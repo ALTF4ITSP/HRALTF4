@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Editar Documento - Hospital de Clínicas</title>
   <!-- Usa el mismo archivo CSS que usas para la página de cargar -->
-  <link rel="stylesheet" href="CSS/cargarnuevodoc.css">
+  <link rel="stylesheet" href="../CSS/cargarnuevodoc.css">
 </head>
+
 <body>
 
   <div class="contenedor">
     <!-- BARRA SUPERIOR -->
     <header class="barra-superior">
-      <a href="./documents.html" class="btn-volver" style="text-decoration: none; color: white;">
+      <a href="documents.html" class="btn-volver" style="text-decoration: none; color: white;">
         <span>←</span> Volver a Documentos
       </a>
       <div class="logo-titulo">
-        <img src="Elements/Icons/hospital-logo.png" alt="Logo Hospital" class="img-logo">
+        <img src="../Elements/Icons/hospital-logo.png" alt="Logo Hospital" class="img-logo">
         <h1>EDITAR DOCUMENTO</h1>
       </div>
-      <div style="width: 150px;"></div> 
+      <div style="width: 150px;"></div>
     </header>
 
     <!-- FORMULARIO CENTRAL -->
     <main class="contenedor-formulario">
-      <form id="formulario-edicion" class="tarjeta-formulario" method="POST" action="actualizar_doc.php" enctype="multipart/form-data">
-        
+      <form id="formulario-edicion" class="tarjeta-formulario" method="POST" action="actualizar_doc.php"
+        enctype="multipart/form-data">
+
         <div class="encabezado-seccion">
           <span class="indicador-morado"></span>
           <h2>MODIFICAR DATOS</h2>
@@ -37,7 +40,8 @@
         <div class="grupo-input">
           <label for="nombre">Nombre del documento:</label>
           <!-- El atributo 'value' simula el dato que PHP traerá de la base de datos -->
-          <input type="text" id="nombre" name="nombre" class="input-formulario" value="Indicaciones de interrupción voluntaria..." required>
+          <input type="text" id="nombre" name="nombre" class="input-formulario"
+            value="Indicaciones de interrupción voluntaria..." required>
         </div>
 
         <div class="grupo-input">
@@ -58,7 +62,8 @@
           <label>Reemplazar archivo adjunto (Opcional):</label>
           <div class="area-subida" id="area-subida">
             <img src="Elements/Icons/folder-icon.svg" alt="Subir" style="width: 40px; margin-bottom: 10px;">
-            <p id="texto-archivo">Archivo actual: documento_vigente.pdf<br><br>Haz clic aquí solo si deseas subir un archivo nuevo</p>
+            <p id="texto-archivo">Archivo actual: documento_vigente.pdf<br><br>Haz clic aquí solo si deseas subir un
+              archivo nuevo</p>
             <!-- A diferencia del form de carga, este input NO lleva el atributo 'required' -->
             <input type="file" id="archivo" name="archivo" class="input-archivo" accept=".pdf, .docx, .jpg, .png">
           </div>
@@ -76,4 +81,5 @@
   </div>
 
 </body>
+
 </html>
