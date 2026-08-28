@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cargar Documento - Hospital</title>
-  <link rel="stylesheet" href="./CSS/cargarnuevodoc.css">
-  <script src="cargar.js" defer></script>
+  <link rel="stylesheet" href="../CSS/cargarnuevodoc.css">
+  <script src="../JS/cargar.js" defer></script>
 </head>
+
 <body>
 
   <div class="contenedor">
-    
+
     <!-- BARRA SUPERIOR SIMPLIFICADA -->
     <header class="barra-superior">
-      <a href="./documents.html" class="btn-volver" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 10px;">
+      <a href="documents.html" class="btn-volver"
+        style="text-decoration: none; color: white; display: flex; align-items: center; gap: 10px;">
         <span>←</span> Volver al Panel
       </a>
       <div class="logo-titulo">
@@ -26,8 +29,9 @@
     <!-- FORMULARIO CENTRAL -->
     <main class="contenedor-formulario">
       <!-- REEMPLAZA TU ETIQUETA FORM ACTUAL POR ESTA -->
-<form id="formulario-carga" class="tarjeta-formulario" method="POST" action="./php/guardar.php" enctype="multipart/form-data">
-        
+      <form id="formulario-carga" class="tarjeta-formulario" method="POST" action="./php/guardar.php"
+        enctype="multipart/form-data">
+
         <div class="encabezado-seccion">
           <span class="indicador-morado"></span>
           <h2>DATOS DEL DOCUMENTO</h2>
@@ -35,7 +39,8 @@
 
         <div class="grupo-input">
           <label for="nombre">Nombre del documento:</label>
-          <input type="text" id="nombre" name="nombre" class="input-formulario" placeholder="Ej. Informe Médico" required>
+          <input type="text" id="nombre" name="nombre" class="input-formulario" placeholder="Ej. Informe Médico"
+            required>
         </div>
 
         <div class="grupo-input">
@@ -63,7 +68,8 @@
           <div class="area-subida" id="area-subida">
             <img src="../Elements/Icons/folder-icon.svg" alt="Subir" style="width: 40px; margin-bottom: 10px;">
             <p id="texto-archivo">Haz clic aquí para seleccionar un archivo PDF, DOCX o JPG</p>
-            <input type="file" id="archivo" name="archivo" class="input-archivo" accept=".pdf, .docx, .jpg, .png" required>
+            <input type="file" id="archivo" name="archivo" class="input-archivo" accept=".pdf, .docx, .jpg, .png"
+              required>
           </div>
         </div>
 
@@ -79,4 +85,5 @@
 
   </div>
 </body>
+
 </html>
