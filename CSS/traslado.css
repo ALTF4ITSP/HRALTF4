@@ -1,5 +1,5 @@
 /* =========================================================
-   ESTILOS ESPECÍFICOS - TRASLADO DE AMBULANCIAS (LIQUID GLASS)
+   ESTILOS ESPECÍFICOS - TRASLADO DE AMBULANCIAS 
    ========================================================= */
 
 .traslado-wrapper {
@@ -15,7 +15,7 @@
   width: min(100%, 780px);
   padding: 40px 50px;
   
-  /* EFECTO LIQUID GLASS / GLASSMORPHISM */
+  
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 35px;
@@ -53,7 +53,7 @@
   transform: scale(1.1);
 }
 
-/* ÍCONO DE LA AMBULANCIA */
+
 .ambulance-icon-container {
   margin-bottom: 8px;
 }
@@ -73,7 +73,7 @@
   text-transform: uppercase;
 }
 
-/* GRID CONTENEDOR (MAPA A LA IZQ, TEXTO A LA DER) */
+/* GRID CONTENEDOR (MAPA) */
 .traslado-body {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -146,7 +146,7 @@
   }
 }
 
-/* FIX PARA EL MENÚ HAMBURGUESA */
+/* FIX BUG MENÚ HAMBURGUESA */
 .menu-action {
   position: absolute;
   left: -108px;
