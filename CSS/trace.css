@@ -1,0 +1,571 @@
+:root {
+    --trace-panel: #111934;
+    --trace-card: rgba(18, 26, 55, 0.68);
+    --trace-border: rgba(150, 163, 209, 0.24);
+    --trace-muted: rgba(238, 238, 238, 0.55);
+}
+
+[hidden] {
+    display: none !important;
+}
+
+/* =========================================================
+   CONTENIDO DE TRASLADOS
+   La barra lateral, la barra superior, la búsqueda y el
+   perfil se obtienen directamente de main.css.
+   ========================================================= */
+
+.trace-panel {
+    width: calc(100% - 125px);
+    margin-left: 125px;
+    display: flex;
+    flex-direction: column;
+    transition:
+        margin-left 0.6s cubic-bezier(0.34, 1.35, 0.64, 1),
+        width 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
+}
+
+.app-shell.menu-open .trace-panel {
+    width: calc(100% - 297px);
+    margin-left: 297px;
+}
+
+.trace-content {
+    width: 100%;
+}
+
+/* =========================================================
+   TÍTULO Y BOTONES SUPERIORES
+   ========================================================= */
+
+.trace-heading {
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.trace-heading h1 {
+    margin: 0 0 4px;
+    font-family: "Krub", sans-serif;
+    font-size: clamp(1.45rem, 2vw, 2rem);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.trace-heading p {
+    margin: 0;
+    color: var(--trace-muted);
+    font-size: 0.9rem;
+}
+
+.heading-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.action-button {
+    min-height: 42px;
+    padding: 0 18px;
+    border: 1px solid rgba(150, 163, 209, 0.3);
+    border-radius: 9px;
+    background: transparent;
+    color: #eeeeee;
+    font-family: "Krub", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+    border-color: rgba(183, 194, 239, 0.55);
+}
+
+.primary-action {
+    border-color: rgba(112, 137, 239, 0.75);
+    box-shadow: 0 0 15px rgba(63, 102, 226, 0.48);
+}
+
+/* =========================================================
+   FONDO ESPECIAL
+   Se usa la misma imagen para todos los botones activos.
+   ========================================================= */
+
+.primary-action,
+.filter-button.active,
+.page-button.active {
+    background-color: #4b6dde;
+    background-image: url("../Elements/special-bg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* =========================================================
+   FILTROS
+   ========================================================= */
+
+.status-tabs {
+    width: min(100%, 432px);
+    height: 45px;
+    padding: 3px;
+    border: 1px solid rgba(150, 163, 209, 0.26);
+    border-radius: 7px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: rgba(8, 13, 32, 0.14);
+}
+
+.filter-button {
+    border: 0;
+    border-radius: 7px;
+    background-color: transparent;
+    color: rgba(238, 238, 238, 0.65);
+    font-family: "Krub", sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition:
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.filter-button span {
+    margin-left: 3px;
+    padding: 1px 3px;
+    border: 1px solid rgba(238, 238, 238, 0.18);
+    border-radius: 3px;
+    color: rgba(238, 238, 238, 0.68);
+    font-size: 0.6rem;
+}
+
+.filter-button:hover {
+    color: #ffffff;
+}
+
+.filter-button.active {
+    color: #ffffff;
+    box-shadow:
+        0 0 12px rgba(41, 90, 222, 0.7),
+        inset 0 0 8px rgba(255, 255, 255, 0.18);
+}
+
+/* =========================================================
+   TARJETAS DE TRASLADOS
+   ========================================================= */
+
+.transfer-grid {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.transfer-card {
+    min-width: 0;
+    min-height: 352px;
+    padding: 14px 13px 11px;
+    border: 1px solid var(--trace-border);
+    border-radius: 8px;
+    background: var(--trace-card);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    animation: show-card 0.25s ease;
+}
+
+@keyframes show-card {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-heading {
+    min-height: 54px;
+    display: grid;
+    grid-template-columns: 53px minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 10px;
+}
+
+/* Contenedor vacío para que puedas agregar tu icono después. */
+.ambulance-icon {
+    width: 53px;
+    height: 53px;
+    border-radius: 12px;
+}
+
+.blue-card .ambulance-icon {
+    background: rgba(33, 47, 105, 0.68);
+}
+
+.green-card .ambulance-icon {
+    background: rgba(29, 84, 91, 0.54);
+}
+
+.purple-card .ambulance-icon {
+    background: rgba(72, 32, 91, 0.56);
+}
+
+.card-title {
+    min-width: 0;
+    padding-top: 6px;
+}
+
+.card-title h2 {
+    margin: 0 0 7px;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.92);
+    font-family: "Krub", sans-serif;
+    font-size: 0.84rem;
+    line-height: 1;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-title p {
+    margin: 0;
+    overflow: hidden;
+    color: rgba(238, 238, 238, 0.53);
+    font-size: 0.65rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.status-label {
+    margin-top: 7px;
+    padding: 3px 7px;
+    border-radius: 9px;
+    font-family: "Krub", sans-serif;
+    font-size: 0.48rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.progress-label {
+    color: #b4f4dc;
+    background: rgba(14, 111, 85, 0.58);
+}
+
+.assigned-label {
+    color: #c7d0ff;
+    border: 1px solid rgba(135, 150, 225, 0.38);
+    background: rgba(50, 61, 116, 0.38);
+}
+
+.completed-label {
+    color: #cbd1e8;
+    border: 1px solid rgba(150, 163, 209, 0.22);
+    background: rgba(82, 94, 137, 0.25);
+}
+
+.card-divider {
+    height: 1px;
+    margin: 11px 4px;
+    background: rgba(150, 163, 209, 0.1);
+}
+
+.transfer-information {
+    padding: 0 6px;
+}
+
+.transfer-information p {
+    margin: 0 0 5px;
+    overflow: hidden;
+    color: rgba(238, 238, 238, 0.78);
+    font-size: 0.65rem;
+    line-height: 1.05;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.transfer-information p.information-label {
+    margin: 0 0 4px;
+    color: rgba(238, 238, 238, 0.46);
+    font-size: 0.6rem;
+}
+
+/* =========================================================
+   ORIGEN Y DESTINO
+   ========================================================= */
+
+.route-box {
+    min-height: 80px;
+    margin: 3px 0 7px;
+    padding: 7px 9px;
+    border-radius: 7px;
+    display: grid;
+    grid-template-columns: 14px minmax(0, 1fr);
+    gap: 7px;
+    background: rgba(20, 30, 62, 0.85);
+}
+
+.route-line {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.route-line::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(#198962 0 50%, #3368cc 50% 100%);
+}
+
+.route-line span {
+    position: relative;
+    z-index: 1;
+    width: 12px;
+    height: 12px;
+    border: 3px solid #168b61;
+    border-radius: 50%;
+    background: #14203f;
+}
+
+.route-line span:last-child {
+    border-color: #336bd4;
+}
+
+.route-text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.route-text div {
+    min-width: 0;
+}
+
+.route-text small,
+.route-text strong,
+.route-text p {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.route-text small {
+    margin-bottom: 1px;
+    color: rgba(238, 238, 238, 0.42);
+    font-size: 0.51rem;
+}
+
+.route-text strong {
+    color: rgba(238, 238, 238, 0.82);
+    font-size: 0.6rem;
+    line-height: 1.1;
+    font-weight: 500;
+}
+
+.route-text p {
+    margin: 1px 0 0;
+    color: rgba(238, 238, 238, 0.5);
+    font-size: 0.5rem;
+}
+
+.details-button {
+    width: 100%;
+    height: 27px;
+    margin-top: auto;
+    border: 1px solid rgba(150, 163, 209, 0.2);
+    border-radius: 7px;
+    background: transparent;
+    color: rgba(238, 238, 238, 0.68);
+    font-size: 0.68rem;
+    cursor: pointer;
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.details-button:hover {
+    color: #ffffff;
+    border-color: rgba(150, 163, 209, 0.36);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+/* =========================================================
+   PIE Y PAGINACIÓN
+   ========================================================= */
+
+.empty-message {
+    min-height: 352px;
+    margin: 15px 0 0;
+    border: 1px solid rgba(150, 163, 209, 0.15);
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    color: var(--trace-muted);
+}
+
+.list-footer {
+    min-height: 30px;
+    padding-top: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.list-footer > p {
+    margin: 0;
+    color: rgba(238, 238, 238, 0.42);
+    font-size: 0.64rem;
+}
+
+.pagination,
+.page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.page-button,
+.page-arrow {
+    min-width: 20px;
+    height: 20px;
+    padding: 0 4px;
+    border: 1px solid rgba(150, 163, 209, 0.24);
+    border-radius: 3px;
+    background-color: transparent;
+    color: rgba(238, 238, 238, 0.68);
+    font-size: 0.59rem;
+    cursor: pointer;
+}
+
+.page-arrow {
+    min-width: 14px;
+    padding: 0;
+    border-color: transparent;
+    font-size: 0.65rem;
+}
+
+.page-button:hover,
+.page-arrow:hover:not(:disabled) {
+    color: #ffffff;
+    border-color: rgba(150, 163, 209, 0.48);
+}
+
+.page-button.active {
+    color: #ffffff;
+    border-color: #6689ef;
+    box-shadow: 0 0 8px rgba(44, 104, 227, 0.7);
+}
+
+.page-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+/* =========================================================
+   DISEÑO RESPONSIVO
+   ========================================================= */
+
+@media (max-width: 1100px) {
+    .trace-panel {
+        width: calc(100% - 96px);
+        margin-left: 96px;
+    }
+
+    .app-shell.menu-open .trace-panel {
+        width: calc(100% - 260px);
+        margin-left: 260px;
+    }
+
+    .transfer-grid {
+        gap: 12px;
+    }
+
+    .transfer-card {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .card-heading {
+        grid-template-columns: 47px minmax(0, 1fr) auto;
+        gap: 7px;
+    }
+
+    .ambulance-icon {
+        width: 47px;
+        height: 47px;
+    }
+
+    .action-button {
+        padding: 0 13px;
+    }
+}
+
+@media (max-width: 900px) {
+    .transfer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 770px) {
+    .trace-panel,
+    .app-shell.menu-open .trace-panel {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .trace-heading {
+        padding-bottom: 12px;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .heading-actions,
+    .status-tabs {
+        width: 100%;
+    }
+
+    .action-button {
+        flex: 1;
+    }
+
+    .transfer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    .heading-actions {
+        flex-direction: column;
+    }
+
+    .filter-button {
+        font-size: 0.7rem;
+    }
+
+    .list-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pagination {
+        align-self: flex-end;
+    }
+}
