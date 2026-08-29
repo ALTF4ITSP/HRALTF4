@@ -72,17 +72,24 @@
             </nav>
         </aside>
 
-        <!-- Se reutiliza la barra de búsqueda de main-menu.html -->
-        <header class="topbar">
-            <div class="search-wrapper">
-                <input type="search" class="search-input" id="transferSearch" placeholder="Escribe algo..." autocomplete="off">
-                <button type="button" class="topbar-action search-action" aria-label="Buscar">
-                    <img src="../Elements/Icons/search-icon.svg" alt="" aria-hidden="true">
-                </button>
-            </div>
-        </header>
+        <!-- Esta columna se redimensiona junto con el menú lateral. -->
+        <section class="content-card">
+            <!-- Se reutiliza la barra de búsqueda de main-menu.html -->
+            <header class="topbar">
+                <div class="brand">
+                    <img src="../Elements/Icons/hospital-logo.png" alt="Hospital de Clínicas">
+                    <span>HOSPITAL DE CLINICAS</span>
+                </div>
 
-        <section class="trace-panel">
+                <div class="search-wrapper">
+                    <input type="search" class="search-input" id="transferSearch" placeholder="Escribe algo..." autocomplete="off">
+                    <button type="button" class="topbar-action search-action" aria-label="Buscar">
+                        <img src="../Elements/Icons/search-icon.svg" alt="" aria-hidden="true">
+                    </button>
+                </div>
+            </header>
+
+            <section class="trace-panel">
             <div class="trace-content">
                 <div class="trace-heading">
                     <div>
@@ -513,13 +520,31 @@
 
                     <div class="pagination" aria-label="Paginación">
                         <button type="button" class="page-arrow" id="previousPage" aria-label="Página anterior">◀</button>
-                        <div class="page-numbers" id="pageNumbers"></div>
+                        <div class="page-numbers" id="pageNumbers">
+                            <button type="button" class="page-button active" aria-current="page">1</button>
+                        </div>
                         <button type="button" class="page-arrow" id="nextPage" aria-label="Página siguiente">▶</button>
                     </div>
                 </footer>
             </div>
+            </section>
         </section>
     </main>
+
+    <!-- Se reutiliza el perfil de main-menu.html -->
+    <div class="profile-wrapper">
+        <div class="profile-menu">
+            <button type="button" class="profile-menu-item" aria-label="Configuración">
+                <img src="../Elements/Icons/settings-icon.svg" alt="Configuración">
+            </button>
+            <div class="profile-menu-divider"></div>
+            <button type="button" class="profile-menu-item" aria-label="Cerrar sesión">
+                <img src="../Elements/Icons/logout-icon.svg" alt="Cerrar sesión">
+            </button>
+        </div>
+
+        <button type="button" class="profile-button" aria-label="Perfil de usuario"></button>
+    </div>
 </body>
 
 </html>
