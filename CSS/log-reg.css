@@ -51,6 +51,7 @@ body {
     width: 100%;
     padding: 12px;
     background: rgba(37, 99, 235, 0.45);
+    transition: background 0.3s ease;
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 8px;
@@ -65,12 +66,17 @@ body {
 }
 
 .tarjeta a {
-    color: #ffffff
+    text-decoration: none;
+    color: #e2e2e2;
+    transition: color 0.3s ease;
+}
+
+.tarjeta a:hover {
+    color: #ffffff;
 }
 
 .tarjeta p {
-
-    color:#be9191
+    color: #b1b1b1;
 }
 
 button:focus,
@@ -79,5 +85,4 @@ input:focus,
 input:focus-visible {
     outline: none;
     box-shadow: none;
-
 }

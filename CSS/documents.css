@@ -68,7 +68,9 @@
   font-weight: 700;
   text-align: left;
   cursor: pointer;
-  transition: transform 0.22s ease, background 0.22s ease;
+  transition:
+    transform 0.22s ease,
+    background 0.22s ease;
 }
 
 .staff-action:hover {
@@ -134,7 +136,10 @@
   border-radius: 20px;
   background: rgba(8, 12, 28, 0.34);
   text-align: center;
-  transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+  transition:
+    transform 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease;
 }
 
 .document-folder-card:hover {
