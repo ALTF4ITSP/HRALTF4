@@ -106,6 +106,19 @@
         transform 0.2s ease,
         border-color 0.2s ease,
         box-shadow 0.2s ease;
+        
+    /* New properties for vertical alignment and spacing */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.button-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
 }
 
 .action-button:hover {
@@ -113,10 +126,17 @@
     border-color: rgba(183, 194, 239, 0.55);
 }
 
+.action-button.secondary-action:hover {
+    transform: translateY(-1px);
+    border-color: rgba(183, 194, 239, 0.55);
+    background: rgba(255, 255, 255, 0.035);
+}
+
 .primary-action {
     border-color: rgba(112, 137, 239, 0.75);
     box-shadow: none;
 }
+
 
 /* =========================================================
    FONDO ESPECIAL
@@ -153,7 +173,6 @@
     border-radius: 7px;
     background-color: transparent;
     color: rgba(238, 238, 238, 0.65);
-    font-family: "Krub", sans-serif;
     font-size: 0.8rem;
     cursor: pointer;
     transition:
@@ -192,7 +211,7 @@
 
 .transfer-card {
     min-width: 0;
-    min-height: 410px;
+    min-height: 500px;
     padding: 14px 13px 11px;
     border: 1px solid var(--trace-border);
     border-radius: 8px;
@@ -230,6 +249,13 @@
     border-radius: 12px;
 }
 
+.ambulance-icon > img {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    filter: brightness(0) invert(1);
+}
+
 .blue-card .ambulance-icon {
     background: rgba(33, 47, 105, 0.68);
 }
@@ -251,8 +277,7 @@
     margin: 0 0 7px;
     overflow: hidden;
     color: rgba(255, 255, 255, 0.92);
-    font-family: "Krub", sans-serif;
-    font-size: 0.84rem;
+    font-size: 1.3rem;
     line-height: 1;
     font-weight: 500;
     text-overflow: ellipsis;
@@ -263,7 +288,7 @@
     margin: 0;
     overflow: hidden;
     color: rgba(238, 238, 238, 0.53);
-    font-size: 0.65rem;
+    font-size: 0.80rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -272,8 +297,7 @@
     margin-top: 7px;
     padding: 3px 7px;
     border-radius: 9px;
-    font-family: "Krub", sans-serif;
-    font-size: 0.48rem;
+    font-size: 0.7rem;
     line-height: 1;
     white-space: nowrap;
 }
@@ -303,22 +327,47 @@
 
 .transfer-information {
     padding: 0 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Controls spacing between the three groups */
+}
+
+.transfer-information .info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Space between the label and the icon/text row */
 }
 
 .transfer-information p {
-    margin: 0 0 5px;
+    margin: 0;
     overflow: hidden;
     color: rgba(238, 238, 238, 0.78);
-    font-size: 0.65rem;
+    font-size: 0.99rem;
     line-height: 1.05;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .transfer-information p.information-label {
-    margin: 0 0 4px;
+    margin: 0;
     color: rgba(238, 238, 238, 0.46);
-    font-size: 0.6rem;
+    font-size: 0.75rem;
+}
+
+/* New Flexbox container for horizontal alignment */
+.info-value {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between the icon and the name */
+}
+
+/* Styles for the new icons */
+.info-icon {
+    width: 16px; 
+    height: 16px;
+    object-fit: contain;
+    opacity: 0.7; /* Matches the slightly muted aesthetic from the reference */
+    filter: brightness(0) invert(1);
 }
 
 /* =========================================================
@@ -326,13 +375,13 @@
    ========================================================= */
 
 .route-box {
-    min-height: 80px;
+    min-height: auto; /* Removes the forced giant gap */
     margin: 3px 0 7px;
-    padding: 7px 9px;
+    padding: 16px 12px; /* Added slight padding for breathing room */
     border-radius: 7px;
     display: grid;
     grid-template-columns: 14px minmax(0, 1fr);
-    gap: 7px;
+    gap: 12px;
     background: rgba(20, 30, 62, 0.85);
 }
 
@@ -371,8 +420,8 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 5px;
+    justify-content: flex-start; /* Prevents text from sticking to the edges */
+    gap: 24px; /* Controls the exact space between Origen and Destino */
 }
 
 .route-text div {
@@ -389,33 +438,35 @@
 }
 
 .route-text small {
-    margin-bottom: 1px;
-    color: rgba(238, 238, 238, 0.42);
-    font-size: 0.51rem;
+    margin-bottom: 2px;
+    color: rgba(238, 238, 238, 0.55);
+    font-size: 0.82rem; /* Shrunk from the oversized 1.3rem */
+    font-weight: 500;
+    letter-spacing: 0.04em;
 }
 
 .route-text strong {
-    color: rgba(238, 238, 238, 0.82);
-    font-size: 0.6rem;
-    line-height: 1.1;
-    font-weight: 500;
+    color: rgba(238, 238, 238, 0.95);
+    font-size: 1.05rem; /* Increased slightly to make the location stand out */
+    line-height: 1.2;
+    font-weight: 600;
 }
 
 .route-text p {
-    margin: 1px 0 0;
-    color: rgba(238, 238, 238, 0.5);
-    font-size: 0.5rem;
+    margin: 2px 0 0;
+    color: rgba(238, 238, 238, 0.65);
+    font-size: 0.88rem; /* Adjusted from 0.99rem for better secondary readability */
 }
 
 .details-button {
     width: 100%;
-    height: 27px;
+    height: 40px;
     margin-top: auto;
     border: 1px solid rgba(150, 163, 209, 0.2);
     border-radius: 7px;
     background: transparent;
     color: rgba(238, 238, 238, 0.68);
-    font-size: 0.68rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition:
         color 0.2s ease,
@@ -455,7 +506,7 @@
 .list-footer > p {
     margin: 0;
     color: rgba(238, 238, 238, 0.42);
-    font-size: 0.64rem;
+    font-size: 0.9rem;
 }
 
 .pagination,
