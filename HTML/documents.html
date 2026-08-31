@@ -92,13 +92,10 @@
 
           <div class="staff-divider"></div>
 
-
-
           <a href="documents-upload.html" class="staff-action" style="text-decoration: none;">
             <img src="../Elements/Icons/folder-icon.svg" alt="">
             <span>CARGAR NUEVO DOCUMENTO</span>
           </a>
-
 
           <a href="documents-edit.html" class="staff-action" style="text-decoration: none;">
             <img src="../Elements/Icons/folder-icon.svg" alt="">
@@ -115,7 +112,16 @@
           <div class="documents-grid">
             <a href="documents-viewer.html" class="document-link">
               <article class="document-folder-card">
-                <span class="more-options" aria-hidden="true">⋮</span>
+                <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
+
+                <div class="document-dropdown-menu">
+                  <ul>
+                    <li><button type="button" class="edit-btn">Editar</button></li>
+                    <li><button type="button" class="select-btn">Seleccionar</button></li>
+                    <li><button type="button" class="delete-btn">Eliminar</button></li>
+                  </ul>
+                </div>
+
                 <img src="../Elements/Icons/folder-icon.svg" alt="">
                 <p class="document-date">31/07/2026</p>
                 <p class="document-name">DOCUMENTO 1</p>
@@ -124,7 +130,16 @@
 
             <a href="documents-viewer.html" class="document-link">
               <article class="document-folder-card">
-                <span class="more-options" aria-hidden="true">⋮</span>
+                <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
+
+                <div class="document-dropdown-menu">
+                  <ul>
+                    <li><button type="button" class="edit-btn">Editar</button></li>
+                    <li><button type="button" class="select-btn">Seleccionar</button></li>
+                    <li><button type="button" class="delete-btn">Eliminar</button></li>
+                  </ul>
+                </div>
+
                 <img src="../Elements/Icons/folder-icon.svg" alt="">
                 <p class="document-date">31/07/2026</p>
                 <p class="document-name">DOCUMENTO 2</p>
@@ -133,7 +148,16 @@
 
             <a href="documents-viewer.html" class="document-link">
               <article class="document-folder-card">
-                <span class="more-options" aria-hidden="true">⋮</span>
+                <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
+
+                <div class="document-dropdown-menu">
+                  <ul>
+                    <li><button type="button" class="edit-btn">Editar</button></li>
+                    <li><button type="button" class="select-btn">Seleccionar</button></li>
+                    <li><button type="button" class="delete-btn">Eliminar</button></li>
+                  </ul>
+                </div>
+
                 <img src="../Elements/Icons/folder-icon.svg" alt="">
                 <p class="document-date">31/07/2026</p>
                 <p class="document-name">DOCUMENTO 3</p>
@@ -142,7 +166,16 @@
 
             <a href="documents-viewer.html" class="document-link">
               <article class="document-folder-card">
-                <span class="more-options" aria-hidden="true">⋮</span>
+                <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
+
+                <div class="document-dropdown-menu">
+                  <ul>
+                    <li><button type="button" class="edit-btn">Editar</button></li>
+                    <li><button type="button" class="select-btn">Seleccionar</button></li>
+                    <li><button type="button" class="delete-btn">Eliminar</button></li>
+                  </ul>
+                </div>
+
                 <img src="../Elements/Icons/folder-icon.svg" alt="">
                 <p class="document-date">31/07/2026</p>
                 <p class="document-name">DOCUMENTO 4</p>
@@ -157,7 +190,6 @@
   <div class="profile-wrapper" id="contenedor-perfil">
     <div class="profile-menu">
 
-      <!-- Enlace a Configuración (puedes crear un configuracion.html o .php en el futuro) -->
       <a href="config_user_docs.html" class="profile-menu-item" aria-label="Configuración"
         style="text-decoration: none;">
         <img src="../Elements/Icons/settings-icon.svg" alt="Configuración">
@@ -165,16 +197,13 @@
 
       <div class="profile-menu-divider"></div>
 
-      <!-- Enlace a tu script de Cerrar Sesión -->
       <a href="register.html" class="profile-menu-item" aria-label="Cerrar sesión" style="text-decoration: none;">
         <img src="../Elements/Icons/logout-icon.svg" alt="Cerrar sesión">
       </a>
 
     </div>
 
-    <!-- Le agregamos el evento onclick para que active la magia de JavaScript -->
     <button type="button" class="profile-button" aria-label="Perfil de usuario" onclick="toggleMenu()"></button>
-  </div>
   </div>
 </body>
 
