@@ -178,3 +178,16 @@
   object-fit: contain;
   filter: brightness(0) invert(1);
 }
+
+.info-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
