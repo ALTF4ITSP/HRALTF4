@@ -147,6 +147,7 @@
   background: rgba(255, 255, 255, 0.045);
 }
 
+/* --- BOTÓN DE TRES PUNTOS --- */
 .more-options {
   position: absolute;
   top: 13px;
@@ -154,6 +155,72 @@
   color: #abbaea;
   font-size: 1.4rem;
   line-height: 1;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  z-index: 5;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.more-options:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* --- MENÚ DESPLEGABLE --- */
+.document-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 45px;
+  right: 17px;
+  width: 150px;
+  background: #111934;
+  border: 1px solid rgba(238, 238, 238, 0.13);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  padding: 6px 0;
+  z-index: 100;
+  text-align: left;
+}
+
+.document-dropdown-menu.active {
+  display: block;
+}
+
+.document-dropdown-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.document-dropdown-menu button {
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  color: #eeeeee;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+}
+
+.document-dropdown-menu button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.document-dropdown-menu button.delete-btn {
+  color: #ff6b6b;
+}
+
+.document-dropdown-menu button.delete-btn:hover {
+  background: rgba(255, 107, 107, 0.15);
 }
 
 .document-folder-card > img {
@@ -178,6 +245,12 @@
   color: #eeeeee;
   font-size: 1rem;
   font-weight: 600;
+}
+
+/* Estilo opcional para cuando se usa "Seleccionar" */
+.document-folder-card.selected {
+  border-color: #abbaea;
+  background: rgba(171, 186, 234, 0.12);
 }
 
 @media (max-width: 900px) {
