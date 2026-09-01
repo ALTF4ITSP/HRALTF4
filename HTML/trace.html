@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traslados de Ambulancias</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../CSS/main.css">
+    <link rel="stylesheet" href="../CSS/trace.css">
+    <script src="../JS/main.js" defer></script>
+    <script src="../JS/trace.js" defer></script>
+</head>
+
+<body>
+    <div class="page-background"></div>
+    <div class="page-glow"></div>
+
+    <main class="app-shell">
+
+        <!-- Se reutiliza la barra lateral de main-menu.html -->
+        <aside class="sidebar">
+            <button type="button" class="sidebar-action" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="sidebar-nav">
+                <div class="nav-indicator"></div>
+
+                <a href="main-menu.html" class="nav-item">
+                    <img src="../Elements/Icons/house-icon.svg" alt="Inicio">
+                    <span>Inicio</span>
+                </a>
+
+                <a href="documents.html" class="nav-item">
+                    <img src="../Elements/Icons/folder-icon.svg" alt="Documentos">
+                    <span>Documentos</span>
+                </a>
+
+                <a href="#" class="nav-item active">
+                    <img src="../Elements/Icons/location-icon.svg" alt="Ambulancias">
+                    <span>Ambulancias</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../Elements/Icons/analytics-icon.svg" alt="Reportes">
+                    <span>Reportes</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../Elements/Icons/calendar-icon.svg" alt="Calendario">
+                    <span>Calendario</span>
+                </a>
+
+                <a href="surveys.html" class="nav-item">
+                    <img src="../Elements/Icons/survey-icon.svg" alt="Encuestas">
+                    <span>Encuestas</span>
+                </a>
+
+                <div class="nav-spacer"></div>
+
+                <a href="#" class="nav-item">
+                    <img src="../Elements/Icons/settings-icon.svg" alt="Configuración">
+                    <span>Configuración</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Esta columna se redimensiona junto con el menú lateral. -->
+        <section class="content-card">
+            <!-- Se reutiliza la barra de búsqueda de main-menu.html -->
+            <header class="topbar">
+                <div class="brand">
+                    <img src="../Elements/Icons/hospital-logo.png" alt="Hospital de Clínicas">
+                    <span>HOSPITAL DE CLINICAS</span>
+                </div>
+
+                <div class="search-wrapper">
+                    <input type="search" class="search-input" id="transferSearch" placeholder="Escribe algo..."
+                        autocomplete="off">
+                    <button type="button" class="topbar-action search-action" aria-label="Buscar">
+                        <img src="../Elements/Icons/search-icon.svg" alt="" aria-hidden="true">
+                    </button>
+                </div>
+            </header>
+
+            <section class="trace-panel">
+                <div class="trace-content">
+                    <div class="trace-heading">
+                        <div>
+                            <h1>Traslados de Ambulancias</h1>
+                            <p>Gestiona y realiza seguimiento de todos los traslados</p>
+                        </div>
+
+                        <div class="heading-actions">
+                            <button type="button" class="action-button primary-action">
+                                <img src="../Elements/Icons/plus-icon.svg" alt="" aria-hidden="true" class="button-icon">
+                                Nuevo Traslado
+                            </button>
+
+                            <button type="button" class="action-button secondary-action">
+                                <img src="../Elements/Icons/map-icon.svg" alt="" aria-hidden="true" class="button-icon">
+                                Ver en Mapa
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filtros -->
+                    <div class="status-tabs" role="tablist" aria-label="Filtrar traslados">
+                        <button type="button" class="filter-button active" data-filter="active" role="tab"
+                            aria-selected="true">
+                            Activos <span id="activeCount">3</span>
+                        </button>
+                        <button type="button" class="filter-button" data-filter="completed" role="tab"
+                            aria-selected="false">
+                            Completados <span id="completedCount">15</span>
+                        </button>
+                        <button type="button" class="filter-button" data-filter="all" role="tab" aria-selected="false">
+                            Todos <span id="allCount">18</span>
+                        </button>
+                    </div>
+
+                    <!-- Tarjetas de traslados -->
+                    <section class="transfer-grid" id="transferGrid" aria-live="polite">
+
+                        <article class="transfer-card blue-card" data-status="active">
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 1</h2>
+                                    <p>Ambulancia A-12</p>
+                                </div>
+                                <span class="status-label progress-label">EN CURSO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <!-- Replace src with your steering wheel icon path -->
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Benjamín Genolet</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <!-- Replace src with your user icon path -->
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Nicolás Paluffo</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <!-- Replace src with your person icon path -->
+                                        <img src="../Elements/Icons/human-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Paciente</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Hospital de Clínicas</strong>
+                                        <p>12/07/2026 · 9:32 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Sanatorio de Velen</strong>
+                                        <p>12/07/2026 · ETA 10:12 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button"
+                                onclick="window.location.href='trace-view.html';">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card green-card" data-status="active">
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 2</h2>
+                                    <p>Ambulancia B-27</p>
+                                </div>
+                                <span class="status-label assigned-label">ASIGNADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <!-- Replace src with your steering wheel icon path -->
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Ethan Viera</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <!-- Replace src with your user icon path -->
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Matias Guedes</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <!-- Replace src with your person icon path -->
+                                        <img src="../Elements/Icons/medkit-icon.png" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Equipo</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Polvorín Polvoriento</strong>
+                                        <p>12/12/2026 · 8:05 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Hospital de Clínicas</strong>
+                                        <p>12/12/2026 · ETA 7:42 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button"
+                                onclick="window.location.href='trace-view.html';">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card purple-card" data-status="active">
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 3</h2>
+                                    <p>Ambulancia C-03</p>
+                                </div>
+                                <span class="status-label progress-label">EN CURSO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <!-- Replace src with your steering wheel icon path -->
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Tobias Baucher</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <!-- Replace src with your user icon path -->
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Emilia Muniz</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <!-- Replace src with your person icon path -->
+                                        <img src="../Elements/Icons/biohazard-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Biologico</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Hospital de Clínicas</strong>
+                                        <p>13/08/2026 · 2:57 PM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Pisos Picados</strong>
+                                        <p>13/08/2026 · 3:28 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button"
+                                onclick="window.location.href='trace-view.html';">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card blue-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 4</h2>
+                                    <p>Ambulancia A-04</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Lucía Rodríguez</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Sofía Pereira</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/human-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Paciente</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Hospital de Clínicas</strong>
+                                        <p>14/08/2026 · 8:10 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>CASMU</strong>
+                                        <p>14/08/2026 · 8:48 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card green-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 5</h2>
+                                    <p>Ambulancia B-18</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Martín Silva</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Diego Fernández</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/medkit-icon.png" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Equipo</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Depósito Central</strong>
+                                        <p>14/08/2026 · 9:15 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Hospital de Clínicas</strong>
+                                        <p>14/08/2026 · 10:03 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card purple-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 6</h2>
+                                    <p>Ambulancia C-09</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Valentina Suárez</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Ana Cabrera</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/biohazard-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Biológico</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Laboratorio Central</strong>
+                                        <p>15/08/2026 · 7:30 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Hospital de Clínicas</strong>
+                                        <p>15/08/2026 · 8:12 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card blue-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 7</h2>
+                                    <p>Ambulancia A-31</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Nicolás Méndez</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Camila Sosa</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/human-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Paciente</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Hospital Maciel</strong>
+                                        <p>15/08/2026 · 10:20 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Hospital de Clínicas</strong>
+                                        <p>15/08/2026 · 11:05 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card green-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 8</h2>
+                                    <p>Ambulancia B-06</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Santiago Pereira</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Mateo López</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/medkit-icon.png" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Equipo</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Hospital de Clínicas</strong>
+                                        <p>16/08/2026 · 8:00 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Taller Biomédico</strong>
+                                        <p>16/08/2026 · 8:44 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card purple-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 9</h2>
+                                    <p>Ambulancia C-14</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Florencia Acosta</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Paula Núñez</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/biohazard-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Biológico</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Banco de Sangre</strong>
+                                        <p>16/08/2026 · 9:25 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Laboratorio Central</strong>
+                                        <p>16/08/2026 · 9:59 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card blue-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 10</h2>
+                                    <p>Ambulancia A-22</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Federico Alonso</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>María Giménez</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/human-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Paciente</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Sanatorio Americano</strong>
+                                        <p>17/08/2026 · 7:40 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Hospital de Clínicas</strong>
+                                        <p>17/08/2026 · 8:25 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card green-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 11</h2>
+                                    <p>Ambulancia B-27</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Gabriel Castro</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Bruno Ferreira</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/medkit-icon.png" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Equipo</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Depósito Central</strong>
+                                        <p>17/08/2026 · 10:10 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Hospital de Clínicas</strong>
+                                        <p>17/08/2026 · 10:52 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card purple-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 12</h2>
+                                    <p>Ambulancia C-03</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Joaquín Ramos</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Elena Morales</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/biohazard-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Biológico</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Hospital de Clínicas</strong>
+                                        <p>18/08/2026 · 8:35 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Instituto de Higiene</strong>
+                                        <p>18/08/2026 · 9:06 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card blue-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 13</h2>
+                                    <p>Ambulancia A-15</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Agustina Varela</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Juan Techera</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/human-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Paciente</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Hospital Pasteur</strong>
+                                        <p>18/08/2026 · 11:15 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Hospital de Clínicas</strong>
+                                        <p>18/08/2026 · 12:01 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card green-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 14</h2>
+                                    <p>Ambulancia B-11</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Rodrigo Cabrera</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Micaela Díaz</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/medkit-icon.png" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Equipo</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Hospital de Clínicas</strong>
+                                        <p>19/08/2026 · 7:55 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Centro de Diagnóstico</strong>
+                                        <p>19/08/2026 · 8:37 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card purple-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 15</h2>
+                                    <p>Ambulancia C-21</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Martina Olivera</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Andrés Pereira</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/biohazard-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Biológico</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Laboratorio Central</strong>
+                                        <p>19/08/2026 · 10:05 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Hospital de Clínicas</strong>
+                                        <p>19/08/2026 · 10:44 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card blue-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 16</h2>
+                                    <p>Ambulancia A-08</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Sebastián Costa</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Laura Barreto</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/human-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Paciente</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Hospital Saint Bois</strong>
+                                        <p>20/08/2026 · 8:18 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Hospital de Clínicas</strong>
+                                        <p>20/08/2026 · 9:08 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card green-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 17</h2>
+                                    <p>Ambulancia B-02</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Emiliano Rodríguez</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Julieta Silva</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/medkit-icon.png" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Equipo</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Almacén Hospitalario</strong>
+                                        <p>20/08/2026 · 10:30 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Hospital de Clínicas</strong>
+                                        <p>20/08/2026 · 11:14 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                        <article class="transfer-card purple-card" data-status="completed" hidden>
+                            <div class="card-heading">
+                                <div class="ambulance-icon">
+                                    <img src="../Elements/Icons/ambulance-icon.png" alt="" aria-hidden="true">
+                                </div>
+                                <div class="card-title">
+                                    <h2>TRASLADO 18</h2>
+                                    <p>Ambulancia C-17</p>
+                                </div>
+                                <span class="status-label completed-label">COMPLETADO</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="transfer-information">
+                                <div class="info-group">
+                                    <p class="information-label">Conductor</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Daniela Méndez</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Acompañante</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Gonzalo Reyes</p>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <p class="information-label">Elemento</p>
+                                    <div class="info-value">
+                                        <img src="../Elements/Icons/biohazard-icon.svg" alt="" aria-hidden="true"
+                                            class="info-icon">
+                                        <p>Biológico</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route-box">
+                                <div class="route-line"><span></span><span></span></div>
+                                <div class="route-text">
+                                    <div><small>Origen</small><strong>Hospital de Clínicas</strong>
+                                        <p>21/08/2026 · 7:20 AM</p>
+                                    </div>
+                                    <div><small>Destino</small><strong>Banco de Sangre</strong>
+                                        <p>21/08/2026 · 7:54 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="details-button">Ver detalles</button>
+                        </article>
+
+                    </section>
+
+                    <p class="empty-message" id="emptyMessage" hidden>No se encontraron traslados.</p>
+
+                    <footer class="list-footer">
+                        <p id="resultsText">Mostrando 3 de 3 traslados</p>
+
+                        <div class="pagination" aria-label="Paginación">
+                            <button type="button" class="page-arrow" id="previousPage"
+                                aria-label="Página anterior">◀</button>
+                            <div class="page-numbers" id="pageNumbers">
+                                <button type="button" class="page-button active" aria-current="page">1</button>
+                            </div>
+                            <button type="button" class="page-arrow" id="nextPage"
+                                aria-label="Página siguiente">▶</button>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+        </section>
+    </main>
+
+</body>
+
+</html>

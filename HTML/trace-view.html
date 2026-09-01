@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital de Clínicas - Traslado 1</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="stylesheet" href="../CSS/main.css">
+  <link rel="stylesheet" href="../CSS/traslado.css">
+  
+  <script src="../JS/main.js" defer></script>
+</head>
+
+<body>
+  <div class="page-background"></div>
+  <div class="page-glow"></div>
+
+  <main class="app-shell">
+
+    <!-- BARRA LATERAL (SIDEBAR) -->
+    <aside class="sidebar">
+      <button type="button" class="sidebar-action" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="sidebar-nav">
+        <div class="nav-indicator"></div>
+
+        <a href="main-menu.html" class="nav-item">
+          <img src="../Elements/Icons/house-icon.svg" alt="Inicio">
+          <span>Inicio</span>
+        </a>
+
+        <a href="documents.html" class="nav-item">
+          <img src="../Elements/Icons/folder-icon.svg" alt="Documentos">
+          <span>Documentos</span>
+        </a>
+
+        <a href="trace.html" class="nav-item active">
+          <img src="../Elements/Icons/location-icon.svg" alt="Ambulancias">
+          <span>Ambulancias</span>
+        </a>
+
+        <a href="#" class="nav-item">
+          <img src="../Elements/Icons/analytics-icon.svg" alt="Reportes">
+          <span>Reportes</span>
+        </a>
+
+        <a href="#" class="nav-item">
+          <img src="../Elements/Icons/calendar-icon.svg" alt="Calendario">
+          <span>Calendario</span>
+        </a>
+
+        <a href="#" class="nav-item">
+          <img src="../Elements/Icons/survey-icon.svg" alt="Encuestas">
+          <span>Encuestas</span>
+        </a>
+
+        <div class="nav-spacer"></div>
+
+        <a href="#" class="nav-item">
+          <img src="../Elements/Icons/settings-icon.svg" alt="Configuración">
+          <span>Configuración</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <section class="content-card">
+      
+      <!-- TOPBAR CON LUPA -->
+      <header class="topbar">
+        <div class="brand">
+          <img src="../Elements/Icons/hospital-logo.png" alt="Hospital de Clínicas">
+          <span>HOSPITAL DE CLINICAS</span>
+        </div>
+
+        <div class="search-wrapper">
+          <input type="search" class="search-input" placeholder="Buscar..." autocomplete="off">
+          <button type="button" class="topbar-action search-action" aria-label="Buscar">
+            <img src="../Elements/Icons/search-icon.svg" alt="" aria-hidden="true">
+          </button>
+        </div>
+      </header>
+
+      <!-- TARJETA DE TRASLADO -->
+      <section class="traslado-wrapper">
+        <article class="traslado-card">
+          
+          <!-- BOTÓN ROJO X -->
+          <button type="button" class="btn-close" aria-label="Cerrar" onclick="window.location.href='trace.html';">&times;</button>
+
+          <!-- ÍCONO PRINCIPAL DE AMBULANCIA -->
+          <div class="ambulance-icon-container">
+            <img src="../Elements/Icons/ambulance-icon.png" alt="Ambulancia" class="ambulance-icon">
+          </div>
+
+          <h1 class="traslado-title">TRASLADO 1</h1>
+
+          <div class="traslado-body">
+            
+            <!-- COLUMNA IZQUIERDA: MAPA -->
+            <div class="map-column">
+              <span class="map-label">Rastreo en Vivo:</span>
+              <div class="map-container">
+                <img src="../Elements/mapa-placeholder.png" alt="Mapa de rastreo" class="map-image">
+              </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: DATOS E ÍCONOS -->
+            <div class="info-column">
+              
+              <div class="info-group">
+                <p class="information-label">Conductor</p>
+                <div class="info-value">
+                  <img src="../Elements/Icons/steering-wheel.svg" alt="" aria-hidden="true" class="info-icon">
+                  <p><strong>Benjamín Genolet</strong></p>
+                </div>
+              </div>
+
+              <div class="info-group">
+                <p class="information-label">Acompañante</p>
+                <div class="info-value">
+                  <img src="../Elements/Icons/person-icon.svg" alt="" aria-hidden="true" class="info-icon">
+                  <p><strong>Nicolás Peluffo</strong></p>
+                </div>
+              </div>
+
+              <div class="info-group">
+                <p class="information-label">Elemento</p>
+                <div class="info-value">
+                  <img src="../Elements/Icons/human-icon.svg" alt="" aria-hidden="true" class="info-icon">
+                  <p><strong>PACIENTE</strong></p>
+                </div>
+              </div>
+
+              <div class="info-group">
+                <p><strong>Origen:</strong> Hospital</p>
+                <p><strong>Destino:</strong> ITSP</p>
+              </div>
+
+              <div class="info-group">
+                <p><strong>Hora de Inicio:</strong> 22:32 PM</p>
+                <p><strong>Hora Final:</strong> 2:12 AM</p>
+              </div>
+
+              <div class="info-group">
+                <p><strong>Fecha de Realización:</strong> 12/02/2026</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <!-- MENÚ Y BOTÓN DE PERFIL -->
+  <div class="profile-wrapper" id="contenedor-perfil">
+    <div class="profile-menu">
+      <a href="./config_user_docs.html" class="profile-menu-item" aria-label="Configuración" style="text-decoration: none;">
+        <img src="../Elements/Icons/settings-icon.svg" alt="Configuración">
+      </a>
+      <div class="profile-menu-divider"></div>
+      <a href="./register.html" class="profile-menu-item" aria-label="Cerrar sesión" style="text-decoration: none;">
+        <img src="../Elements/Icons/logout-icon.svg" alt="Cerrar sesión">
+      </a>
+    </div>
+
+    <button type="button" class="profile-button" aria-label="Perfil de usuario"></button>
+  </div>
+
+</body>
+</html>
