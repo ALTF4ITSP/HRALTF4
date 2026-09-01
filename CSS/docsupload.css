@@ -1,6 +1,3 @@
-/* =========================================================
-   BASE Y RESET (Heredado de tu diseño principal)
-   ========================================================= */
 @import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap');
 
 :root {
@@ -23,12 +20,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 32px 42px 55px; /* Mantiene el margen de tu app-shell */
+    padding: 32px 42px 55px;
 }
 
-/* =========================================================
-   CONTENEDOR PRINCIPAL
-   ========================================================= */
 .contenedor {
     width: min(100%, 1080px);
     display: flex;
@@ -36,9 +30,6 @@ body {
     gap: 30px;
 }
 
-/* =========================================================
-   BARRA SUPERIOR (Idéntica a tu .topbar)
-   ========================================================= */
 .barra-superior {
     display: flex;
     align-items: center;
@@ -86,9 +77,6 @@ body {
     white-space: nowrap;
 }
 
-/* =========================================================
-   FORMULARIO CENTRAL (Efecto Cristal)
-   ========================================================= */
 .contenedor-formulario {
     display: flex;
     justify-content: center;
@@ -121,7 +109,7 @@ body {
 .indicador-morado {
     width: 6px;
     height: 28px;
-    background-color: #abbaea; /* El tono exacto de tu nav-item activo */
+    background-color: #abbaea;
     border-radius: 4px;
 }
 
@@ -132,9 +120,6 @@ body {
     color: #eeeeee;
 }
 
-/* =========================================================
-   INPUTS (Basado en tu barra de búsqueda)
-   ========================================================= */
 .grupo-input {
     display: flex;
     flex-direction: column;
@@ -170,15 +155,11 @@ body {
     background: rgba(16, 23, 50, 0.8);
 }
 
-/* Opciones del menú desplegable */
 select.input-formulario option {
     background: #101732;
     color: #eeeeee;
 }
 
-/* =========================================================
-   ÁREA DE SUBIDA DE ARCHIVOS
-   ========================================================= */
 .area-subida {
     background: rgba(255, 255, 255, 0.015);
     border: 2px dashed rgba(238, 238, 238, 0.2);
@@ -202,7 +183,6 @@ select.input-formulario option {
     transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
-/* El ícono se vuelve del color activo al pasar el mouse */
 .area-subida:hover img {
     opacity: 1;
     filter: brightness(0) saturate(100%) invert(77%) sepia(11%) saturate(1478%) hue-rotate(189deg) brightness(97%) contrast(96%);
@@ -224,9 +204,6 @@ select.input-formulario option {
     cursor: pointer;
 }
 
-/* =========================================================
-   BOTONES Y SEPARADOR
-   ========================================================= */
 .linea-divisora {
     border: 0;
     height: 1px;
@@ -276,9 +253,6 @@ select.input-formulario option {
     border-color: rgba(238, 238, 238, 0.3);
 }
 
-/* =========================================================
-   RESPONSIVE (Celulares y Tablets)
-   ========================================================= */
 @media (max-width: 770px) {
     body { padding: 22px 20px 50px; }
     

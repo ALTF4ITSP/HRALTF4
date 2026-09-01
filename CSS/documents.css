@@ -147,7 +147,6 @@
   background: rgba(255, 255, 255, 0.045);
 }
 
-/* --- BOTÓN DE TRES PUNTOS --- */
 .more-options {
   position: absolute;
   top: 13px;
@@ -169,7 +168,6 @@
   color: #ffffff;
 }
 
-/* --- MENÚ DESPLEGABLE --- */
 .document-dropdown-menu {
   display: none;
   position: absolute;
@@ -247,7 +245,6 @@
   font-weight: 600;
 }
 
-/* Estilo opcional para cuando se usa "Seleccionar" */
 .document-folder-card.selected {
   border-color: #abbaea;
   background: rgba(171, 186, 234, 0.12);
