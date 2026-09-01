@@ -1,10 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // =====================================================
-    // LISTA DE TRASLADOS
-    // Este bloque funciona solamente dentro de trace.html.
-    // =====================================================
-
     const transferGrid = document.getElementById("transferGrid");
 
     if (transferGrid) {
@@ -35,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("completedCount").textContent = completedCards.length;
         document.getElementById("allCount").textContent = transferCards.length;
 
-        // Devuelve las tarjetas que coinciden con el filtro y la búsqueda.
         function getFilteredCards() {
             return transferCards.filter(function (card) {
                 const matchesFilter = currentFilter === "all" || card.dataset.status === currentFilter;
@@ -46,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        // Crea solamente los números de página que realmente se necesitan.
         function createPageButtons(totalPages) {
             pageNumbers.innerHTML = "";
 
@@ -87,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // Muestra solamente las tarjetas de la página elegida.
         function showCurrentPage() {
             const filteredCards = getFilteredCards();
             const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
@@ -152,7 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        // Abre la nueva pantalla sin tener que cambiar trace.html.
         if (newTransferButton) {
             newTransferButton.addEventListener("click", function () {
                 window.location.href = "trace-new.html";
@@ -161,11 +152,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         showCurrentPage();
     }
-
-    // =====================================================
-    // FORMULARIO DE NUEVO TRASLADO
-    // Este bloque funciona solamente dentro de trace-new.html.
-    // =====================================================
 
     const newTransferForm = document.getElementById("newTransferForm");
 
@@ -180,7 +166,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const startDate = document.getElementById("startDate");
         const draftName = "hospitalNewTransferDraft";
 
-        // Evita que se elija una fecha anterior al día actual.
         const today = new Date();
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, "0");
@@ -197,12 +182,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // El nombre del paciente es obligatorio solo para traslados de pacientes.
         function updatePatientRequirement() {
             patientName.required = transferType.value === "patient";
         }
 
-        // Guarda los campos simples del formulario en el navegador.
         function saveDraft() {
             const draft = {};
             const controls = newTransferForm.querySelectorAll("input, select, textarea");
@@ -227,7 +210,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // Recupera el borrador cuando se vuelve a abrir la página.
         function loadDraft() {
             let savedDraft = null;
 
@@ -283,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
                 localStorage.removeItem(draftName);
             } catch (error) {
-                // La página puede continuar aunque el navegador bloquee el almacenamiento.
+
             }
 
             window.location.href = "trace.html";
@@ -302,7 +284,6 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
                 localStorage.removeItem(draftName);
             } catch (error) {
-                // No es necesario detener el formulario por este error.
             }
 
             newTransferForm.reset();
