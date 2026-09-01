@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración | Hospital de Clínicas</title>
+  <link rel="stylesheet" href="../CSS/settings.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:wght@400;500;600;700&family=Krub:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="#">
+  <script src="../JS/settings.js" defer></script>
+</head>
+
+<body>
+  <main class="app-shell">
+    <aside class="sidebar">
+      <button type="button" class="sidebar-action" aria-label="Abrir o cerrar menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="sidebar-nav" aria-label="Navegación principal">
+        <div class="nav-indicator"></div>
+
+        <a href="main-menu.html" class="nav-item">
+          <img src="#" alt="">
+          <span>Inicio</span>
+        </a>
+        <a href="documents.html" class="nav-item">
+          <img src="#" alt="">
+          <span>Documentos</span>
+        </a>
+        <a href="trace.html" class="nav-item">
+          <img src="#" alt="">
+          <span>Ambulancias</span>
+        </a>
+        <a href="#" class="nav-item">
+          <img src="#" alt="">
+          <span>Reportes</span>
+        </a>
+        <a href="#" class="nav-item">
+          <img src="#" alt="">
+          <span>Calendario</span>
+        </a>
+        <a href="surveys.html" class="nav-item">
+          <img src="#" alt="">
+          <span>Encuestas</span>
+        </a>
+
+        <div class="nav-spacer"></div>
+
+        <a href="settings.html" class="nav-item active">
+          <img src="#" alt="">
+          <span>Configuración</span>
+        </a>
+      </nav>
+    </aside>
+
+    <section class="settings-card">
+      <header class="settings-header">
+        <a href="main-menu.html" class="brand" aria-label="Ir al inicio">
+          <img src="#" alt="">
+          <span>HOSPITAL DE CLINICAS</span>
+        </a>
+
+        <div class="profile-area">
+          <button type="button" class="profile-summary" aria-label="Abrir menú de usuario" aria-expanded="false">
+            <span class="profile-icon"><img src="#" alt=""></span>
+            <span>Usuario</span>
+            <span class="profile-arrows" aria-hidden="true"></span>
+          </button>
+
+          <div class="profile-menu">
+            <a href="settings.html"><img src="#" alt="">Configuración</a>
+            <button type="button"><img src="#" alt="">Cerrar sesión</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="settings-content">
+        <h1>Configuración</h1>
+
+        <div class="settings-tabs" role="tablist" aria-label="Secciones de configuración">
+          <button type="button" class="tab-button active" id="general-tab" data-tab="general-panel" role="tab"
+            aria-controls="general-panel" aria-selected="true">
+            Información General
+          </button>
+          <button type="button" class="tab-button" id="privacy-tab" data-tab="privacy-panel" role="tab"
+            aria-controls="privacy-panel" aria-selected="false">
+            Privacidad
+          </button>
+        </div>
+
+        <section class="tab-panel" id="general-panel" role="tabpanel" aria-labelledby="general-tab">
+          <form class="general-layout" id="general-form">
+            <div class="general-fields">
+              <label class="field-group">
+                <span>Nombre</span>
+                <input type="text" name="name" placeholder="Usuario...">
+              </label>
+
+              <label class="field-group">
+                <span>Email</span>
+                <input type="email" name="email" placeholder="Email...">
+              </label>
+
+              <label class="field-group">
+                <span>Centro</span>
+                <input type="text" name="center" placeholder="Hospital de Clinicas...">
+              </label>
+
+              <div class="specialties-block">
+                <span class="field-label">Especializaciones</span>
+                <div class="specialties-list" id="specialties-list">
+                  <span class="specialty-tag">Gooner</span>
+                  <span class="specialty-tag">Goonette</span>
+                  <button type="button" class="add-specialty" id="add-specialty" aria-label="Agregar especialización">+</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="general-divider" aria-hidden="true"></div>
+
+            <div class="photo-settings">
+              <span class="field-label">Foto de Perfil</span>
+
+              <label class="upload-box" for="profile-photo">
+                <input type="file" id="profile-photo" accept="image/*">
+                <img class="upload-icon" src="#" alt="">
+                <img class="photo-preview" id="photo-preview" alt="Vista previa de la foto de perfil">
+                <strong id="upload-text">SUBIR IMAGEN</strong>
+              </label>
+
+              <div class="visibility-setting">
+                <span class="field-label">Visibilidad de Foto</span>
+                <div class="visibility-row">
+                  <button type="button" class="switch is-on" aria-label="Cambiar visibilidad de la foto"
+                    aria-pressed="true"></button>
+                  <p>Tu foto se mostrará<br>públicamente</p>
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section class="tab-panel" id="privacy-panel" role="tabpanel" aria-labelledby="privacy-tab" hidden>
+          <div class="privacy-layout">
+            <div class="privacy-options">
+              <div class="privacy-option">
+                <span>Análisis de Rendimiento</span>
+                <button type="button" class="switch is-on" aria-label="Activar análisis de rendimiento"
+                  aria-pressed="true"></button>
+              </div>
+
+              <div class="privacy-option">
+                <span>Notificaciones de Seguridad</span>
+                <button type="button" class="switch" aria-label="Activar notificaciones de seguridad"
+                  aria-pressed="false"></button>
+              </div>
+
+              <div class="privacy-option">
+                <span>Cerrar Sesión Automáticamente</span>
+                <button type="button" class="switch" aria-label="Activar cierre de sesión automático"
+                  aria-pressed="false"></button>
+              </div>
+
+              <label class="field-group language-field">
+                <span>Idioma</span>
+                <select name="language" aria-label="Idioma">
+                  <option>Español</option>
+                  <option>English</option>
+                  <option>Português</option>
+                </select>
+              </label>
+
+              <div class="theme-setting">
+                <span class="field-label">Estilo de Interfaz</span>
+                <div class="theme-picker" aria-label="Estilo de interfaz">
+                  <button type="button" class="theme-option active" data-theme="dark" aria-label="Tema oscuro">
+                    <img src="#" alt="">
+                  </button>
+                  <button type="button" class="theme-option" data-theme="light" aria-label="Tema claro">
+                    <img src="#" alt="">
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="password-settings">
+              <span>¿Olvidaste tu Contraseña?</span>
+              <button type="button" class="reset-password" id="reset-password">Restablecer Contraseña</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="notice" id="notice" role="status" aria-live="polite"></div>
+</body>
+
+</html>

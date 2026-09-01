@@ -16,10 +16,7 @@
     display: none !important;
 }
 
-/* =========================================================
-   COLUMNA PRINCIPAL
-   Conserva el mismo movimiento usado en trace.css.
-   ========================================================= */
+
 
 .content-card {
     width: calc(100% - 108px);
@@ -63,9 +60,7 @@
     margin: 0 auto;
 }
 
-/* =========================================================
-   VOLVER Y TÍTULO
-   ========================================================= */
+
 
 .back-link {
     width: fit-content;
@@ -128,9 +123,7 @@
     font-size: 0.9rem;
 }
 
-/* =========================================================
-   ESTRUCTURA DEL FORMULARIO
-   ========================================================= */
+
 
 .form-layout {
     display: grid;
@@ -281,9 +274,7 @@ input[type="time"] {
     width: 100%;
 }
 
-/* =========================================================
-   ARCHIVO DEL PACIENTE
-   ========================================================= */
+
 
 .file-input {
     position: absolute;
@@ -317,9 +308,7 @@ input[type="time"] {
     white-space: nowrap;
 }
 
-/* =========================================================
-   OPCIONES Y BOTONES
-   ========================================================= */
+
 
 .option-grid {
     display: grid;
@@ -424,9 +413,7 @@ input[type="time"] {
     background-color: #5979e5;
 }
 
-/* =========================================================
-   DISEÑO RESPONSIVO
-   ========================================================= */
+
 
 @media (min-width: 1101px) and (max-width: 1440px),
        (min-width: 1101px) and (max-height: 900px) {
