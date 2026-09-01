@@ -24,10 +24,6 @@ body {
     position: relative;
 }
 
-/* =========================================================
-   MAIN LAYOUT
-   ========================================================= */
-
 .app-shell {
     position: relative;
     width: min(100%, 1880px);
@@ -38,10 +34,6 @@ body {
     flex-direction: column;
     gap: 30px;
 }
-
-/* =========================================================
-   SIDEBAR & NAVIGATION
-   ========================================================= */
 
 .sidebar {
     position: absolute;
@@ -91,7 +83,7 @@ body {
 }
 
 .sidebar-action {
-    width: 92px; /* Fixed size keeps hitbox strictly around the icon area */
+    width: 92px;
     height: 92px;
     margin: 4px 0 0 0;
     flex-shrink: 0;
@@ -144,7 +136,6 @@ body {
     flex-grow: 1;
     gap: 8px;
 
-    /* Changed top padding from 0 to 12px to give the bounce some breathing room */
     padding: 12px 16px 24px 16px;
 
     opacity: 0;
@@ -174,7 +165,6 @@ body {
     pointer-events: none;
     top: var(--indicator-top, 0px);
 
-    /* Toned down the curve (from 1.56 to 1.12) and slightly sped it up for a tighter snap */
     transition: top 0.4s cubic-bezier(0.34, 1.12, 0.64, 1);
 }
 
@@ -223,10 +213,6 @@ body {
     flex-grow: 1;
 }
 
-/* =========================================================
-   TOP NAVIGATION
-   ========================================================= */
-
 .topbar {
     position: relative;
     margin-left: 108px;
@@ -261,10 +247,6 @@ body {
         border-color 0.2s ease;
 }
 
-/* =========================================================
-   HOSPITAL BRAND
-   ========================================================= */
-
 .brand {
     display: flex;
     align-items: center;
@@ -295,10 +277,6 @@ body {
     filter: brightness(0) invert(1);
     opacity: 0.88;
 }
-
-/* =========================================================
-   SEARCH COMPONENT
-   ========================================================= */
 
 .search-wrapper {
     position: absolute;
@@ -387,10 +365,6 @@ body {
         contrast(96%);
 }
 
-/* =========================================================
-   HERO
-   ========================================================= */
-
 .hero-panel {
     width: min(100%, 1080px);
     margin-left: 125px;
@@ -426,10 +400,6 @@ body {
     font-weight: 400;
     color: rgba(238, 238, 238, 0.55);
 }
-
-/* =========================================================
-   CARDS GRID & FEATURE CARDS
-   ========================================================= */
 
 .cards-grid {
     width: 100%;
@@ -534,10 +504,6 @@ body {
     background: rgba(255, 255, 255, 0.07);
     border-color: rgba(238, 238, 238, 0.28);
 }
-
-/* =========================================================
-   PROFILE WRAPPER & MENU
-   ========================================================= */
 
 .profile-wrapper {
     position: fixed;
@@ -658,10 +624,6 @@ body {
     background: rgba(255, 255, 255, 0.08);
 }
 
-/* =========================================================
-   RESPONSIVE — 1100px
-   ========================================================= */
-
 @media (max-width: 1100px) {
     .app-shell {
         padding: 28px 30px 50px;
@@ -710,10 +672,6 @@ body {
         height: 54px;
     }
 }
-
-/* =========================================================
-   RESPONSIVE — 770px
-   ========================================================= */
 
 @media (max-width: 770px) {
     .app-shell {
@@ -807,10 +765,6 @@ body {
         bottom: 12px;
     }
 }
-
-/* =========================================================
-   RESPONSIVE — 500px
-   ========================================================= */
 
 @media (max-width: 500px) {
     .app-shell {
