@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital de Clínicas - Traslado 1</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../../../assets/hospital-dark.ico">
+
+  <link rel="stylesheet" href="../../css/main-menu.css">
+  <link rel="stylesheet" href="../../css/traces/trace-view.css">
+  
+  <script src="../../js/main-menu.js" defer></script>
+</head>
+
+<body>
+  <div class="page-background"></div>
+  <div class="page-glow"></div>
+
+  <main class="app-shell">
+
+    
+    <aside class="sidebar">
+      <button type="button" class="sidebar-action" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="sidebar-nav">
+        <div class="nav-indicator"></div>
+
+        <a href="../main-menu.html" class="nav-item">
+          <img src="../../../assets/Icons/house-icon.svg" alt="Inicio">
+          <span>Inicio</span>
+        </a>
+
+        <a href="../documents/documents.html" class="nav-item">
+          <img src="../../../assets/Icons/folder-icon.svg" alt="Documentos">
+          <span>Documentos</span>
+        </a>
+
+        <a href="trace.html" class="nav-item active">
+          <img src="../../../assets/Icons/location-icon.svg" alt="Ambulancias">
+          <span>Ambulancias</span>
+        </a>
+
+        <a href="../analytics/analytics.html" class="nav-item">
+          <img src="../../../assets/Icons/analytics-icon.svg" alt="Reportes">
+          <span>Reportes</span>
+        </a>
+
+        <a href="../calendar/calendar.html" class="nav-item">
+          <img src="../../../assets/Icons/calendar-icon.svg" alt="Calendario">
+          <span>Calendario</span>
+        </a>
+
+        <a href="../surveys/surveys.html" class="nav-item">
+          <img src="../../../assets/Icons/survey-icon.svg" alt="Encuestas">
+          <span>Encuestas</span>
+        </a>
+
+        <div class="nav-spacer"></div>
+
+        <a href="../settings.html" class="nav-item">
+          <img src="../../../assets/Icons/settings-icon.svg" alt="Configuración">
+          <span>Configuración</span>
+        </a>
+      </nav>
+    </aside>
+
+    
+    <section class="content-card">
+      
+      
+      <header class="topbar">
+        <div class="brand">
+          <img src="../../../assets/Icons/hospital-logo.png" alt="Hospital de Clínicas">
+          <span>HOSPITAL DE CLINICAS</span>
+        </div>
+
+        <div class="search-wrapper">
+          <input type="search" class="search-input" placeholder="Buscar..." autocomplete="off">
+          <button type="button" class="topbar-action search-action" aria-label="Buscar">
+            <img src="../../../assets/Icons/search-icon.svg" alt="" aria-hidden="true">
+          </button>
+        </div>
+      </header>
+
+      
+      <section class="traslado-wrapper">
+        <article class="traslado-card">
+          
+          
+          <button type="button" class="btn-close" aria-label="Cerrar" onclick="window.location.href='trace.html';">&times;</button>
+
+          
+          <div class="ambulance-icon-container">
+            <img src="../../../assets/Icons/ambulance-icon.png" alt="Ambulancia" class="ambulance-icon">
+          </div>
+
+          <h1 class="traslado-title">TRASLADO 1</h1>
+
+          <div class="traslado-body">
+            
+            
+            <div class="map-column">
+              <span class="map-label">Rastreo en Vivo:</span>
+              <div class="map-container">
+                <img src="../../../assets/map-placeholder.png" alt="Mapa de rastreo" class="map-image">
+              </div>
+            </div>
+
+            
+            <div class="info-column">
+              
+              <div class="info-group">
+                <p class="information-label">Conductor</p>
+                <div class="info-value">
+                  <img src="../../../assets/Icons/steering-wheel.svg" alt="" aria-hidden="true" class="info-icon">
+                  <p><strong>Benjamín Genolet</strong></p>
+                </div>
+              </div>
+
+              <div class="info-group">
+                <p class="information-label">Acompañante</p>
+                <div class="info-value">
+                  <img src="../../../assets/Icons/person-icon.svg" alt="" aria-hidden="true" class="info-icon">
+                  <p><strong>Nicolás Peluffo</strong></p>
+                </div>
+              </div>
+
+              <div class="info-group">
+                <p class="information-label">Elemento</p>
+                <div class="info-value">
+                  <img src="../../../assets/Icons/human-icon.svg" alt="" aria-hidden="true" class="info-icon">
+                  <p><strong>PACIENTE</strong></p>
+                </div>
+              </div>
+
+              <div class="info-group">
+                <p><strong>Origen:</strong> Hospital</p>
+                <p><strong>Destino:</strong> ITSP</p>
+              </div>
+
+              <div class="info-group">
+                <p><strong>Hora de Inicio:</strong> 22:32 PM</p>
+                <p><strong>Hora Final:</strong> 2:12 AM</p>
+              </div>
+
+              <div class="info-group">
+                <p><strong>Fecha de Realización:</strong> 12/02/2026</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </article>
+      </section>
+    </section>
+  </main>
+
+</body>
+</html>
