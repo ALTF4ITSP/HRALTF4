@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vista de Documento - Documento 1</title>
+  <link rel="stylesheet" href="../../css/main-menu.css">
+  <link rel="stylesheet" href="../../css/documents/documents-viewer.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;1,400;1,500&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../../../assets/hospital-dark.ico">
+  <script src="../../js/main-menu.js" defer></script>
+</head>
+
+<body>
+  <div class="page-background"></div>
+  <div class="page-glow"></div>
+
+  <main class="app-shell">
+    <aside class="sidebar">
+      <button type="button" class="sidebar-action" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="sidebar-nav">
+        <div class="nav-indicator"></div>
+
+        <a href="../main-menu.html" class="nav-item">
+          <img src="../../../assets/Icons/house-icon.svg" alt="Inicio">
+          <span>Inicio</span>
+        </a>
+        <a href="documents.html" class="nav-item active">
+          <img src="../../../assets/Icons/folder-icon.svg" alt="Documentos">
+          <span>Documentos</span>
+        </a>
+        <a href="../traces/trace.html" class="nav-item">
+          <img src="../../../assets/Icons/location-icon.svg" alt="Ambulancias">
+          <span>Ambulancias</span>
+        </a>
+        <a href="../analytics/analytics.html" class="nav-item">
+          <img src="../../../assets/Icons/analytics-icon.svg" alt="Reportes">
+          <span>Reportes</span>
+        </a>
+        <a href="../calendar/calendar.html" class="nav-item">
+          <img src="../../../assets/Icons/calendar-icon.svg" alt="Calendario">
+          <span>Calendario</span>
+        </a>
+        <a href="../surveys/surveys.html" class="nav-item">
+          <img src="../../../assets/Icons/survey-icon.svg" alt="Encuestas">
+          <span>Encuestas</span>
+        </a>
+
+        <div class="nav-spacer"></div>
+
+        <a href="../settings.html" class="nav-item">
+          <img src="../../../assets/Icons/settings-icon.svg" alt="Configuración">
+          <span>Configuración</span>
+        </a>
+      </nav>
+    </aside>
+
+    <header class="topbar">
+      <div class="brand">
+        <img src="../../../assets/Icons/hospital-logo.png" alt="Hospital de Clínicas">
+        <span>HOSPITAL DE CLINICAS</span>
+      </div>
+
+      <div class="search-wrapper">
+        <input type="text" class="search-input" placeholder="Escribe algo...">
+        <button type="button" class="topbar-action search-action" aria-label="Buscar">
+          <img src="../../../assets/Icons/search-icon.svg" alt="" aria-hidden="true">
+        </button>
+      </div>
+    </header>
+
+    <section class="hero-panel viewer-panel">
+
+      <div class="viewer-grid">
+        <aside class="viewer-surface viewer-profile-card">
+          <img class="viewer-avatar" src="../../../assets/Icons/pfp-default.png" alt="Funcionario 1">
+          <h2>FUNCIONARIO 1</h2>
+          <p>1.234.567-0 &bull; CARGO: GESTOR</p>
+          <p>11/09/2001</p>
+
+          <div class="viewer-divider"></div>
+
+          <button type="button" class="qr-button" aria-label="Generar código QR">
+            <a href="#" class="qr-button" aria-label="Generar código QR">
+              <img src="../../../assets/Icons/qr-icon.svg" alt="QR Code">
+              <span>GENERAR QR</span>
+            </a>
+          </button>
+        </aside>
+
+        <article class="viewer-surface document-card">
+          <a href="documents.html" class="close-btn" aria-label="Cerrar documento">&times;</a>
+
+          <h2 class="document-title">DOCUMENTO MEDICO: Prostatectomía radical de Juan Benitez</h2>
+
+          <div class="document-content">
+            <div class="document-text">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius efficitur turpis, at
+                fermentum quam volutpat ut. Integer dictum, eros in mattis volutpat, leo ligula mattis leo, at sodales
+                mauris velit at dolor. Etiam venenatis venenatis sapien, sed aliquet felis convallis viverra.</p>
+              <p>Nulla interdum mauris nec nisi ultrices, sit amet venenatis tortor lacinia. Aliquam egestas et dui sed
+                rhoncus. Mauris semper cursus placerat. Ut sit amet urna in augue efficitur dapibus. Maecenas finibus
+                placerat suscipit. Nunc magna ligula, tincidunt nec iaculis sit amet, vestibulum sit amet mauris.</p>
+              <p>Donec vel magna nec dolor mattis bibendum ultrices et nulla. Aliquam eu efficitur ex. Cras sed mi nec
+                arcu commodo iaculis.</p>
+            </div>
+
+            <div class="document-image-wrapper">
+              <div class="document-image-wrapper">
+                <a href="#" class="document-image-link" aria-label="Vista previa del documento">
+                  <img src="../../../assets/images.jpeg" class="image-placeholder" alt="Vista previa">
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+</body>
+
+</html>
