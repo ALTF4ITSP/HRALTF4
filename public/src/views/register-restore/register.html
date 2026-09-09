@@ -12,28 +12,67 @@
 <body>
     <div class="tarjeta">
         <h1>Registro</h1>
-        <form onsubmit="window.location.href='../main-menu.html'; return false;">
-            <input type="text" name="usuario" placeholder="Usuario">
+       <form
+    id="registerForm"
+    method="POST"
+    action="../../../../backend/php/usuarios/register.php">
 
-            <!-- Campo de Contraseña único con ojito -->
-            <div class="password-wrapper">
-                <input type="password" id="contraseña" name="contraseña" placeholder="Contraseña" minlength="8" maxlength="16" required>
-                <button type="button" id="togglePasswordBtn" class="btn-toggle-eye">
-                 <img src="../../../assets/Icons/eye.svg" id="eyeIcon" alt="Mostrar contraseña">
-                </button>
-            </div>
+    <input
+        type="text"
+        name="usuario"
+        placeholder="Usuario"
+        required>
 
-                <!-- BARRA DE SEGURIDAD -->
-        <div class="strength-meter">
+    <div class="password-wrapper">
+        <input
+            type="password"
+            id="contraseña"
+            name="contrasena"
+            placeholder="Contraseña"
+            minlength="8"
+            maxlength="16"
+            required>
+
+        <button
+            type="button"
+            id="togglePasswordBtn"
+            class="btn-toggle-eye">
+
+            <img
+                src="../../../assets/Icons/eye.svg"
+                id="eyeIcon"
+                alt="Mostrar contraseña">
+        </button>
+    </div>
+
+    <div class="strength-meter">
         <div id="strengthBar" class="strength-bar"></div>
-        </div>
-        <span id="strengthText" class="strength-text"></span>
+    </div>
 
+    <span
+        id="strengthText"
+        class="strength-text">
+    </span>
 
-            <input type="text" name="Email" placeholder="Email">
-            <input type="text" name="CI" placeholder="CI">
-            <button type="submit" onclick="window.location.href='../../../index.html'; return false;">Registrarse</button>
-        </form>
+    <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required>
+
+    <input
+        type="text"
+        name="CI"
+        placeholder="CI"
+        required>
+
+    <button type="submit">
+        Registrarse
+    </button>
+
+    <p id="registerMessage"></p>
+
+</form>
         <p>
             ¿Ya tienes cuenta?
             <a href="../../../index.html">Iniciar Sesion</a>
