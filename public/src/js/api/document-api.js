@@ -27,7 +27,7 @@
     }
 
     if (!response.ok || payload.success !== true) {
-      const message = payload?.error?.message || "No se pudo guardar el documento.";
+      const message = payload?.message || "No se pudo guardar el documento.";
       throw new DocumentApiError(message, response.status, payload);
     }
 
