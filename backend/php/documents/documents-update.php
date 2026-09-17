@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/connection.php';
+require_once __DIR__ . '/documents-storage.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -141,16 +142,10 @@ try {
         $crearTipo->close();
     }
 
-    $rutaBaseUploads = dirname(__DIR__, 2) . '/uploads/documentos';
+    $rutaBaseUploads = document_storage_directory();
     $rutaArchivo = (string) $documento['ruta_archivo'];
 
     if ($reemplazaArchivo) {
-        if (!is_dir($rutaBaseUploads)
-            && !mkdir($rutaBaseUploads, 0775, true)
-            && !is_dir($rutaBaseUploads)) {
-            throw new RuntimeException('No se pudo preparar la carpeta de documentos.');
-        }
-
         $nombreArchivo = 'doc_' . bin2hex(random_bytes(16)) . '.' . $extension;
         $rutaFisicaNueva = $rutaBaseUploads . DIRECTORY_SEPARATOR . $nombreArchivo;
 
@@ -167,15 +162,17 @@ try {
              titulo = ?,
              descripcion = ?,
              ruta_archivo = ?,
+             fecha_carga = ?,
              version = version + 1
          WHERE id_documento = ?'
     );
     $actualizar->bind_param(
-        'isssi',
+        'issssi',
         $idTipoDocumento,
         $nombre,
         $descripcion,
         $rutaArchivo,
+        $fecha,
         $idDocumento
     );
     $actualizar->execute();

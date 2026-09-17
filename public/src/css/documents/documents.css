@@ -109,13 +109,36 @@
 .documents-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(200px, 1fr));
   gap: 20px;
 }
 
 .document-link {
+  position: relative;
   min-width: 0;
   color: inherit;
   text-decoration: none;
+}
+
+.document-link.menu-open {
+  z-index: 20;
+}
+
+.documents-empty {
+  margin: 0;
+  color: rgba(238, 238, 238, 0.58);
+  text-align: center;
+}
+
+.document-placeholder {
+  min-height: 200px;
+  visibility: hidden;
+}
+
+.document-placeholder.has-message {
+  display: grid;
+  place-items: center;
+  visibility: visible;
 }
 
 .document-folder-card {
@@ -261,6 +284,7 @@
 @media (max-width: 600px) {
   .documents-grid {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
   }
 
   .recent-documents {
