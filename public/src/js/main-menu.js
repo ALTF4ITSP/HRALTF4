@@ -13,6 +13,43 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    const userNameTargets = document.querySelectorAll('[data-current-user-name]');
+    const welcomeTargets = document.querySelectorAll('[data-current-user-welcome]');
+    const userAvatarTargets = document.querySelectorAll('[data-current-user-avatar]');
+
+    if (userNameTargets.length || welcomeTargets.length || userAvatarTargets.length) {
+        const script = document.querySelector('script[src*="js/main-menu.js"]');
+
+        if (script) {
+            const endpoint = new URL('../../api/settings_get.php', script.src);
+
+            fetch(endpoint, { credentials: 'same-origin' })
+                .then(response => response.json().then(data => ({ response, data })))
+                .then(({ response, data }) => {
+                    if (!response.ok || data.success !== true) return;
+
+                    const user = data.data?.usuario || {};
+                    const fullName = user.nombre_completo || user.nombre_usuario || 'Usuario';
+                    const firstName = user.nombre || fullName;
+
+                    userNameTargets.forEach(element => {
+                        element.textContent = fullName;
+                    });
+
+                    welcomeTargets.forEach(element => {
+                        element.textContent = `¡Bienvenido ${firstName}!`;
+                    });
+
+                    userAvatarTargets.forEach(element => {
+                        element.alt = fullName;
+                    });
+                })
+                .catch(() => {
+                    // Keep the HTML placeholders if the user data cannot be loaded.
+                });
+        }
+    }
+
     const searchBtn = document.querySelector('.search-action');
     const topbar = document.querySelector('.topbar');
     const searchInput = document.querySelector('.search-input');
