@@ -22,6 +22,32 @@ document.addEventListener("DOMContentLoaded", () => {
     if (/^[1-9]\d*$/.test(requestedId || "")) documentIdField.value = requestedId;
   }
 
+  async function loadDocument() {
+    if (!documentIdField || !documentIdField.value) return;
+
+    try {
+      const response = await fetch(`../../../api/documents/get.php?id=${encodeURIComponent(documentIdField.value)}`);
+      const payload = await response.json();
+      if (!response.ok || payload.success !== true) throw new Error(payload?.error?.message || "No se pudo cargar el documento.");
+
+      const documentData = payload.data;
+      form.elements.nombre.value = documentData.titulo;
+      form.elements.descripcion.value = documentData.descripcion || "";
+      form.elements.fecha.value = documentData.fecha;
+      const categoryByName = {
+        "Informe médico": "informe",
+        "Estudio de Laboratorio": "estudio",
+        "Documento Administrativo": "administrativo"
+      };
+      form.elements.categoria.value = categoryByName[documentData.tipo] || "";
+      const currentFileName = currentFile?.querySelector("strong");
+      if (currentFileName) currentFileName.textContent = documentData.ruta_archivo.split("/").pop();
+    } catch (error) {
+      showMessage(error.message, true);
+      submitButton.disabled = true;
+    }
+  }
+
   function showMessage(message, isError = false) {
     formMessage.textContent = message;
     formMessage.classList.toggle("error", isError);
@@ -115,19 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderSelectedFile();
   });
 
-  uploadArea.addEventListener("drop", (event) => {
-    const files = event.dataTransfer?.files;
-    if (!files?.length) return;
-
-    if (files.length > 1) {
-      showMessage("Seleccioná un solo archivo.", true);
-      return;
-    }
-
-    fileInput.files = files;
-    renderSelectedFile();
-  });
-
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -157,4 +170,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setSubmitting(false);
     }
   });
+
+  loadDocument();
 });
