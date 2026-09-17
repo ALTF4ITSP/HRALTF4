@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . '/php/settings-common.php';
+require_once __DIR__ . '/settings-common.php';
 
 settings_require_method('POST');
 

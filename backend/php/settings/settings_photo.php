@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . '/php/settings-common.php';
+require_once __DIR__ . '/settings-common.php';
 
 $idUsuario = settings_current_user_id();
 $conexion = db();
 
-$directorio = dirname(__DIR__) . '/uploads/perfiles';
+$directorio = dirname(__DIR__, 2) . '/uploads/perfiles';
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
     try {

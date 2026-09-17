@@ -264,8 +264,7 @@ CREATE TABLE `tipo_documento` (
 INSERT INTO `tipo_documento` (`id_tipo_documento`, `nombre`, `descripcion`) VALUES
   (1, 'Informe médico', 'Informes realizados por profesionales de la salud'),
   (2, 'Estudio de Laboratorio', 'Resultados y órdenes de estudios de laboratorio'),
-  (3, 'Documento Administrativo', 'Documentación administrativa de pacientes/hospital'),
-  (5, 'Resultado de estudio', 'Tipo de documento utilizado por el sistema.');
+  (3, 'Documento Administrativo', 'Documentación administrativa de pacientes/hospital');
 
 CREATE TABLE `documento` (
   `id_documento` int(11) NOT NULL AUTO_INCREMENT,
@@ -288,12 +287,8 @@ CREATE TABLE `documento` (
     ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
-INSERT INTO `documento`
-  (`id_documento`, `id_tipo_documento`, `titulo`, `descripcion`, `ruta_archivo`, `fecha_carga`, `version`, `estado`, `id_funcionario_carga`)
-VALUES
-  (3, 1, 'Informe Médico de Paciente (prueba 1)', 'Prueba Nro1', 'uploads/documentos/doc_6aa174f97b6844.99393758.pdf', '2026-09-09 12:02:17', 1, 'ACTIVO', 3),
-  (4, 3, 'Documento administrativo de hospital (prueba 2)', 'Prueba Nro2', 'uploads/documentos/doc_6aa1754a648e36.38804847.pdf', '2026-09-09 12:03:38', 1, 'ACTIVO', 3),
-  (5, 5, 'PRUEBA DEL 10/09', 'PRUEBA 3 DEL 10/09', 'uploads/documentos/doc_6aa29f8f7fe291.77249241.pdf', '2026-09-10 09:16:15', 1, 'ACTIVO', 3);
+-- Los documentos se crean desde la aplicación. No se cargan registros de
+-- ejemplo porque sus archivos binarios no forman parte del repositorio.
 
 CREATE TABLE `qr` (
   `id_qr` int(11) NOT NULL AUTO_INCREMENT,
@@ -511,8 +506,8 @@ ALTER TABLE `solicitud_traslado` AUTO_INCREMENT = 3;
 ALTER TABLE `carga_transportada` AUTO_INCREMENT = 4;
 ALTER TABLE `traslado` AUTO_INCREMENT = 3;
 ALTER TABLE `historial_estado` AUTO_INCREMENT = 4;
-ALTER TABLE `tipo_documento` AUTO_INCREMENT = 6;
-ALTER TABLE `documento` AUTO_INCREMENT = 6;
+ALTER TABLE `tipo_documento` AUTO_INCREMENT = 4;
+ALTER TABLE `documento` AUTO_INCREMENT = 1;
 ALTER TABLE `servicio_hospitalario` AUTO_INCREMENT = 5;
 ALTER TABLE `encuesta` AUTO_INCREMENT = 3;
 ALTER TABLE `envio_encuesta` AUTO_INCREMENT = 4;
