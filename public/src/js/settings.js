@@ -30,10 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const userAvatar = document.querySelector(".user-avatar img");
 
     /*
-     * settings.html está dentro de public/html y las APIs están
+     * settings.html está dentro de public/src/views y las APIs están
      * dentro de public/api.
      */
-    const API = "../api";
+    const API = "../../api";
 
     /*
      * ------------------------------------------------------------

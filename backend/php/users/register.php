@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__DIR__) . '/connection.php';
+
 header('Content-Type: application/json; charset=utf-8');
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -7,15 +9,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 try {
 
     //conexion a la base de datos
-    $conexion = new mysqli(
-        'localhost',
-        'root',
-        '',
-        'altf4',
-        3306
-    );
-
-    $conexion->set_charset('utf8mb4');
+    $conexion = db_mysqli();
 
     //datos recibidos del formulario
     $usuario = trim($_POST['usuario'] ?? '');

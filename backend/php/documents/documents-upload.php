@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__DIR__) . '/connection.php';
+
 header('Content-Type: application/json; charset=utf-8');
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -8,15 +10,7 @@ try {
 
 
     //conexion con mysql
-    $conexion = new mysqli(
-        'localhost',
-        'root',
-        '',
-        'altf4',
-        3306
-    );
-
-    $conexion->set_charset('utf8mb4');
+    $conexion = db_mysqli();
 
 
     //comprobar datos del archivo
@@ -87,8 +81,8 @@ try {
 
      //buscar el tipo de docuemento
     $tipos = [
-        'informe' => 'Informe medico',
-        'estudio' => 'Resultado de estudio',
+        'informe' => 'Informe médico',
+        'estudio' => 'Estudio de Laboratorio',
         'administrativo' => 'Documento Administrativo'
     ];
 
