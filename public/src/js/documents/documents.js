@@ -4,14 +4,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.querySelector(".search-input");
   const prevButton = document.getElementById("prevDocs");
   const nextButton = document.getElementById("nextDocs");
+  const gridViewButton = document.getElementById("gridView");
+  const listViewButton = document.getElementById("listView");
+  const pagination = document.querySelector(".documents-pagination");
   const pageSize = 4;
   let currentPage = 1;
+  let viewMode = "grid";
   if (!grid) return;
   let documents = Array.from(grid.querySelectorAll(".document-link")).map((link) => ({
     id_documento: link.dataset.documentId,
     titulo: link.querySelector(".document-name")?.textContent.trim() || "",
     descripcion: "",
     fecha: link.querySelector(".document-date")?.textContent.trim() || "",
+    tamano: link.querySelector(".document-size")?.textContent.trim() || "—",
+    hora: link.querySelector(".document-time")?.textContent.trim() || "",
     sample: true
   }));
 
@@ -32,7 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const filtered = matches();
     const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
     currentPage = Math.min(currentPage, pageCount);
-    const visible = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const visible = viewMode === "list"
+      ? filtered
+      : filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     const cards = visible.map((item) => `
       <a href="documents-viewer.html?id=${item.id_documento}" class="document-link" data-document-id="${item.id_documento}">
@@ -46,20 +54,33 @@ document.addEventListener("DOMContentLoaded", () => {
           <img src="../../../assets/Icons/folder-icon.svg" alt="">
           <p class="document-date">${escapeHtml(item.fecha)}</p>
           <p class="document-name">${escapeHtml(item.titulo)}</p>
+          <p class="document-size">${escapeHtml(item.tamano || item.tamaño || "—")}</p>
+          <p class="document-time">${escapeHtml(item.hora || "")}</p>
         </article>
       </a>`).join("");
-    const emptySlots = Array.from(
+    const emptySlots = viewMode === "grid" ? Array.from(
       { length: pageSize - visible.length },
       () => '<div class="document-placeholder" aria-hidden="true"></div>'
-    ).join("");
+    ).join("") : "";
 
     grid.innerHTML = cards + emptySlots;
     if (!visible.length) {
-      grid.querySelector(".document-placeholder").innerHTML = '<p class="documents-empty">No se encontraron documentos.</p>';
-      grid.querySelector(".document-placeholder").classList.add("has-message");
+      grid.innerHTML = '<div class="document-placeholder has-message"><p class="documents-empty">No se encontraron documentos.</p></div>';
     }
+    grid.classList.toggle("list-view", viewMode === "list");
+    pagination.hidden = viewMode === "list";
     prevButton.disabled = currentPage === 1;
     nextButton.disabled = currentPage === pageCount;
+  }
+
+  function setViewMode(mode) {
+    viewMode = mode;
+    currentPage = 1;
+    gridViewButton.classList.toggle("active", mode === "grid");
+    listViewButton.classList.toggle("active", mode === "list");
+    gridViewButton.setAttribute("aria-pressed", String(mode === "grid"));
+    listViewButton.setAttribute("aria-pressed", String(mode === "list"));
+    render();
   }
 
   function closeMenus() {
@@ -119,6 +140,8 @@ document.addEventListener("DOMContentLoaded", () => {
   searchInput?.addEventListener("input", () => { currentPage = 1; render(); });
   prevButton?.addEventListener("click", () => { currentPage -= 1; render(); });
   nextButton?.addEventListener("click", () => { currentPage += 1; render(); });
+  gridViewButton?.addEventListener("click", () => setViewMode("grid"));
+  listViewButton?.addEventListener("click", () => setViewMode("list"));
 
   render();
 
