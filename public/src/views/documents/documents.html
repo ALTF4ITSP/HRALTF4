@@ -56,6 +56,10 @@
           <img src="../../../assets/Icons/survey-icon.svg" alt="Encuestas">
           <span>Encuestas</span>
         </a>
+        <a href="../management/management.html" class="nav-item">
+          <img src="../../../assets/Icons/database-cog.svg" alt="Gestion">
+          <span>Gestion</span>
+        </a>
 
         <div class="nav-spacer"></div>
 
@@ -104,9 +108,15 @@
 
         <section class="document-surface recent-documents" aria-labelledby="recent-title">
           <div class="documents-heading">
-            <div class="heading-title">
-              <span></span>
-              <h2 id="recent-title">ÚLTIMOS ABIERTOS</h2>
+            <div class="documents-view-switch" role="group" aria-label="Cambiar vista de documentos">
+              <button type="button" class="view-toggle active" id="gridView" aria-label="Vista de cuadrícula"
+                aria-pressed="true" title="Vista de cuadrícula">
+                <img src="../../../assets/Icons/grid-icon.svg" alt="" aria-hidden="true">
+              </button>
+              <button type="button" class="view-toggle" id="listView" aria-label="Vista de lista"
+                aria-pressed="false" title="Vista de lista">
+                <img src="../../../assets/Icons/list-icon.svg" alt="" aria-hidden="true">
+              </button>
             </div>
 
             <div class="documents-pagination">
@@ -137,6 +147,8 @@
                 <img src="../../../assets/Icons/folder-icon.svg" alt="">
                 <p class="document-date">31/07/2026</p>
                 <p class="document-name">DOCUMENTO 1</p>
+                <p class="document-size">2.4 MB</p>
+                <p class="document-time">9:21 AM</p>
               </article>
             </a>
 
@@ -155,6 +167,8 @@
                 <img src="../../../assets/Icons/folder-icon.svg" alt="">
                 <p class="document-date">31/07/2026</p>
                 <p class="document-name">DOCUMENTO 2</p>
+                <p class="document-size">1.8 MB</p>
+                <p class="document-time">4:15 PM</p>
               </article>
             </a>
 
@@ -173,6 +187,8 @@
                 <img src="../../../assets/Icons/folder-icon.svg" alt="">
                 <p class="document-date">31/07/2026</p>
                 <p class="document-name">DOCUMENTO 3</p>
+                <p class="document-size">860 KB</p>
+                <p class="document-time">11:02 AM</p>
               </article>
             </a>
 
@@ -191,6 +207,8 @@
                 <img src="../../../assets/Icons/folder-icon.svg" alt="">
                 <p class="document-date">31/07/2026</p>
                 <p class="document-name">DOCUMENTO 4</p>
+                <p class="document-size">1.2 MB</p>
+                <p class="document-time">3:45 PM</p>
               </article>
             </a>
 
@@ -210,6 +228,8 @@
                 <img src="../../../assets/Icons/folder-icon.svg" alt="">
                 <p class="document-date">01/08/2026</p>
                 <p class="document-name">DOCUMENTO 5</p>
+                <p class="document-size">1.1 MB</p>
+                <p class="document-time">10:18 AM</p>
               </article>
             </a>
 
@@ -228,6 +248,8 @@
                 <img src="../../../assets/Icons/folder-icon.svg" alt="">
                 <p class="document-date">01/08/2026</p>
                 <p class="document-name">DOCUMENTO 6</p>
+                <p class="document-size">950 KB</p>
+                <p class="document-time">5:30 PM</p>
               </article>
             </a>
 
@@ -246,6 +268,8 @@
                 <img src="../../../assets/Icons/folder-icon.svg" alt="">
                 <p class="document-date">02/08/2026</p>
                 <p class="document-name">DOCUMENTO 7</p>
+                <p class="document-size">1.0 MB</p>
+                <p class="document-time">8:05 AM</p>
               </article>
             </a>
 
@@ -264,6 +288,8 @@
                 <img src="../../../assets/Icons/folder-icon.svg" alt="">
                 <p class="document-date">02/08/2026</p>
                 <p class="document-name">DOCUMENTO 8</p>
+                <p class="document-size">720 KB</p>
+                <p class="document-time">1:40 PM</p>
               </article>
             </a>
 
