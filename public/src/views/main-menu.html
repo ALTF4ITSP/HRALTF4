@@ -5,14 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hospital de Clínicas</title>
-  <link rel="stylesheet" href="../css/main-menu.css">
+  <link rel="stylesheet" href="../css/main-menu.css?v=20260927-brand-fix">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="../../assets/hospital-dark.ico">
-  <script src="../js/main-menu.js?v=20260917-user-name" defer></script>
+  <script src="../js/main-menu.js?v=20260927-global" defer></script>
+  <script src="../js/universal-search.js?v=20260927-global" defer></script>
 </head>
 
 <body>
@@ -70,18 +71,30 @@
       </nav>
     </aside>
 
-    <header class="topbar">
+    <header class="topbar quick-search-topbar">
       <div class="brand">
         <img src="../../assets/Icons/hospital-logo.png" alt="Hospital de Clínicas">
         <span>HOSPITAL DE CLINICAS</span>
       </div>
 
-      <div class="search-wrapper">
-        <input type="text" class="search-input" placeholder="Escribe algo...">
-        <button type="button" class="topbar-action search-action" aria-label="Buscar">
+      <div class="search-wrapper" role="search">
+        <input type="text" id="quick-search" class="search-input" placeholder="Buscar una acción o sección..."
+          aria-label="Buscar una acción o sección" role="combobox" aria-autocomplete="list"
+          aria-controls="search-results-list" aria-expanded="false" autocomplete="off" tabindex="-1">
+        <button type="button" class="topbar-action search-action" aria-label="Abrir búsqueda"
+          aria-controls="quick-search" aria-expanded="false">
           <img src="../../assets/Icons/search-icon.svg" alt="" aria-hidden="true">
         </button>
       </div>
+
+      <div class="search-results" id="search-results" hidden>
+        <div class="search-results-heading">
+          <span id="search-results-title">Accesos rápidos</span>
+        </div>
+        <ul id="search-results-list" class="search-results-list" role="listbox" aria-label="Resultados de búsqueda"></ul>
+        <p class="search-results-footer">Haz clic en una opción disponible para ir a esa sección.</p>
+      </div>
+      <span id="search-status" class="visually-hidden" role="status" aria-live="polite"></span>
     </header>
 
     <section class="hero-panel">

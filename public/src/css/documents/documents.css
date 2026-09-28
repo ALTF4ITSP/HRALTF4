@@ -1,4 +1,6 @@
 .documents-panel {
+  position: relative;
+  z-index: 1;
   width: min(calc(100% - 125px), 1180px);
 }
 
@@ -329,10 +331,28 @@
   width: 30px;
   height: 34px;
   margin: 0;
-  content: url("../../../assets/Icons/pdf-icon.png");
-  filter: invert(38%) sepia(98%) saturate(3035%) hue-rotate(338deg) brightness(108%) contrast(101%);
+  filter: brightness(0) invert(1);
   opacity: 1;
   object-fit: contain;
+}
+
+.documents-grid.list-view .document-link[data-file-type="pdf"] .document-folder-card>img {
+  content: url("../../../assets/Icons/pdf-icon.png");
+  filter: invert(38%) sepia(98%) saturate(3035%) hue-rotate(338deg) brightness(108%) contrast(101%);
+}
+
+.documents-grid.list-view .document-link[data-file-type="docx"] .document-folder-card>img {
+  content: url("../../../assets/Icons/docx-icon.png");
+  filter: brightness(0) saturate(100%) invert(65%) sepia(16%) saturate(898%) hue-rotate(176deg) brightness(89%) contrast(130%);
+}
+
+.documents-grid.list-view .document-link[data-file-type="pptx"] .document-folder-card>img {
+  content: url("../../../assets/Icons/pptx-icon.png");
+  filter: brightness(0) saturate(100%) invert(54%) sepia(36%) saturate(594%) hue-rotate(346deg) brightness(120%) contrast(88%);
+}
+
+.documents-grid.list-view .document-link:is([data-file-type="png"], [data-file-type="jpg"]) .document-folder-card>img {
+  content: url("../../../assets/Icons/camera-icon.svg");
 }
 
 .documents-grid.list-view .document-name {
@@ -434,11 +454,179 @@
 }
 
 .documents-heading {
+  position: relative;
+  z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   width: 100%;
   margin-bottom: 24px;
+}
+
+.documents-heading-left,
+.documents-list-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.documents-list-filters[hidden],
+.documents-list-search[hidden],
+.filter-menu[hidden] {
+  display: none;
+}
+
+.document-filter {
+  position: relative;
+}
+
+.filter-trigger,
+.documents-list-search {
+  min-height: 38px;
+  border: 1px solid rgba(150, 163, 209, 0.28);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #eeeeee;
+  font: inherit;
+  font-size: 0.78rem;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.filter-trigger {
+  min-width: 104px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.filter-trigger:hover,
+.filter-trigger[aria-expanded="true"] {
+  border-color: rgba(171, 186, 234, 0.62);
+  background: rgba(171, 186, 234, 0.12);
+  transform: translateY(-1px);
+}
+
+.filter-trigger:focus-visible,
+.filter-menu button:focus-visible,
+.documents-list-search:focus-within,
+.documents-list-search button:focus-visible {
+  outline: 2px solid #abbaea;
+  outline-offset: 2px;
+}
+
+.filter-chevron {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-right: 1.5px solid #abbaea;
+  border-bottom: 1.5px solid #abbaea;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+.filter-trigger[aria-expanded="true"] .filter-chevron {
+  transform: rotate(225deg) translateY(-2px);
+}
+
+.filter-menu {
+  position: absolute;
+  z-index: 2;
+  top: calc(100% + 7px);
+  left: 0;
+  min-width: 100%;
+  padding: 6px;
+  border: 1px solid rgba(171, 186, 234, 0.28);
+  border-radius: 11px;
+  background: #111934;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.34);
+  animation: documentMenuEnter 0.18s ease-out both;
+}
+
+.filter-menu button {
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #eeeeee;
+  font: inherit;
+  font-size: 0.78rem;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.filter-menu button:hover,
+.filter-menu button[aria-pressed="true"] {
+  background: rgba(171, 186, 234, 0.16);
+  color: #ffffff;
+}
+
+.documents-list-search {
+  width: min(235px, 100%);
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.documents-list-search:hover,
+.documents-list-search:focus-within {
+  border-color: rgba(171, 186, 234, 0.62);
+  background: rgba(171, 186, 234, 0.08);
+}
+
+.documents-list-search input {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 0 0 0 12px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #eeeeee;
+  font: inherit;
+  font-size: 0.78rem;
+}
+
+.documents-list-search input::placeholder {
+  color: rgba(238, 238, 238, 0.48);
+}
+
+.documents-list-search button {
+  width: 37px;
+  height: 36px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.documents-list-search button:hover {
+  background: rgba(171, 186, 234, 0.14);
+}
+
+.documents-list-search button img {
+  width: 17px;
+  height: 17px;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+}
+
+@keyframes documentMenuEnter {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .documents-view-switch {
@@ -542,6 +730,15 @@
 }
 
 @media (max-width: 600px) {
+  .documents-heading-left {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .documents-list-search {
+    width: 100%;
+  }
+
   .documents-grid.list-view .document-folder-card {
     grid-template-columns: 34px minmax(0, 1fr) 96px;
     gap: 10px;
@@ -563,5 +760,17 @@
 
   .documents-grid.list-view .document-date::after {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-trigger,
+  .filter-chevron,
+  .filter-menu,
+  .filter-menu button,
+  .documents-list-search,
+  .documents-list-search button {
+    animation: none;
+    transition: none;
   }
 }
