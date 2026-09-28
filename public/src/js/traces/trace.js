@@ -5,18 +5,53 @@ document.addEventListener("DOMContentLoaded", function () {
     if (transferGrid) {
         const filterButtons = document.querySelectorAll(".filter-button");
         const transferCards = Array.from(document.querySelectorAll(".transfer-card"));
-        const searchInput = document.getElementById("transferSearch");
+        const allTransfers = document.getElementById("allTransfers");
+        const transferList = document.getElementById("transferList");
+        const contentCard = document.querySelector(".content-card");
+        const searchInput = document.getElementById("listTransferSearch");
+        const typeButtons = Array.from(document.querySelectorAll("[data-type]"));
+        const sortButtons = Array.from(document.querySelectorAll("[data-sort]"));
         const resultsText = document.getElementById("resultsText");
         const emptyMessage = document.getElementById("emptyMessage");
+        const listEmptyMessage = document.getElementById("listEmptyMessage");
         const pageNumbers = document.getElementById("pageNumbers");
         const previousButton = document.getElementById("previousPage");
         const nextButton = document.getElementById("nextPage");
         const newTransferButton = document.querySelector(".primary-action");
 
-        const cardsPerPage = 3;
         let currentFilter = "active";
         let currentPage = 1;
         let searchText = "";
+        let currentType = "all";
+        let dateOrder = "newest";
+
+        function normalize(value) {
+            return value.toLowerCase().normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]+/g, " ")
+                .trim();
+        }
+
+        function originTimestamp(card) {
+            const dateText = card.querySelector(".route-text > div:first-child p")?.textContent || "";
+            const parts = dateText.match(/(\d{1,2})\/(\d{1,2})\/(\d{4}).*?(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+            if (!parts) return 0;
+            let hour = Number(parts[4]) % 12;
+            if (parts[6].toUpperCase() === "PM") hour += 12;
+            return new Date(Number(parts[3]), Number(parts[2]) - 1, Number(parts[1]), hour, Number(parts[5])).getTime();
+        }
+
+        // The cards remain the single source of transfer details for both views.
+        const transfers = transferCards.map(function (card, index) {
+            const type = card.querySelector(".transfer-information .info-group:last-child .info-value p")?.textContent || "";
+            return {
+                card,
+                index,
+                type: normalize(type),
+                timestamp: originTimestamp(card),
+                keywords: normalize(card.textContent)
+            };
+        });
 
         const activeCards = transferCards.filter(function (card) {
             return card.dataset.status === "active";
@@ -32,12 +67,61 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function getFilteredCards() {
             return transferCards.filter(function (card) {
-                const matchesFilter = currentFilter === "all" || card.dataset.status === currentFilter;
-                const cardText = card.textContent.toLowerCase();
-                const matchesSearch = cardText.includes(searchText);
-
-                return matchesFilter && matchesSearch;
+                return card.dataset.status === currentFilter;
             });
+        }
+
+        function getFilteredTransfers() {
+            const words = normalize(searchText).split(" ").filter(Boolean);
+            return transfers.filter(function (transfer) {
+                return (currentType === "all" || transfer.type === currentType) &&
+                    words.every(function (word) { return transfer.keywords.includes(word); });
+            }).sort(function (first, second) {
+                const difference = dateOrder === "newest"
+                    ? second.timestamp - first.timestamp
+                    : first.timestamp - second.timestamp;
+                return difference || first.index - second.index;
+            });
+        }
+
+        function makeListRow(transfer) {
+            const card = transfer.card;
+            const row = document.createElement("article");
+            row.className = "transfer-list-row " + ["blue-card", "green-card", "purple-card"]
+                .find(function (name) { return card.classList.contains(name); });
+
+            const identity = document.createElement("div");
+            identity.className = "list-row-identity";
+            identity.appendChild(card.querySelector(".ambulance-icon").cloneNode(true));
+            const identityCopy = document.createElement("div");
+            identityCopy.className = "list-row-identity-copy";
+            identityCopy.appendChild(card.querySelector(".card-title").cloneNode(true));
+            const badges = document.createElement("div");
+            badges.className = "list-row-badges";
+            badges.appendChild(card.querySelector(".status-label").cloneNode(true));
+            const typeBadge = document.createElement("span");
+            typeBadge.className = "list-type-badge";
+            typeBadge.textContent = "Elemento: " +
+                (card.querySelector(".transfer-information .info-group:last-child .info-value p")?.textContent || "");
+            badges.appendChild(typeBadge);
+            identityCopy.appendChild(badges);
+            identity.appendChild(identityCopy);
+
+            const route = document.createElement("div");
+            route.className = "list-row-route";
+            route.appendChild(card.querySelector(".route-box").cloneNode(true));
+
+            const crew = document.createElement("div");
+            crew.className = "list-row-crew";
+            const information = card.querySelector(".transfer-information").cloneNode(true);
+            information.querySelector(".info-group:last-child").remove();
+            crew.appendChild(information);
+
+            const action = document.createElement("div");
+            action.className = "list-row-action";
+            action.appendChild(card.querySelector(".details-button").cloneNode(true));
+            row.append(identity, route, crew, action);
+            return row;
         }
 
         function createPageButtons(totalPages) {
@@ -81,29 +165,42 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function showCurrentPage() {
-            const filteredCards = getFilteredCards();
-            const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
+            const isListView = currentFilter === "all";
+            const filteredItems = isListView ? getFilteredTransfers() : getFilteredCards();
+            const cardsPerPage = 3;
+            const totalPages = isListView ? 0 : Math.ceil(filteredItems.length / cardsPerPage);
 
             if (currentPage > totalPages && totalPages > 0) {
                 currentPage = totalPages;
             }
 
+            transferGrid.hidden = isListView;
+            allTransfers.hidden = !isListView;
+            contentCard.classList.toggle("all-view-active", isListView);
             transferCards.forEach(function (card) {
                 card.hidden = true;
             });
 
-            const firstCard = (currentPage - 1) * cardsPerPage;
-            const lastCard = firstCard + cardsPerPage;
-            const cardsOnThisPage = filteredCards.slice(firstCard, lastCard);
+            const firstItem = (currentPage - 1) * cardsPerPage;
+            const itemsOnThisPage = isListView
+                ? filteredItems
+                : filteredItems.slice(firstItem, firstItem + cardsPerPage);
 
-            cardsOnThisPage.forEach(function (card) {
-                card.hidden = false;
-            });
+            if (isListView) {
+                transferList.replaceChildren(...itemsOnThisPage.map(makeListRow));
+                transferList.hidden = filteredItems.length === 0;
+                transferList.scrollTop = 0;
+            } else {
+                itemsOnThisPage.forEach(function (card) { card.hidden = false; });
+            }
 
-            emptyMessage.hidden = filteredCards.length !== 0;
-            resultsText.textContent = "Mostrando " + cardsOnThisPage.length + " de " + filteredCards.length + " traslados";
+            emptyMessage.hidden = isListView || filteredItems.length !== 0;
+            listEmptyMessage.hidden = !isListView || filteredItems.length !== 0;
+            resultsText.textContent = isListView
+                ? filteredItems.length + (filteredItems.length === 1 ? " traslado" : " traslados")
+                : "Mostrando " + itemsOnThisPage.length + " de " + filteredItems.length + " traslados";
 
-            createPageButtons(totalPages);
+            if (!isListView) createPageButtons(totalPages);
         }
 
         filterButtons.forEach(function (button) {
@@ -123,9 +220,33 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         searchInput.addEventListener("input", function () {
-            searchText = searchInput.value.trim().toLowerCase();
+            searchText = searchInput.value;
             currentPage = 1;
-            showCurrentPage();
+            if (currentFilter === "all") showCurrentPage();
+        });
+
+        typeButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                typeButtons.forEach(function (otherButton) {
+                    otherButton.classList.toggle("active", otherButton === button);
+                    otherButton.setAttribute("aria-pressed", String(otherButton === button));
+                });
+                currentType = button.dataset.type;
+                currentPage = 1;
+                showCurrentPage();
+            });
+        });
+
+        sortButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                sortButtons.forEach(function (otherButton) {
+                    otherButton.classList.toggle("active", otherButton === button);
+                    otherButton.setAttribute("aria-pressed", String(otherButton === button));
+                });
+                dateOrder = button.dataset.sort;
+                currentPage = 1;
+                showCurrentPage();
+            });
         });
 
         previousButton.addEventListener("click", function () {
@@ -136,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         nextButton.addEventListener("click", function () {
-            const totalPages = Math.ceil(getFilteredCards().length / cardsPerPage);
+            const totalPages = Math.ceil(getFilteredCards().length / 3);
 
             if (currentPage < totalPages) {
                 currentPage++;

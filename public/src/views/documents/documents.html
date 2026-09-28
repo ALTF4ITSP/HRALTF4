@@ -5,16 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentos</title>
-  <link rel="stylesheet" href="../../css/main-menu.css">
-  <link rel="stylesheet" href="../../css/documents/documents.css">
+  <link rel="stylesheet" href="../../css/main-menu.css?v=20260927-brand-fix">
+  <link rel="stylesheet" href="../../css/documents/documents.css?v=20260927-list-controls-2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;1,400;1,500&display=swap"
     rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="../../../assets/hospital-dark.ico">
-  <script src="../../js/main-menu.js?v=20260917-user-name" defer></script>
-  <script src="../../js/documents/documents.js?v=20260917-document-menu" defer></script>
+  <script src="../../js/main-menu.js?v=20260927-global" defer></script>
+  <script src="../../js/universal-search.js?v=20260927-global" defer></script>
+  <script src="../../js/documents/documents.js?v=20260927-list-controls" defer></script>
 </head>
 
 <body>
@@ -107,15 +108,54 @@
         </aside>
 
         <section class="document-surface recent-documents" aria-labelledby="recent-title">
+          <h2 id="recent-title" class="visually-hidden">Documentos</h2>
           <div class="documents-heading">
-            <div class="documents-view-switch" role="group" aria-label="Cambiar vista de documentos">
-              <button type="button" class="view-toggle active" id="gridView" aria-label="Vista de cuadrícula"
-                aria-pressed="true" title="Vista de cuadrícula">
-                <img src="../../../assets/Icons/grid-icon.svg" alt="" aria-hidden="true">
-              </button>
-              <button type="button" class="view-toggle" id="listView" aria-label="Vista de lista"
-                aria-pressed="false" title="Vista de lista">
-                <img src="../../../assets/Icons/list-icon.svg" alt="" aria-hidden="true">
+            <div class="documents-heading-left">
+              <div class="documents-view-switch" role="group" aria-label="Cambiar vista de documentos">
+                <button type="button" class="view-toggle active" id="gridView" aria-label="Vista de cuadrícula"
+                  aria-pressed="true" title="Vista de cuadrícula">
+                  <img src="../../../assets/Icons/grid-icon.svg" alt="" aria-hidden="true">
+                </button>
+                <button type="button" class="view-toggle" id="listView" aria-label="Vista de lista"
+                  aria-pressed="false" title="Vista de lista">
+                  <img src="../../../assets/Icons/list-icon.svg" alt="" aria-hidden="true">
+                </button>
+              </div>
+
+              <div class="documents-list-filters" id="documentListFilters" hidden>
+                <div class="document-filter">
+                  <button type="button" class="filter-trigger" id="documentTypeButton" aria-haspopup="true"
+                    aria-expanded="false" aria-controls="documentTypeMenu">
+                    <span id="documentTypeLabel">Tipo: Todos</span><span class="filter-chevron" aria-hidden="true"></span>
+                  </button>
+                  <div class="filter-menu" id="documentTypeMenu" aria-label="Filtrar por tipo" hidden>
+                    <button type="button" data-type="" aria-pressed="true">Todos</button>
+                    <button type="button" data-type="pdf" aria-pressed="false">PDF</button>
+                    <button type="button" data-type="docx" aria-pressed="false">DOCX</button>
+                    <button type="button" data-type="pptx" aria-pressed="false">PPTX</button>
+                    <button type="button" data-type="png" aria-pressed="false">PNG</button>
+                    <button type="button" data-type="jpg" aria-pressed="false">JPG</button>
+                  </div>
+                </div>
+                <div class="document-filter">
+                  <button type="button" class="filter-trigger" id="documentDateButton" aria-haspopup="true"
+                    aria-expanded="false" aria-controls="documentDateMenu">
+                    <span id="documentDateLabel">Fecha</span><span class="filter-chevron" aria-hidden="true"></span>
+                  </button>
+                  <div class="filter-menu" id="documentDateMenu" aria-label="Ordenar por fecha" hidden>
+                    <button type="button" data-date="" aria-pressed="true">Sin ordenar</button>
+                    <button type="button" data-date="recent" aria-pressed="false">Más recientes</button>
+                    <button type="button" data-date="oldest" aria-pressed="false">Más antiguos</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="documents-list-search" id="documentListSearch" role="search" hidden>
+              <label class="visually-hidden" for="documentSearchInput">Buscar documentos por nombre o palabras clave</label>
+              <input type="search" id="documentSearchInput" placeholder="Nombre o palabras clave..." autocomplete="off">
+              <button type="button" id="documentSearchButton" aria-label="Buscar en documentos" title="Buscar en documentos">
+                <img src="../../../assets/Icons/search-icon.svg" alt="" aria-hidden="true">
               </button>
             </div>
 
@@ -129,10 +169,11 @@
             </div>
           </div>
 
+          <p class="visually-hidden" id="documentResultsStatus" role="status" aria-live="polite"></p>
           <div class="documents-grid" id="documentsGrid">
 
             <!-- PÁGINA 1 -->
-            <a href="documents-viewer.html" class="document-link" data-document-id="1" data-page="1">
+            <a href="documents-viewer.html" class="document-link" data-document-id="1" data-page="1" data-file-type="pdf">
               <article class="document-folder-card">
                 <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
 
@@ -152,7 +193,7 @@
               </article>
             </a>
 
-            <a href="documents-viewer.html" class="document-link" data-document-id="2" data-page="1">
+            <a href="documents-viewer.html" class="document-link" data-document-id="2" data-page="1" data-file-type="docx">
               <article class="document-folder-card">
                 <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
 
@@ -172,7 +213,7 @@
               </article>
             </a>
 
-            <a href="documents-viewer.html" class="document-link" data-document-id="3" data-page="1">
+            <a href="documents-viewer.html" class="document-link" data-document-id="3" data-page="1" data-file-type="pptx">
               <article class="document-folder-card">
                 <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
 
@@ -192,7 +233,7 @@
               </article>
             </a>
 
-            <a href="documents-viewer.html" class="document-link" data-document-id="4" data-page="1">
+            <a href="documents-viewer.html" class="document-link" data-document-id="4" data-page="1" data-file-type="png">
               <article class="document-folder-card">
                 <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
 
@@ -213,7 +254,7 @@
             </a>
 
             <!-- PÁGINA 2 -->
-            <a href="documents-viewer.html" class="document-link" data-document-id="5" data-page="2" hidden>
+            <a href="documents-viewer.html" class="document-link" data-document-id="5" data-page="2" data-file-type="jpg" hidden>
               <article class="document-folder-card">
                 <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
 
@@ -233,7 +274,7 @@
               </article>
             </a>
 
-            <a href="documents-viewer.html" class="document-link" data-document-id="6" data-page="2" hidden>
+            <a href="documents-viewer.html" class="document-link" data-document-id="6" data-page="2" data-file-type="pdf" hidden>
               <article class="document-folder-card">
                 <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
 
@@ -253,7 +294,7 @@
               </article>
             </a>
 
-            <a href="documents-viewer.html" class="document-link" data-document-id="7" data-page="2" hidden>
+            <a href="documents-viewer.html" class="document-link" data-document-id="7" data-page="2" data-file-type="docx" hidden>
               <article class="document-folder-card">
                 <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
 
@@ -273,7 +314,7 @@
               </article>
             </a>
 
-            <a href="documents-viewer.html" class="document-link" data-document-id="8" data-page="2" hidden>
+            <a href="documents-viewer.html" class="document-link" data-document-id="8" data-page="2" data-file-type="png" hidden>
               <article class="document-folder-card">
                 <button type="button" class="more-options" aria-haspopup="true" aria-expanded="false">⋮</button>
 

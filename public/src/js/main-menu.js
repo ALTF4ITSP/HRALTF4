@@ -50,24 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const searchBtn = document.querySelector('.search-action');
-    const topbar = document.querySelector('.topbar');
-    const searchInput = document.querySelector('.search-input');
-
-    if (searchBtn && topbar && searchInput) {
-        searchBtn.addEventListener('click', () => {
-            topbar.classList.toggle('search-active');
-            searchBtn.setAttribute('aria-expanded', String(topbar.classList.contains('search-active')));
-
-            if (topbar.classList.contains('search-active')) {
-                setTimeout(() => searchInput.focus(), 400);
-            } else {
-                searchInput.value = '';
-                searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-        });
-    }
-
     const profileWrapper = document.querySelector('.profile-wrapper');
     const profileBtn = document.querySelector('.profile-button');
 
