@@ -4,148 +4,202 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Documento médico · Visor de documentos</title>
-  <link rel="icon" href="#">
+  <link rel="icon" type="image/x-icon" href="../../../assets/hospital-dark.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:wght@400;500;600;700&family=Krub:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="../../css/main-menu.css?v=20260927-brand-fix">
-  <link rel="stylesheet" href="../../css/documents/documents-viewer.css?v=20260928-shell">
+  <link rel="stylesheet" href="../../css/documents/documents-viewer.css?v=20260929-icons">
   <script src="../../js/main-menu.js?v=20260927-global" defer></script>
+  <script src="../../js/universal-search.js?v=20260927-global" defer></script>
   <script src="../../js/documents/documents-viewer.js?v=20260928-shell" defer></script>
 </head>
 <body>
   <div class="page-background"></div>
   <div class="page-glow"></div>
 
-  <main class="app-shell viewer-app-shell">
+  <main class="app-shell document-viewer-shell">
     <aside class="sidebar">
-      <button type="button" class="sidebar-action" aria-label="Abrir menú" aria-expanded="false">
-        <img src="#" alt="" aria-hidden="true">
+      <button type="button" class="sidebar-action" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
-      <nav class="sidebar-nav" aria-label="Navegación principal">
+
+      <nav class="sidebar-nav">
+
         <div class="nav-indicator"></div>
-        <a href="../main-menu.html" class="nav-item"><img src="#" alt="" aria-hidden="true"><span>Inicio</span></a>
-        <a href="documents.html" class="nav-item active" aria-current="page"><img src="#" alt="" aria-hidden="true"><span>Documentos</span></a>
-        <a href="../traces/trace.html" class="nav-item"><img src="#" alt="" aria-hidden="true"><span>Ambulancias</span></a>
-        <a href="../analytics/analytics.html" class="nav-item"><img src="#" alt="" aria-hidden="true"><span>Reportes</span></a>
-        <a href="../calendar/calendar.html" class="nav-item"><img src="#" alt="" aria-hidden="true"><span>Calendario</span></a>
-        <a href="../surveys/surveys.html" class="nav-item"><img src="#" alt="" aria-hidden="true"><span>Encuestas</span></a>
-        <a href="../management/management.html" class="nav-item"><img src="#" alt="" aria-hidden="true"><span>Gestión</span></a>
+
+        <a href="../main-menu.html" class="nav-item">
+          <img src="../../../assets/Icons/house-icon.svg" alt="Inicio">
+          <span>Inicio</span>
+        </a>
+        <a href="documents.html" class="nav-item active" aria-current="page">
+          <img src="../../../assets/Icons/folder-icon.svg" alt="Documentos">
+          <span>Documentos</span>
+        </a>
+        <a href="../traces/trace.html" class="nav-item">
+          <img src="../../../assets/Icons/location-icon.svg" alt="Ambulancias">
+          <span>Ambulancias</span>
+        </a>
+        <a href="../analytics/analytics.html" class="nav-item">
+          <img src="../../../assets/Icons/analytics-icon.svg" alt="Reportes">
+          <span>Reportes</span>
+        </a>
+        <a href="../calendar/calendar.html" class="nav-item">
+          <img src="../../../assets/Icons/calendar-icon.svg" alt="Calendario">
+          <span>Calendario</span>
+        </a>
+        <a href="../surveys/surveys.html" class="nav-item">
+          <img src="../../../assets/Icons/survey-icon.svg" alt="Encuestas">
+          <span>Encuestas</span>
+        </a>
+        <a href="../management/management.html" class="nav-item">
+          <img src="../../../assets/Icons/database-cog.svg" alt="Gestion">
+          <span>Gestion</span>
+        </a>
+
         <div class="nav-spacer"></div>
-        <a href="../settings.html" class="nav-item"><img src="#" alt="" aria-hidden="true"><span>Configuración</span></a>
+
+        <a href="../settings.html" class="nav-item">
+          <img src="../../../assets/Icons/settings-icon.svg" alt="Configuración">
+          <span>Configuración</span>
+        </a>
       </nav>
     </aside>
 
-    <header class="topbar viewer-topbar">
-      <div class="brand"><img src="#" alt="" aria-hidden="true"><span>HOSPITAL DE CLINICAS</span></div>
-      <div class="search-wrapper">
-        <input id="viewer-search" type="search" class="search-input" aria-label="Buscar en el documento" placeholder="Buscar en el documento..." tabindex="-1">
-        <button type="button" class="topbar-action search-action" aria-label="Abrir búsqueda" aria-controls="viewer-search" aria-expanded="false"><img src="#" alt="" aria-hidden="true"></button>
+    <header class="topbar quick-search-topbar">
+      <div class="brand">
+        <img src="../../../assets/Icons/hospital-logo.png" alt="Hospital de Clínicas">
+        <span>HOSPITAL DE CLINICAS</span>
       </div>
+
+      <div class="search-wrapper" role="search">
+        <input type="text" id="quick-search" class="search-input" placeholder="Buscar una acción o sección..."
+          aria-label="Buscar una acción o sección" role="combobox" aria-autocomplete="list"
+          aria-controls="search-results-list" aria-expanded="false" autocomplete="off" tabindex="-1">
+        <button type="button" class="topbar-action search-action" aria-label="Abrir búsqueda"
+          aria-controls="quick-search" aria-expanded="false">
+          <img src="../../../assets/Icons/search-icon.svg" alt="" aria-hidden="true">
+        </button>
+      </div>
+
+      <div class="search-results" id="search-results" hidden>
+        <div class="search-results-heading">
+          <span id="search-results-title">Accesos rápidos</span>
+        </div>
+        <ul id="search-results-list" class="search-results-list" role="listbox" aria-label="Resultados de búsqueda"></ul>
+        <p class="search-results-footer">Haz clic en una opción disponible para ir a esa sección.</p>
+      </div>
+      <span id="search-status" class="visually-hidden" role="status" aria-live="polite"></span>
     </header>
 
-  <section class="hero-panel viewer-hero document-app">
-    <header class="document-header">
-      <a class="back-link" href="documents.html"><img class="icon" src="#" alt="" aria-hidden="true"><span>Volver a documentos</span></a>
-      <div class="header-main">
-        <div class="document-heading">
-          <h1 id="document-title">DOCUMENTO MEDICO: Prostatectomía radical</h1>
-          <p><span id="patient-name">Juan Benitez</span><span aria-hidden="true"> · </span><span>ID: <span id="document-id">DOC-2026-00045</span></span></p>
-        </div>
-        <div class="header-actions">
-          <button class="action-button download-button" id="download-button" type="button"><img class="icon" src="#" alt="" aria-hidden="true"><span>Descargar</span></button>
-          <button class="action-button share-button" id="share-button" type="button"><img class="icon" src="#" alt="" aria-hidden="true"><span>Compartir</span></button>
-          <div class="more-wrap">
-            <button class="action-button icon-action" id="more-button" type="button" aria-label="Más opciones" aria-haspopup="menu" aria-expanded="false" aria-controls="more-menu"><img class="icon" src="#" alt="" aria-hidden="true"></button>
-            <div class="more-menu" id="more-menu" role="menu" hidden>
-              <button type="button" role="menuitem" id="copy-link-menu">Copiar enlace</button>
-              <button type="button" role="menuitem" id="reset-view-menu">Restablecer vista</button>
+    <section class="hero-panel document-viewer-hero">
+      <div class="viewer-card">
+        <header class="document-header">
+          <a class="back-link" href="documents.html"><img class="icon" src="../../../assets/Icons/arrow-left.svg" alt="" aria-hidden="true"><span>Volver a documentos</span></a>
+          <div class="header-main">
+            <div class="document-heading">
+              <h1 id="document-title">DOCUMENTO MEDICO: Prostatectomía radical</h1>
+              <p><span id="patient-name">Juan Benitez</span><span aria-hidden="true"> · </span><span>ID: <span id="document-id">DOC-2026-00045</span></span></p>
             </div>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <div class="content-grid">
-      <section class="viewer-container" id="viewer-container" aria-label="Visor de documento">
-        <div class="viewer-toolbar" role="toolbar" aria-label="Herramientas del visor">
-          <div class="toolbar-group">
-            <button class="tool-button" id="toggle-thumbnails" type="button" aria-label="Ocultar miniaturas" aria-pressed="true" title="Mostrar u ocultar miniaturas"><img class="icon" src="#" alt="" aria-hidden="true"></button>
-            <label class="visually-hidden" for="page-input">Página actual</label>
-            <input id="page-input" class="page-input" type="number" min="1" max="5" value="1" inputmode="numeric">
-            <span class="page-total">/ <span id="total-pages">5</span></span>
-            <span class="toolbar-space" aria-hidden="true"></span>
-            <button class="tool-button" id="zoom-out" type="button" aria-label="Reducir zoom" title="Reducir zoom"><img class="icon" src="#" alt="" aria-hidden="true"></button>
-            <button class="zoom-level" id="zoom-reset" type="button" aria-label="Restablecer zoom a 100%" title="Restablecer zoom">100%</button>
-            <button class="tool-button" id="zoom-in" type="button" aria-label="Aumentar zoom" title="Aumentar zoom"><img class="icon" src="#" alt="" aria-hidden="true"></button>
-          </div>
-          <div class="toolbar-group toolbar-group-right">
-            <button class="tool-button" id="rotate-button" type="button" aria-label="Rotar 90 grados" title="Rotar 90 grados"><img class="icon" src="#" alt="" aria-hidden="true"></button>
-            <button class="tool-button" id="fullscreen-button" type="button" aria-label="Pantalla completa" title="Pantalla completa"><img class="icon" src="#" alt="" aria-hidden="true"></button>
-          </div>
-        </div>
-        <div class="viewer-body" id="viewer-body">
-          <nav class="thumbnail-rail" id="thumbnail-rail" aria-label="Páginas del documento">
-            <div class="thumbnail-list" id="thumbnail-list"></div>
-          </nav>
-          <div class="document-viewport" id="document-viewport" aria-label="Vista previa del documento">
-            <div class="page-scroll-inner">
-              <div class="page-frame" id="page-frame">
-                <div class="document-sheet" id="document-sheet" role="img" aria-label="Vista previa de la página 1">
-                  <div class="mock-page-content" id="mock-page-content" aria-hidden="true"></div>
-                  <img class="document-image" id="document-image" alt="Documento" hidden>
-                  <iframe class="document-pdf" id="document-pdf" title="Documento PDF" hidden></iframe>
-                  <div class="unavailable-preview" id="unavailable-preview" hidden>
-                    <img class="icon" src="#" alt="" aria-hidden="true">
-                    <strong>Vista previa no disponible</strong>
-                    <span>Descargá el archivo para abrirlo en tu dispositivo.</span>
-                  </div>
+            <div class="header-actions">
+              <button class="action-button download-button" id="download-button" type="button"><img class="icon" src="../../../assets/Icons/download-icon.svg" alt="" aria-hidden="true"><span>Descargar</span></button>
+              <button class="action-button share-button" id="share-button" type="button"><img class="icon" src="../../../assets/Icons/share-icon.svg" alt="" aria-hidden="true"><span>Compartir</span></button>
+              <div class="more-wrap">
+                <button class="action-button icon-action" id="more-button" type="button" aria-label="Más opciones" aria-haspopup="menu" aria-expanded="false" aria-controls="more-menu"><span aria-hidden="true">⋮</span></button>
+                <div class="more-menu" id="more-menu" role="menu" hidden>
+                  <button type="button" role="menuitem" id="copy-link-menu">Copiar enlace</button>
+                  <button type="button" role="menuitem" id="reset-view-menu">Restablecer vista</button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <p class="visually-hidden" id="viewer-status" role="status" aria-live="polite"></p>
-      </section>
+        </header>
 
-      <aside class="document-sidebar" aria-label="Detalles y acciones del documento">
-        <section class="sidebar-panel information-panel" aria-labelledby="info-heading">
-          <h2 id="info-heading">Información del documento</h2>
-          <dl class="metadata-list">
-            <div class="metadata-row"><img class="icon" src="#" alt="" aria-hidden="true"><div><dt>Tipo de documento</dt><dd id="document-kind">Informe Médico</dd></div></div>
-            <div class="metadata-row"><img class="icon" src="#" alt="" aria-hidden="true"><div><dt>Formato</dt><dd id="document-format">PDF</dd></div></div>
-            <div class="metadata-row"><img class="icon" src="#" alt="" aria-hidden="true"><div><dt>Tamaño</dt><dd id="document-size">2.4 MB</dd></div></div>
-            <div class="metadata-row"><img class="icon" src="#" alt="" aria-hidden="true"><div><dt>Subido por</dt><dd id="document-author">Usuario</dd></div></div>
-            <div class="metadata-row"><img class="icon" src="#" alt="" aria-hidden="true"><div><dt>Fecha de subida</dt><dd id="document-uploaded">24/07/2026</dd></div></div>
-            <div class="metadata-row last-modified"><img class="icon" src="#" alt="" aria-hidden="true"><div><dt>Última modificación</dt><dd id="document-updated">28/07/2026 · 5:46 PM</dd></div></div>
-          </dl>
-        </section>
-        <section class="sidebar-panel quick-panel" aria-labelledby="quick-heading">
-          <h2 id="quick-heading">Acciones rápidas</h2>
-          <div class="quick-actions">
-            <button type="button" id="print-button"><img class="icon" src="#" alt="" aria-hidden="true"><span>Imprimir documento</span></button>
-            <button type="button" id="qr-button"><img class="icon" src="#" alt="" aria-hidden="true"><span>Generar código QR</span></button>
-            <button type="button" class="danger-button" id="delete-button"><img class="icon" src="#" alt="" aria-hidden="true"><span>Eliminar documento</span></button>
-          </div>
-        </section>
-      </aside>
-    </div>
-  </section>
+        <div class="content-grid">
+          <section class="viewer-container" id="viewer-container" aria-label="Visor de documento">
+            <div class="viewer-toolbar" role="toolbar" aria-label="Herramientas del visor">
+              <div class="toolbar-group">
+                <button class="tool-button" id="toggle-thumbnails" type="button" aria-label="Ocultar miniaturas" aria-pressed="true" title="Mostrar u ocultar miniaturas"><img class="icon" src="../../../assets/Icons/list-icon.svg" alt="" aria-hidden="true"></button>
+                <label class="visually-hidden" for="page-input">Página actual</label>
+                <input id="page-input" class="page-input" type="number" min="1" max="5" value="1" inputmode="numeric">
+                <span class="page-total">/ <span id="total-pages">5</span></span>
+                <span class="toolbar-space" aria-hidden="true"></span>
+                <button class="tool-button" id="zoom-out" type="button" aria-label="Reducir zoom" title="Reducir zoom"><img class="icon" src="../../../assets/Icons/zoom-out.svg" alt="" aria-hidden="true"></button>
+                <button class="zoom-level" id="zoom-reset" type="button" aria-label="Restablecer zoom a 100%" title="Restablecer zoom">100%</button>
+                <button class="tool-button" id="zoom-in" type="button" aria-label="Aumentar zoom" title="Aumentar zoom"><img class="icon" src="../../../assets/Icons/zoom-in.svg" alt="" aria-hidden="true"></button>
+              </div>
+              <div class="toolbar-group toolbar-group-right">
+                <button class="tool-button" id="rotate-button" type="button" aria-label="Rotar 90 grados" title="Rotar 90 grados"><img class="icon" src="../../../assets/Icons/reload-icon.svg" alt="" aria-hidden="true"></button>
+                <button class="tool-button" id="fullscreen-button" type="button" aria-label="Pantalla completa" title="Pantalla completa"><img class="icon" src="../../../assets/Icons/full-screen.svg" alt="" aria-hidden="true"></button>
+              </div>
+            </div>
+            <div class="viewer-body" id="viewer-body">
+              <nav class="thumbnail-rail" id="thumbnail-rail" aria-label="Páginas del documento">
+                <div class="thumbnail-list" id="thumbnail-list"></div>
+              </nav>
+              <div class="document-viewport" id="document-viewport" aria-label="Vista previa del documento">
+                <div class="page-scroll-inner">
+                  <div class="page-frame" id="page-frame">
+                    <div class="document-sheet" id="document-sheet" role="img" aria-label="Vista previa de la página 1">
+                      <div class="mock-page-content" id="mock-page-content" aria-hidden="true"></div>
+                      <img class="document-image" id="document-image" alt="Documento" hidden>
+                      <iframe class="document-pdf" id="document-pdf" title="Documento PDF" hidden></iframe>
+                      <div class="unavailable-preview" id="unavailable-preview" hidden>
+                        <img class="icon" src="../../../assets/Icons/format-icon.svg" alt="" aria-hidden="true">
+                        <strong>Vista previa no disponible</strong>
+                        <span>Descargá el archivo para abrirlo en tu dispositivo.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="visually-hidden" id="viewer-status" role="status" aria-live="polite"></p>
+          </section>
+
+          <aside class="document-sidebar" aria-label="Detalles y acciones del documento">
+            <section class="sidebar-panel information-panel" aria-labelledby="info-heading">
+              <h2 id="info-heading">Información del documento</h2>
+              <dl class="metadata-list">
+                <div class="metadata-row"><img class="icon" src="../../../assets/Icons/information-icon.svg" alt="" aria-hidden="true"><div><dt>Tipo de documento</dt><dd id="document-kind">Informe Médico</dd></div></div>
+                <div class="metadata-row"><img class="icon" src="../../../assets/Icons/format-icon.svg" alt="" aria-hidden="true"><div><dt>Formato</dt><dd id="document-format">PDF</dd></div></div>
+                <div class="metadata-row"><img class="icon" src="../../../assets/Icons/server-icon.svg" alt="" aria-hidden="true"><div><dt>Tamaño</dt><dd id="document-size">2.4 MB</dd></div></div>
+                <div class="metadata-row"><img class="icon" src="../../../assets/Icons/person-icon.svg" alt="" aria-hidden="true"><div><dt>Subido por</dt><dd id="document-author">Usuario</dd></div></div>
+                <div class="metadata-row"><img class="icon" src="../../../assets/Icons/calendar-icon.svg" alt="" aria-hidden="true"><div><dt>Fecha de subida</dt><dd id="document-uploaded">24/07/2026</dd></div></div>
+                <div class="metadata-row last-modified"><img class="icon" src="../../../assets/Icons/time-icon.svg" alt="" aria-hidden="true"><div><dt>Última modificación</dt><dd id="document-updated">28/07/2026 · 5:46 PM</dd></div></div>
+              </dl>
+            </section>
+            <section class="sidebar-panel quick-panel" aria-labelledby="quick-heading">
+              <h2 id="quick-heading">Acciones rápidas</h2>
+              <div class="quick-actions">
+                <button type="button" id="print-button"><img class="icon" src="../../../assets/Icons/print-icon.svg" alt="" aria-hidden="true"><span>Imprimir documento</span></button>
+                <button type="button" id="qr-button"><img class="icon" src="../../../assets/Icons/qr-icon.svg" alt="" aria-hidden="true"><span>Generar código QR</span></button>
+                <button type="button" class="danger-button" id="delete-button"><img class="icon" src="../../../assets/Icons/trash-icon.svg" alt="" aria-hidden="true"><span>Eliminar documento</span></button>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </section>
   </main>
 
   <dialog class="viewer-dialog" id="share-dialog" aria-labelledby="share-title">
-    <div class="dialog-heading"><h2 id="share-title">Compartir documento</h2><button type="button" class="dialog-close" data-close-dialog aria-label="Cerrar"><img class="icon" src="#" alt="" aria-hidden="true"></button></div>
+    <div class="dialog-heading"><h2 id="share-title">Compartir documento</h2><button type="button" class="dialog-close" data-close-dialog aria-label="Cerrar"><span aria-hidden="true">×</span></button></div>
     <p>Copiá este enlace para compartir el documento.</p>
     <label class="visually-hidden" for="share-url">Enlace del documento</label>
     <input id="share-url" type="text" readonly>
-    <button type="button" class="dialog-primary" id="copy-share-link"><img class="icon" src="#" alt="" aria-hidden="true"><span>Copiar enlace</span></button>
+    <button type="button" class="dialog-primary" id="copy-share-link"><img class="icon" src="../../../assets/Icons/select-multiple-icon.svg" alt="" aria-hidden="true"><span>Copiar enlace</span></button>
   </dialog>
 
   <dialog class="viewer-dialog qr-dialog" id="qr-dialog" aria-labelledby="qr-title">
-    <div class="dialog-heading"><h2 id="qr-title">Código QR del documento</h2><button type="button" class="dialog-close" data-close-dialog aria-label="Cerrar"><img class="icon" src="#" alt="" aria-hidden="true"></button></div>
+    <div class="dialog-heading"><h2 id="qr-title">Código QR del documento</h2><button type="button" class="dialog-close" data-close-dialog aria-label="Cerrar"><span aria-hidden="true">×</span></button></div>
     <div class="qr-preview"><canvas id="qr-canvas" width="264" height="264" role="img" aria-label="Representación de un código QR para este documento"></canvas></div>
     <p>Vista de demostración para <strong id="qr-document-id">DOC-2026-00045</strong>.</p>
-    <button type="button" class="dialog-primary" id="copy-qr-link"><img class="icon" src="#" alt="" aria-hidden="true"><span>Copiar enlace</span></button>
+    <button type="button" class="dialog-primary" id="copy-qr-link"><img class="icon" src="../../../assets/Icons/select-multiple-icon.svg" alt="" aria-hidden="true"><span>Copiar enlace</span></button>
   </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
