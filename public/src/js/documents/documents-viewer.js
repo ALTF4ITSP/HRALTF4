@@ -329,26 +329,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("[data-close-dialog]").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
   document.querySelectorAll("dialog").forEach((dialog) => dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); }));
 
-  const searchButton = document.querySelector(".viewer-topbar .search-action");
-  const searchInput = document.querySelector(".viewer-topbar .search-input");
-  const searchHost = document.querySelector(".viewer-topbar");
-  searchButton?.addEventListener("click", () => {
-    const open = !searchHost.classList.contains("search-active");
-    searchHost.classList.toggle("search-active", open);
-    searchButton.setAttribute("aria-expanded", String(open));
-    searchButton.setAttribute("aria-label", open ? "Cerrar búsqueda" : "Abrir búsqueda");
-    searchInput.tabIndex = open ? 0 : -1;
-    if (open) searchInput.focus();
-    else { searchInput.value = ""; searchButton.focus(); }
-  });
-  searchInput?.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") searchButton.click();
-    if (event.key === "Enter" && searchInput.value.trim()) {
-      const matches = data.title.toLocaleLowerCase().includes(searchInput.value.trim().toLocaleLowerCase());
-      showToast(matches ? "El título coincide con la búsqueda." : "No hay coincidencias en el título.");
-    }
-  });
-
   renderData();
   renderThumbnails();
   renderSource();
