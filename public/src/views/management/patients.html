@@ -106,26 +106,41 @@
 
   <dialog class="patient-dialog" id="patient-dialog" aria-labelledby="new-patient-title">
     <form id="patient-form" method="dialog">
-      <div class="dialog-heading"><div><p class="eyebrow">Administración</p><h2 id="new-patient-title">Nuevo paciente</h2><p>Completa los datos para añadir un registro de demostración.</p></div><button type="button" class="icon-button" id="close-patient-dialog" aria-label="Cerrar formulario"><img src="../../../assets/Icons/cross-icon.svg" alt="" aria-hidden="true"></button></div>
+      <div class="dialog-heading"><div><h2 id="new-patient-title">Nuevo paciente</h2><p>Completa los datos para añadir un registro de demostración.</p></div><button type="button" class="icon-button" id="close-patient-dialog" aria-label="Cerrar formulario"><img src="../../../assets/Icons/cross-icon.svg" alt="" aria-hidden="true"></button></div>
       <div class="dialog-fields">
-        <label>Nombre completo <input name="name" type="text" maxlength="100" autocomplete="name" required></label>
-        <label>Documento (DNI) <input name="dni" type="text" maxlength="25" required></label>
-        <label>Edad <input name="age" type="number" min="0" max="120" required></label>
-        <label>Teléfono <input name="phone" type="tel" maxlength="25" autocomplete="tel" required></label>
-        <label>Estado <select name="status" required><option value="Internado">Internado</option><option value="Ambulatorio">Ambulatorio</option><option value="Urgencias">Urgencias</option></select></label>
-        <label>Habitación o área <input name="room" type="text" maxlength="80" required></label>
-        <label>Servicio <input name="department" type="text" maxlength="80" required></label>
-        <label>Médico asignado <input name="doctor" type="text" maxlength="100" required></label>
-        <label>Especialidad <input name="doctorSpecialty" type="text" maxlength="80"></label>
-        <label>Grupo sanguíneo <input name="bloodType" type="text" maxlength="5" placeholder="Ej. O+"></label>
-        <label>Alergias <input name="allergies" type="text" maxlength="100" placeholder="Ninguna conocida"></label>
-        <label>Fecha de ingreso <input name="admissionDate" type="date"></label>
-        <label>Contacto de emergencia <input name="emergencyName" type="text" maxlength="100"></label>
-        <label>Teléfono de emergencia <input name="emergencyPhone" type="tel" maxlength="25"></label>
-        <label>Parentesco <input name="emergencyRelationship" type="text" maxlength="50"></label>
+        <fieldset class="patient-form-section">
+          <legend>Información del paciente</legend>
+          <div class="form-section-fields">
+            <label>Nombre completo <input name="name" type="text" maxlength="100" autocomplete="name" required></label>
+            <label>Documento (DNI) <input name="dni" type="text" maxlength="25" required></label>
+            <label>Edad <input name="age" type="number" min="0" max="120" required></label>
+            <label>Teléfono <input name="phone" type="tel" maxlength="25" autocomplete="tel" required></label>
+            <label>Grupo sanguíneo <input name="bloodType" type="text" maxlength="5" placeholder="Ej. O+"></label>
+            <label>Alergias <input name="allergies" type="text" maxlength="100" placeholder="Ninguna conocida"></label>
+          </div>
+        </fieldset>
+        <fieldset class="patient-form-section">
+          <legend>Contacto de emergencia</legend>
+          <div class="form-section-fields">
+            <label>Nombre completo <input name="emergencyName" type="text" maxlength="100"></label>
+            <label>Teléfono <input name="emergencyPhone" type="tel" maxlength="25"></label>
+            <label>Parentesco <input name="emergencyRelationship" type="text" maxlength="50"></label>
+          </div>
+        </fieldset>
+        <fieldset class="patient-form-section">
+          <legend>Estado clínico</legend>
+          <div class="form-section-fields">
+            <label>Estado <select name="status" required><option value="Internado">Internado</option><option value="Ambulatorio">Ambulatorio</option><option value="Urgencias">Urgencias</option></select></label>
+            <label>Habitación o área <input name="room" type="text" maxlength="80" required></label>
+            <label>Servicio <input name="department" type="text" maxlength="80" required></label>
+            <label>Médico asignado <input name="doctor" type="text" maxlength="100" required></label>
+            <label>Especialidad <input name="doctorSpecialty" type="text" maxlength="80"></label>
+            <label>Fecha de ingreso <input name="admissionDate" type="date"></label>
+          </div>
+        </fieldset>
       </div>
       <p class="form-error" id="form-error" role="alert" hidden></p>
-      <div class="dialog-actions"><button type="button" class="cancel-button" id="cancel-patient">Cancelar</button><button type="submit" class="save-button"><img src="../../../assets/Icons/plus-icon.svg" alt="" aria-hidden="true">Guardar paciente</button></div>
+      <div class="dialog-actions"><button type="button" class="cancel-button" id="cancel-patient">Cancelar</button><button type="submit" class="save-button"><img src="../../../assets/Icons/save-floppy.svg" alt="" aria-hidden="true">Guardar paciente</button></div>
     </form>
   </dialog>
 </body>

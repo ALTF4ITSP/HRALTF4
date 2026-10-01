@@ -37,8 +37,9 @@
     search: "search-icon.svg",
     users: "people-svgrepo-com.svg",
     user: "person-icon.svg",
+    doctor: "doctor-icon.svg",
     bed: "bed-icon.svg",
-    house: "house-icon.svg",
+    ambulatory: "ambulatory-icon.svg",
     file: "document-icon.svg",
     calendar: "calendar-icon.svg",
     plus: "plus-icon.svg",
@@ -77,11 +78,11 @@
   }
 
   function row(patient) {
-    const locationIcon = patient.status === "Internado" ? "bed" : patient.status === "Urgencias" ? "ambulance" : "house";
+    const locationIcon = patient.status === "Internado" ? "bed" : patient.status === "Urgencias" ? "ambulance" : "ambulatory";
     return `<article class="patient-row${selectedPatientId === patient.id ? " is-selected" : ""}" data-patient-id="${escapeHtml(patient.id)}">
       <div class="patient-identity"><span class="patient-avatar">${icon("user")}</span><span><strong>${escapeHtml(patient.name)}</strong><small>${escapeHtml(patient.age)} años <span aria-hidden="true">|</span> DNI ${escapeHtml(patient.dni)}</small></span></div>
       <div class="patient-info location-info">${icon(locationIcon)}<span><b>${escapeHtml(patient.room)}</b><small>${escapeHtml(patient.department)}</small></span></div>
-      <div class="patient-info doctor-info">${icon("user")}<span><b>${escapeHtml(patient.doctor)}</b><small>${escapeHtml(patient.doctorSpecialty)}</small></span></div>
+      <div class="patient-info doctor-info">${icon("doctor")}<span><b>${escapeHtml(patient.doctor)}</b><small>${escapeHtml(patient.doctorSpecialty)}</small></span></div>
       ${pill(patient)}
       <button type="button" class="row-action" data-select-id="${escapeHtml(patient.id)}" aria-label="Ver detalle de ${escapeHtml(patient.name)}" aria-controls="detail-panel" aria-expanded="${selectedPatientId === patient.id}">${icon("chevron")}</button>
     </article>`;
@@ -130,8 +131,8 @@
         ${detailItem("phone", "Teléfono", patient.phone)}
         ${detailItem("drop", "Grupo sanguíneo", patient.bloodType)}
         ${detailItem("alert", "Alergias", patient.allergies)}
-        ${detailItem("user", "Doctor asignado", patient.doctor)}
-        ${detailItem("bed", "Habitación / Área", `${patient.room} · ${patient.department}`)}
+        ${detailItem("doctor", "Doctor asignado", patient.doctor)}
+        ${detailItem(patient.status === "Ambulatorio" ? "ambulatory" : "bed", "Habitación / Área", `${patient.room} · ${patient.department}`)}
       </dl></section>
       <section class="detail-card"><h3>Contacto de emergencia</h3><dl>
         ${detailItem("user", "Nombre", emergency.name)}

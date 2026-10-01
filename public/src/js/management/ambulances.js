@@ -50,7 +50,7 @@
     list.innerHTML = shown.map(ambulance => `<article class="ambulance-row${selectedId === ambulance.id ? ' is-selected' : ''}">
       <div class="ambulance-identity"><span class="ambulance-avatar">${icon('ambulance-icon.png')}</span><span><strong>${escapeHtml(ambulance.plate)}</strong><small>Unidad #${String(ambulance.id).padStart(3, '0')}</small></span></div>
       <div class="ambulance-info">${icon('brand-icon.svg')}<span><b>${escapeHtml(ambulance.model)}</b><small>Modelo del vehículo</small></span></div>
-      <div class="ambulance-info">${icon('people-svgrepo-com.svg')}<span><b>${ambulance.capacity} plazas</b><small>Capacidad total</small></span></div>
+      <div class="ambulance-info">${icon('seats-icon.svg')}<span><b>${ambulance.capacity} plazas</b><small>Capacidad total</small></span></div>
       ${pill(ambulance)}
       <button type="button" class="row-action" data-select-id="${ambulance.id}" aria-label="Ver detalle de ${escapeHtml(ambulance.plate)}" aria-controls="detail-panel" aria-expanded="${selectedId === ambulance.id}">${icon('arrow-left.svg', 'chevron-icon')}</button>
     </article>`).join('');
@@ -93,7 +93,7 @@
       <div class="detail-grid"><section class="detail-card"><h3>Información general</h3><dl>
         <dt>${icon('id-badge.svg')}Matrícula</dt><dd>${escapeHtml(ambulance.plate)}</dd>
         <dt>${icon('brand-icon.svg')}Modelo</dt><dd>${escapeHtml(ambulance.model)}</dd>
-        <dt>${icon('people-svgrepo-com.svg')}Capacidad</dt><dd>${ambulance.capacity} plazas</dd>
+        <dt>${icon('seats-icon.svg')}Capacidad</dt><dd>${ambulance.capacity} plazas</dd>
         <dt>${icon('information-icon.svg')}Estado operativo</dt><dd>${labels[ambulance.status]}</dd>
       </dl></section></div>`;
     detailPanel.inert = false;
