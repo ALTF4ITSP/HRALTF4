@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pacientes | Hospital de Clínicas</title>
+  <link rel="icon" type="image/x-icon" href="../../../assets/hospital-dark.ico">
+  <link rel="stylesheet" href="../../css/main-menu.css?v=20260927-brand-fix">
+  <link rel="stylesheet" href="../../css/management/patients.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&amp;family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&amp;display=swap" rel="stylesheet">
+  <script src="../../js/main-menu.js?v=20260927-global" defer></script>
+  <script src="../../js/universal-search.js?v=20260927-global" defer></script>
+  <script src="../../js/management/patients.js" defer></script>
+</head>
+<body class="patients-page">
+  <div class="page-background"></div>
+  <div class="page-glow"></div>
+  <main class="app-shell">
+    <aside class="sidebar">
+      <button type="button" class="sidebar-action" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="sidebar-nav">
+        <div class="nav-indicator"></div>
+        <a href="../main-menu.html" class="nav-item"><img src="../../../assets/Icons/house-icon.svg" alt="Inicio"><span>Inicio</span></a>
+        <a href="../documents/documents.html" class="nav-item"><img src="../../../assets/Icons/folder-icon.svg" alt="Documentos"><span>Documentos</span></a>
+        <a href="../traces/trace.html" class="nav-item"><img src="../../../assets/Icons/location-icon.svg" alt="Ambulancias"><span>Ambulancias</span></a>
+        <a href="../analytics/analytics.html" class="nav-item"><img src="../../../assets/Icons/analytics-icon.svg" alt="Reportes"><span>Reportes</span></a>
+        <a href="../calendar/calendar.html" class="nav-item"><img src="../../../assets/Icons/calendar-icon.svg" alt="Calendario"><span>Calendario</span></a>
+        <a href="../surveys/surveys.html" class="nav-item"><img src="../../../assets/Icons/survey-icon.svg" alt="Encuestas"><span>Encuestas</span></a>
+        <a href="management.html" class="nav-item active" aria-current="page"><img src="../../../assets/Icons/database-cog.svg" alt="Gestión"><span>Gestión</span></a>
+        <div class="nav-spacer"></div>
+        <a href="../settings.html" class="nav-item"><img src="../../../assets/Icons/settings-icon.svg" alt="Configuración"><span>Configuración</span></a>
+      </nav>
+    </aside>
+
+    <header class="topbar quick-search-topbar">
+      <div class="brand">
+        <img src="../../../assets/Icons/hospital-logo.png" alt="Hospital de Clínicas">
+        <span>HOSPITAL DE CLINICAS</span>
+      </div>
+
+      <div class="search-wrapper" role="search">
+        <input type="text" id="quick-search" class="search-input" placeholder="Buscar una acción o sección..."
+          aria-label="Buscar una acción o sección" role="combobox" aria-autocomplete="list"
+          aria-controls="search-results-list" aria-expanded="false" autocomplete="off" tabindex="-1">
+        <button type="button" class="topbar-action search-action" aria-label="Abrir búsqueda"
+          aria-controls="quick-search" aria-expanded="false">
+          <img src="../../../assets/Icons/search-icon.svg" alt="" aria-hidden="true">
+        </button>
+      </div>
+
+      <div class="search-results" id="search-results" hidden>
+        <div class="search-results-heading"><span id="search-results-title">Accesos rápidos</span></div>
+        <ul id="search-results-list" class="search-results-list" role="listbox" aria-label="Resultados de búsqueda"></ul>
+        <p class="search-results-footer">Haz clic en una opción disponible para ir a esa sección.</p>
+      </div>
+      <span id="search-status" class="visually-hidden" role="status" aria-live="polite"></span>
+    </header>
+
+    <section class="hero-panel patients-hero" aria-label="Gestión de pacientes">
+      <div class="summary-row">
+        <a class="summary-back" href="management.html" aria-label="Volver a Gestión">
+          <img src="../../../assets/Icons/arrow-left.svg" alt="" aria-hidden="true">
+        </a>
+        <section class="metrics" aria-label="Resumen de pacientes">
+          <article class="metric-card"><span class="metric-icon"><img src="../../../assets/Icons/people-svgrepo-com.svg" alt="" aria-hidden="true"></span><div><strong>482</strong><span>Pacientes activos</span><small>Actualmente en seguimiento.</small></div></article>
+          <article class="metric-card"><span class="metric-icon"><img src="../../../assets/Icons/bed-icon.svg" alt="" aria-hidden="true"></span><div><strong>68</strong><span>Internados</span><small>Pacientes hospitalizados.</small></div></article>
+          <article class="metric-card"><span class="metric-icon"><img src="../../../assets/Icons/leave-icon.svg" alt="" aria-hidden="true"></span><div><strong>12</strong><span>Altas hoy</span><small>Pacientes dados de alta.</small></div></article>
+          <article class="metric-card"><span class="metric-icon"><img src="../../../assets/Icons/calendar-icon.svg" alt="" aria-hidden="true"></span><div><strong>34</strong><span>Citas programadas</span><small>Para el día de hoy.</small></div></article>
+        </section>
+      </div>
+
+    <div class="patient-workspace" id="patient-workspace">
+      <section class="directory-panel" aria-labelledby="directory-title">
+        <div class="panel-heading">
+          <div><h1 id="directory-title">Listado de pacientes</h1><p>Busca y selecciona un paciente para ver su información detallada.</p></div>
+          <button type="button" class="new-patient-button" id="new-patient-button"><span class="plus-circle"><img src="../../../assets/Icons/plus-icon.svg" alt="" aria-hidden="true"></span>Nuevo paciente</button>
+        </div>
+        <div class="directory-controls">
+          <label class="patient-search"><img src="../../../assets/Icons/search-icon.svg" alt="" aria-hidden="true"><input id="patient-search" type="search" autocomplete="off" placeholder="Buscar por nombre, documento o teléfono..." aria-label="Buscar por nombre, documento o teléfono"></label>
+          <div class="status-filters" role="group" aria-label="Filtrar pacientes por estado">
+            <button type="button" class="filter-button is-active" data-filter="Todos" aria-pressed="true">Todos</button>
+            <button type="button" class="filter-button" data-filter="Internado" aria-pressed="false">Internados</button>
+            <button type="button" class="filter-button" data-filter="Ambulatorio" aria-pressed="false">Ambulatorios</button>
+            <button type="button" class="filter-button" data-filter="Urgencias" aria-pressed="false">Urgencias</button>
+          </div>
+        </div>
+        <div class="patient-list" id="patient-list" aria-live="polite"></div>
+        <p class="empty-state" id="patient-empty" hidden>No se encontraron pacientes con estos criterios.</p>
+        <footer class="directory-footer"><span id="results-summary"></span><nav class="pagination" id="patient-pagination" aria-label="Páginas de pacientes"></nav></footer>
+      </section>
+
+      <aside class="detail-panel" id="detail-panel" aria-labelledby="detail-title" aria-hidden="true" inert>
+        <div class="detail-heading"><div><h2 id="detail-title">Detalle del paciente</h2><p>Información completa del paciente seleccionado.</p></div><button type="button" id="close-detail" class="icon-button" aria-label="Cerrar detalle"><img src="../../../assets/Icons/cross-icon.svg" alt="" aria-hidden="true"></button></div>
+        <div id="detail-content"></div>
+      </aside>
+    </div>
+    </section>
+  </main>
+
+  <dialog class="patient-dialog" id="patient-dialog" aria-labelledby="new-patient-title">
+    <form id="patient-form" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">Administración</p><h2 id="new-patient-title">Nuevo paciente</h2><p>Completa los datos para añadir un registro de demostración.</p></div><button type="button" class="icon-button" id="close-patient-dialog" aria-label="Cerrar formulario"><img src="../../../assets/Icons/cross-icon.svg" alt="" aria-hidden="true"></button></div>
+      <div class="dialog-fields">
+        <label>Nombre completo <input name="name" type="text" maxlength="100" autocomplete="name" required></label>
+        <label>Documento (DNI) <input name="dni" type="text" maxlength="25" required></label>
+        <label>Edad <input name="age" type="number" min="0" max="120" required></label>
+        <label>Teléfono <input name="phone" type="tel" maxlength="25" autocomplete="tel" required></label>
+        <label>Estado <select name="status" required><option value="Internado">Internado</option><option value="Ambulatorio">Ambulatorio</option><option value="Urgencias">Urgencias</option></select></label>
+        <label>Habitación o área <input name="room" type="text" maxlength="80" required></label>
+        <label>Servicio <input name="department" type="text" maxlength="80" required></label>
+        <label>Médico asignado <input name="doctor" type="text" maxlength="100" required></label>
+        <label>Especialidad <input name="doctorSpecialty" type="text" maxlength="80"></label>
+        <label>Grupo sanguíneo <input name="bloodType" type="text" maxlength="5" placeholder="Ej. O+"></label>
+        <label>Alergias <input name="allergies" type="text" maxlength="100" placeholder="Ninguna conocida"></label>
+        <label>Fecha de ingreso <input name="admissionDate" type="date"></label>
+        <label>Contacto de emergencia <input name="emergencyName" type="text" maxlength="100"></label>
+        <label>Teléfono de emergencia <input name="emergencyPhone" type="tel" maxlength="25"></label>
+        <label>Parentesco <input name="emergencyRelationship" type="text" maxlength="50"></label>
+      </div>
+      <p class="form-error" id="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" class="cancel-button" id="cancel-patient">Cancelar</button><button type="submit" class="save-button"><img src="../../../assets/Icons/plus-icon.svg" alt="" aria-hidden="true">Guardar paciente</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

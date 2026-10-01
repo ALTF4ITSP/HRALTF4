@@ -68,7 +68,7 @@
                 title: 'Gestionar pacientes',
                 section: 'Gestión',
                 detail: 'Abrir la sección de pacientes',
-                href: 'management/management.html',
+                href: 'management/patients.html',
                 icon: '../../assets/Icons/database-cog.svg',
                 terms: 'cargar paciente registrar paciente agregar paciente nuevo paciente'
             },
@@ -76,7 +76,7 @@
                 title: 'Gestionar ambulancias',
                 section: 'Gestión',
                 detail: 'Abrir la sección de ambulancias',
-                href: 'management/management.html',
+                href: 'management/ambulances.html',
                 icon: '../../assets/Icons/ambulance-icon.png',
                 terms: 'cargar vehiculo cargar vehículo registrar ambulancia agregar vehiculo transporte'
             },
