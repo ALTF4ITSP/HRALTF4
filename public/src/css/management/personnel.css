@@ -488,7 +488,7 @@
   gap: 12px;
   margin-top: auto;
   padding: 12px 7px 0;
-  border-top: 1px solid rgba(169, 188, 229, 0.12);
+  border-top: 0;
   color: #9099af;
   font-size: 12px;
 }
