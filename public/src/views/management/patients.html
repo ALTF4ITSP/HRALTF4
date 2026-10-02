@@ -6,13 +6,13 @@
   <title>Pacientes | Hospital de Clínicas</title>
   <link rel="icon" type="image/x-icon" href="../../../assets/hospital-dark.ico">
   <link rel="stylesheet" href="../../css/main-menu.css?v=20260927-brand-fix">
-  <link rel="stylesheet" href="../../css/management/patients.css">
+  <link rel="stylesheet" href="../../css/management/patients.css?v=20261001-edit-delete">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&amp;family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&amp;display=swap" rel="stylesheet">
   <script src="../../js/main-menu.js?v=20260927-global" defer></script>
   <script src="../../js/universal-search.js?v=20260927-global" defer></script>
-  <script src="../../js/management/patients.js" defer></script>
+  <script src="../../js/management/patients.js?v=20261001-edit-delete" defer></script>
 </head>
 <body class="patients-page">
   <div class="page-background"></div>
@@ -99,6 +99,7 @@
       <aside class="detail-panel" id="detail-panel" aria-labelledby="detail-title" aria-hidden="true" inert>
         <div class="detail-heading"><div><h2 id="detail-title">Detalle del paciente</h2><p>Información completa del paciente seleccionado.</p></div><button type="button" id="close-detail" class="icon-button" aria-label="Cerrar detalle"><img src="../../../assets/Icons/cross-icon.svg" alt="" aria-hidden="true"></button></div>
         <div id="detail-content"></div>
+        <div class="detail-actions"><button type="button" class="cancel-button" id="delete-from-detail"><img src="../../../assets/Icons/trash-icon.svg" alt="" aria-hidden="true">Eliminar</button><button type="button" class="save-button" id="edit-from-detail"><img src="../../../assets/Icons/pencil-icon.svg" alt="" aria-hidden="true">Editar paciente</button></div>
       </aside>
     </div>
     </section>
@@ -106,7 +107,7 @@
 
   <dialog class="patient-dialog" id="patient-dialog" aria-labelledby="new-patient-title">
     <form id="patient-form" method="dialog">
-      <div class="dialog-heading"><div><h2 id="new-patient-title">Nuevo paciente</h2><p>Completa los datos para añadir un registro de demostración.</p></div><button type="button" class="icon-button" id="close-patient-dialog" aria-label="Cerrar formulario"><img src="../../../assets/Icons/cross-icon.svg" alt="" aria-hidden="true"></button></div>
+      <div class="dialog-heading"><div><h2 id="new-patient-title">Nuevo paciente</h2><p id="form-subtitle">Completa los datos para añadir un registro de demostración.</p></div><button type="button" class="icon-button" id="close-patient-dialog" aria-label="Cerrar formulario"><img src="../../../assets/Icons/cross-icon.svg" alt="" aria-hidden="true"></button></div>
       <div class="dialog-fields">
         <fieldset class="patient-form-section">
           <legend>Información del paciente</legend>
@@ -140,8 +141,16 @@
         </fieldset>
       </div>
       <p class="form-error" id="form-error" role="alert" hidden></p>
-      <div class="dialog-actions"><button type="button" class="cancel-button" id="cancel-patient">Cancelar</button><button type="submit" class="save-button"><img src="../../../assets/Icons/save-floppy.svg" alt="" aria-hidden="true">Guardar paciente</button></div>
+      <div class="dialog-actions"><button type="button" class="cancel-button" id="cancel-patient">Cancelar</button><button type="submit" class="save-button"><img src="../../../assets/Icons/save-floppy.svg" alt="" aria-hidden="true"><span id="save-label">Guardar paciente</span></button></div>
     </form>
   </dialog>
+  <dialog class="patient-dialog delete-dialog" id="delete-dialog" aria-labelledby="delete-title" aria-describedby="delete-description">
+    <div class="delete-dialog-content">
+      <div class="dialog-heading"><div><h2 id="delete-title">¿Eliminar este paciente?</h2><p id="delete-description"></p></div><button type="button" class="icon-button" data-close-delete aria-label="Cerrar confirmación"><img src="../../../assets/Icons/cross-icon.svg" alt="" aria-hidden="true"></button></div>
+      <p class="form-error" id="delete-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" class="cancel-button" data-close-delete autofocus>Cancelar</button><button type="button" class="delete-button" id="confirm-delete">Eliminar paciente</button></div>
+    </div>
+  </dialog>
+  <div class="patient-toast" id="patient-toast" role="status" aria-live="polite" hidden></div>
 </body>
 </html>

@@ -499,6 +499,21 @@
 .detail-card dd.stable { color: #56d695; }
 .detail-card dd.stable::before { content: "● "; }
 
+.detail-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.detail-actions button {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 12px;
+  border-radius: 9px;
+  font-size: 11px;
+}
+.detail-actions .save-button img { filter: brightness(0); width: 14px; height: 14px; }
+.detail-actions .cancel-button { color: var(--patient-danger); }
+.detail-actions .cancel-button img { filter: var(--patient-danger-icon); }
+
 .patient-dialog {
   width: min(720px, calc(100vw - 30px));
   max-height: min(90vh, 850px);
@@ -568,11 +583,33 @@
 .save-button:hover { background: #fff; }
 .patient-dialog .save-button img { width: 16px; height: 16px; filter: brightness(0); }
 
+.delete-dialog { width: min(460px, calc(100vw - 30px)); }
+.delete-dialog-content { padding: 22px; }
+.delete-dialog #delete-description { line-height: 1.6; margin-top: 12px; }
+.delete-button { border: 1px solid rgba(244, 63, 94, .4); background: rgba(244, 63, 94, .12); color: #ff9eae; }
+.delete-button:hover { background: rgba(244, 63, 94, .2); }
+.patient-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  max-width: calc(100vw - 30px);
+  padding: 13px 20px;
+  border: 1px solid var(--patient-line-bright);
+  border-radius: 12px;
+  background: #111934;
+  color: var(--patient-text);
+  font-size: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
 .new-patient-button,
 .row-action,
 .icon-button,
 .cancel-button,
-.save-button {
+.save-button,
+.delete-button {
   transition: transform .24s cubic-bezier(.2, .8, .2, 1), background-color .24s ease,
     border-color .24s ease, box-shadow .24s ease, color .24s ease;
 }
@@ -607,6 +644,15 @@
 }
 
 .icon-button:is(:hover, :focus-visible) img { filter: var(--patient-danger-icon); }
+
+.detail-actions .cancel-button:is(:hover, :focus-visible),
+.delete-button:is(:hover, :focus-visible) {
+  transform: translateY(-2px);
+  color: #ffadba;
+  border-color: rgba(251, 129, 149, .75);
+  background-color: rgba(244, 63, 94, .16);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .2), 0 0 0 3px rgba(244, 63, 94, .08);
+}
 
 .summary-back:active,
 .patients-hero button:not(:disabled):active,

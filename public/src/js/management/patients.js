@@ -15,7 +15,8 @@
     { id: "p-010", name: "Valeria Acosta Benítez", age: 46, dni: "26.552.943", phone: "097 752 630", status: "Ambulatorio", room: "Ambulatorio", department: "Consultorios Externos", doctor: "Dra. Inés Cabrera", doctorSpecialty: "Medicina General", admissionDate: "18 de mar. 2024", bloodType: "AB-", allergies: "Penicilina", diagnosis: "Control general", clinicalState: "Estable", emergencyContact: { name: "Luis Acosta", phone: "098 660 122", relationship: "Hermano" } }
   ];
 
-  const storageKey = "hospital.patientDirectory.v1";
+  const storageKey = "hospital.patientDirectory.v2";
+  const legacyStorageKey = "hospital.patientDirectory.v1";
   const pageSize = 5;
   const workspace = document.getElementById("patient-workspace");
   const list = document.getElementById("patient-list");
@@ -27,9 +28,11 @@
   const search = document.getElementById("patient-search");
   const filters = document.querySelectorAll(".filter-button");
   const dialog = document.getElementById("patient-dialog");
+  const deleteDialog = document.getElementById("delete-dialog");
   const form = document.getElementById("patient-form");
   const formError = document.getElementById("form-error");
-  if (!workspace || !list || !detailPanel || !dialog || !form) return;
+  const deleteError = document.getElementById("delete-error");
+  if (!workspace || !list || !detailPanel || !dialog || !deleteDialog || !form) return;
 
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
   const normalize = (value) => String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -52,20 +55,55 @@
   };
   const icon = (name) => `<img src="${iconFiles[name] ? `../../../assets/Icons/${iconFiles[name]}` : "#"}" alt="" aria-hidden="true"${name === "chevron" ? ' class="chevron-icon"' : ""}>`;
   const statusStyle = { Internado: "internado", Ambulatorio: "ambulatorio", Urgencias: "urgencias" };
-  const allPatients = () => [...customPatients, ...samplePatients];
-  let customPatients = [];
+  const allPatients = () => patients;
+  let patients = [...samplePatients];
   let activeFilter = "Todos";
   let currentPage = 1;
   let selectedPatientId = null;
   let lastSelectionButton = null;
+  let editingPatientId = null;
+  let deletingPatientId = null;
+  let toastTimer;
 
   try {
-    const stored = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    const isPatient = patient => patient && typeof patient.id === "string" && typeof patient.name === "string" && statusStyle[patient.status];
+    const stored = JSON.parse(localStorage.getItem(storageKey) || "null");
     if (Array.isArray(stored)) {
-      customPatients = stored.filter(patient => patient && typeof patient.id === "string" && typeof patient.name === "string" && statusStyle[patient.status]);
+      patients = stored.filter(isPatient);
+    } else {
+      const legacyPatients = JSON.parse(localStorage.getItem(legacyStorageKey) || "[]");
+      if (Array.isArray(legacyPatients)) patients = [...legacyPatients.filter(isPatient), ...samplePatients];
     }
   } catch (_) {
-    customPatients = [];
+    patients = [...samplePatients];
+  }
+
+  function savePatients(nextPatients, errorElement) {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(nextPatients));
+    } catch (_) {
+      errorElement.textContent = "No se pudieron guardar los cambios en este navegador. Comprueba el almacenamiento disponible.";
+      errorElement.hidden = false;
+      return false;
+    }
+    patients = nextPatients;
+    return true;
+  }
+
+  function toast(message) {
+    const notification = document.getElementById("patient-toast");
+    clearTimeout(toastTimer);
+    notification.textContent = message;
+    notification.hidden = false;
+    toastTimer = setTimeout(() => { notification.hidden = true; }, 4000);
+  }
+
+  function admissionDateInput(value) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return value;
+    const match = String(value || "").match(/^(\d{1,2})\s+(?:de\s+)?([a-z]+)\.?\s+(?:de\s+)?(\d{4})$/i);
+    const months = { ene: "01", feb: "02", mar: "03", abr: "04", may: "05", jun: "06", jul: "07", ago: "08", sep: "09", set: "09", oct: "10", nov: "11", dic: "12" };
+    const month = match && months[match[2].toLowerCase().slice(0, 3)];
+    return month ? `${match[3]}-${month}-${match[1].padStart(2, "0")}` : "";
   }
 
   function pill(patient) {
@@ -153,9 +191,9 @@
     detailPanel.setAttribute("aria-hidden", "true");
     detailPanel.inert = true;
     renderList();
-    if (restoreFocus && lastSelectionButton) {
-      const button = list.querySelector(`[data-select-id="${CSS.escape(lastSelectionButton)}"]`);
-      button?.focus();
+    if (restoreFocus) {
+      const button = lastSelectionButton && list.querySelector(`[data-select-id="${CSS.escape(lastSelectionButton)}"]`);
+      (button || document.getElementById("new-patient-button")).focus();
     }
   }
 
@@ -192,21 +230,51 @@
   });
   document.getElementById("close-detail").addEventListener("click", () => closeDetail(true));
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && selectedPatientId && !dialog.open) closeDetail(true);
+    if (event.key === "Escape" && selectedPatientId && !dialog.open && !deleteDialog.open) closeDetail(true);
   });
 
-  document.getElementById("new-patient-button").addEventListener("click", () => {
+  function openForm(patient = null) {
+    closeDetail();
     form.reset();
     formError.hidden = true;
+    editingPatientId = patient?.id ?? null;
+    document.getElementById("new-patient-title").textContent = patient ? "Editar datos del paciente" : "Nuevo paciente";
+    document.getElementById("form-subtitle").textContent = patient ? `Actualiza los datos de ${patient.name}.` : "Completa los datos para añadir un registro de demostración.";
+    document.getElementById("save-label").textContent = patient ? "Guardar cambios" : "Guardar paciente";
+    if (patient) {
+      ["name", "dni", "age", "phone", "bloodType", "allergies", "status", "room", "department", "doctor", "doctorSpecialty"].forEach(key => {
+        form.elements[key].value = patient[key] ?? "";
+      });
+      form.elements.admissionDate.value = admissionDateInput(patient.admissionDate);
+      const emergency = patient.emergencyContact || {};
+      form.elements.emergencyName.value = emergency.name || "";
+      form.elements.emergencyPhone.value = emergency.phone || "";
+      form.elements.emergencyRelationship.value = emergency.relationship || "";
+    }
+    dialog.querySelector(".dialog-fields").scrollTop = 0;
     dialog.showModal();
     form.elements.name.focus();
+  }
+
+  document.getElementById("new-patient-button").addEventListener("click", () => openForm());
+  document.getElementById("edit-from-detail").addEventListener("click", () => {
+    const patient = allPatients().find(item => item.id === selectedPatientId);
+    if (patient) openForm(patient);
   });
   const closeDialog = () => dialog.close();
   document.getElementById("close-patient-dialog").addEventListener("click", closeDialog);
   document.getElementById("cancel-patient").addEventListener("click", closeDialog);
   dialog.addEventListener("click", event => { if (event.target === dialog) closeDialog(); });
+  dialog.addEventListener("close", () => {
+    const button = editingPatientId && list.querySelector(`[data-select-id="${CSS.escape(editingPatientId)}"]`);
+    editingPatientId = null;
+    (button || document.getElementById("new-patient-button")).focus();
+  });
+  form.addEventListener("input", () => { formError.hidden = true; });
+  form.addEventListener("change", () => { formError.hidden = true; });
   form.addEventListener("submit", event => {
     event.preventDefault();
+    formError.hidden = true;
     const fields = Object.fromEntries(new FormData(form).entries());
     const missing = ["name", "dni", "phone", "room", "department", "doctor"].find(key => !fields[key]?.trim());
     if (missing) {
@@ -216,38 +284,55 @@
       return;
     }
     const dni = fields.dni.trim();
-    if (allPatients().some(patient => normalize(patient.dni) === normalize(dni))) {
+    if (allPatients().some(patient => patient.id !== editingPatientId && normalize(patient.dni) === normalize(dni))) {
       formError.textContent = "Ya existe un paciente con ese documento.";
       formError.hidden = false;
       form.elements.dni.focus();
       return;
     }
+    const existingPatient = allPatients().find(patient => patient.id === editingPatientId);
     const patient = {
-      id: `p-local-${crypto.randomUUID()}`,
+      ...existingPatient,
+      id: editingPatientId ?? `p-local-${crypto.randomUUID()}`,
       name: fields.name.trim(), age: Number(fields.age), dni, phone: fields.phone.trim(), status: fields.status,
       room: fields.room.trim(), department: fields.department.trim(), doctor: fields.doctor.trim(),
       doctorSpecialty: fields.doctorSpecialty.trim(),
       admissionDate: fields.admissionDate ? new Intl.DateTimeFormat("es-UY", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${fields.admissionDate}T12:00:00Z`)) : "No indicada",
       bloodType: fields.bloodType.trim(), allergies: fields.allergies.trim() || "Ninguna conocida",
-      diagnosis: "Sin diagnóstico registrado", clinicalState: "Sin datos",
+      diagnosis: existingPatient?.diagnosis ?? "Sin diagnóstico registrado", clinicalState: existingPatient?.clinicalState ?? "Sin datos",
       emergencyContact: { name: fields.emergencyName.trim(), phone: fields.emergencyPhone.trim(), relationship: fields.emergencyRelationship.trim() }
     };
-    try {
-      localStorage.setItem(storageKey, JSON.stringify([patient, ...customPatients]));
-    } catch (_) {
-      formError.textContent = "No se pudo guardar el paciente en este navegador. Comprueba el almacenamiento disponible.";
-      formError.hidden = false;
-      return;
-    }
-    customPatients.unshift(patient);
+    const wasEditing = editingPatientId !== null;
+    const nextPatients = wasEditing ? allPatients().map(item => item.id === editingPatientId ? patient : item) : [patient, ...allPatients()];
+    if (!savePatients(nextPatients, formError)) return;
     search.value = "";
     activeFilter = "Todos";
     filters.forEach(button => { const active = button.dataset.filter === "Todos"; button.classList.toggle("is-active", active); button.setAttribute("aria-pressed", String(active)); });
-    currentPage = 1;
-    if (selectedPatientId) closeDetail();
+    currentPage = Math.floor(allPatients().findIndex(item => item.id === patient.id) / pageSize) + 1;
     renderList();
     dialog.close();
     list.querySelector(`[data-select-id="${CSS.escape(patient.id)}"]`)?.focus();
+    toast(wasEditing ? `Datos de ${patient.name} actualizados.` : `Paciente ${patient.name} agregado.`);
+  });
+
+  document.getElementById("delete-from-detail").addEventListener("click", () => {
+    const patient = allPatients().find(item => item.id === selectedPatientId);
+    if (!patient) return;
+    deletingPatientId = patient.id;
+    deleteError.hidden = true;
+    document.getElementById("delete-description").textContent = `Se eliminará a ${patient.name} (DNI ${patient.dni}) del listado. ¿Deseas continuar?`;
+    deleteDialog.showModal();
+  });
+  document.querySelectorAll("[data-close-delete]").forEach(button => button.addEventListener("click", () => deleteDialog.close()));
+  deleteDialog.addEventListener("close", () => { deletingPatientId = null; });
+  document.getElementById("confirm-delete").addEventListener("click", () => {
+    const patient = allPatients().find(item => item.id === deletingPatientId);
+    if (!patient) return;
+    if (!savePatients(allPatients().filter(item => item.id !== deletingPatientId), deleteError)) return;
+    closeDetail();
+    deleteDialog.close();
+    document.getElementById("new-patient-button").focus();
+    toast(`Paciente ${patient.name} eliminado.`);
   });
 
   renderList();
