@@ -496,7 +496,7 @@
 
 .ambulance-dialog {
   width: min(720px, calc(100vw - 30px));
-  max-height: min(90vh, 850px);
+  max-height: 88vh;
   padding: 0;
   border: 1px solid var(--ambulance-line-bright);
   border-radius: 20px;
@@ -506,35 +506,49 @@
 }
 .ambulance-dialog::backdrop { background: rgba(5, 8, 22, .75); backdrop-filter: blur(5px); }
 .ambulance-dialog form { padding: 22px; }
-.ambulance-dialog .dialog-heading { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
+.ambulance-dialog .dialog-heading { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
 .ambulance-dialog .eyebrow { margin: 0 0 4px; color: var(--ambulance-accent); font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
 .ambulance-dialog h2 { margin: 0; font-size: 22px; }
-.ambulance-dialog .dialog-heading p:last-child { margin: 7px 0 0; color: var(--ambulance-muted); font-size: 12px; }
-.dialog-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; max-height: 56vh; overflow-y: auto; padding: 5px; margin: -5px; }
-.dialog-fields label { display: grid; gap: 7px; color: #d8dbe6; font-size: 11px; font-weight: 600; transition: color .24s ease; }
+.ambulance-dialog .dialog-heading p:last-child { margin: 7px 0 0; color: var(--ambulance-muted); font-size: 12px; line-height: 1.5; }
+.dialog-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; max-height: 58vh; overflow-y: auto; padding: 5px; margin: 17px -5px 0; scrollbar-width: thin; scrollbar-color: var(--ambulance-line-bright) transparent; }
+.dialog-fields label { min-width: 0; display: grid; gap: 7px; color: #d8ddea; font-size: 11px; font-weight: 600; transition: color .24s ease; }
 .dialog-fields label:focus-within { color: var(--ambulance-accent); }
-.dialog-fields input,
-.dialog-fields select {
-  width: 100%;
-  min-width: 0;
+.field-control {
   height: 40px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
   padding: 0 11px;
   border: 1px solid var(--ambulance-line-bright);
-  border-radius: 9px;
-  outline: none;
-  background: #111934;
-  color: var(--ambulance-text);
-  font-size: 12px;
+  border-radius: 10px;
+  background: var(--ambulance-control);
   transition: border-color .24s ease, background-color .24s ease, box-shadow .24s ease;
 }
-.dialog-fields :is(input, select):hover { border-color: rgba(171, 186, 234, .55); }
-.ambulance-dialog .dialog-fields :is(input, select):focus {
+.field-control img { width: 16px; height: 16px; opacity: .7; }
+.field-control input,
+.field-control select {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
   outline: none;
+  background: transparent;
+  color: var(--ambulance-text);
+  font-size: 12px;
+  font-weight: 400;
+}
+.field-control select { cursor: pointer; }
+.ambulance-dialog select option { background: #111934; color: var(--ambulance-text); }
+.field-control:hover { border-color: rgba(171, 186, 234, .5); }
+.field-control:focus-within {
   border-color: var(--ambulance-accent);
   background-color: #17213f;
-  box-shadow: 0 0 0 3px rgba(170, 191, 255, .16);
+  box-shadow: 0 0 0 3px rgba(170, 191, 255, .1);
 }
-.dialog-fields input::placeholder { color: #7f879a; }
+.ambulance-dialog .field-control :is(input, select):focus-visible { outline: none; }
+.field-control input::placeholder { color: #818ca5; }
 .form-error { margin: 14px 0 0; color: #ff9cab; font-size: 12px; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 .dialog-actions button {
@@ -544,14 +558,15 @@
   justify-content: center;
   gap: 8px;
   padding: 0 16px;
-  border-radius: 9px;
+  border-radius: 10px;
   font-size: 12px;
   font-weight: 600;
 }
 .cancel-button { border: 1px solid var(--ambulance-line-bright); background: rgba(27, 36, 63, .48); color: var(--ambulance-text); }
 .save-button { border: 1px solid #c9cddc; background: #eeeeee; color: #101732; }
 .save-button:hover { background: #fff; }
-.ambulance-dialog .save-button img { width: 16px; height: 16px; filter: brightness(0); }
+.ambulance-dialog .save-button { border-color: #6689ef; background: #4b6dde url("../../../assets/special-bg.png") center / cover no-repeat; color: #fff; }
+.ambulance-dialog .save-button img { width: 15px; height: 15px; filter: brightness(0) invert(1); }
 
 
 /* Desktop mockup: keep the patient page's proportions without mobile layouts. */
@@ -579,7 +594,6 @@
 .detail-actions .save-button img { filter: brightness(0); width: 14px; height: 14px; }
 .detail-actions .cancel-button { color: #fb8195; }
 #ambulance-plate { text-transform: uppercase; }
-.ambulance-dialog { width: 620px; }
 .delete-dialog { width: 460px; }
 .delete-dialog-content { padding: 22px; }
 .delete-dialog #delete-description { line-height: 1.6; margin-top: 12px; }
@@ -612,6 +626,13 @@
   border-color: #fff;
   background-color: #fff;
   box-shadow: 0 6px 18px rgba(0, 0, 0, .2), 0 0 0 3px rgba(170, 191, 255, .14);
+}
+
+.ambulance-dialog .save-button:is(:hover, :focus-visible) {
+  border-color: #6689ef;
+  background-color: #4b6dde;
+  filter: brightness(1.12);
+  box-shadow: 0 5px 16px rgba(45, 72, 163, .25);
 }
 
 .icon-button img {
@@ -652,5 +673,6 @@
   .ambulance-search img,
   .ambulance-dialog button,
   .ambulance-dialog .icon-button img,
-  .dialog-fields :is(label, input, select) { transition: none; }
+  .dialog-fields :is(label, input, select),
+  .field-control { transition: none; }
 }

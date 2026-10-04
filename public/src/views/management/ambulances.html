@@ -6,7 +6,7 @@
   <title>Ambulancias | Hospital de Clínicas</title>
   <link rel="icon" type="image/x-icon" href="../../../assets/hospital-dark.ico">
   <link rel="stylesheet" href="../../css/main-menu.css?v=20260927-brand-fix">
-  <link rel="stylesheet" href="../../css/management/ambulances.css?v=20261001-mockup">
+  <link rel="stylesheet" href="../../css/management/ambulances.css?v=20261004-form-design">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&amp;family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&amp;display=swap" rel="stylesheet">
@@ -104,10 +104,10 @@
     <form id="ambulance-form">
       <div class="dialog-heading"><div><h2 id="ambulance-form-title">Nueva ambulancia</h2><p id="form-subtitle">Completa los datos del vehículo.</p></div><button type="button" class="icon-button" id="close-ambulance-dialog" aria-label="Cerrar formulario"><img src="../../../assets/Icons/cross-icon.svg" alt="" aria-hidden="true"></button></div>
       <div class="dialog-fields">
-        <label for="ambulance-plate">Matrícula <input id="ambulance-plate" name="matricula" type="text" maxlength="20" pattern="[A-Za-z0-9]+([ \-][A-Za-z0-9]+)*" placeholder="Ej. SAB 001" autocomplete="off" required></label>
-        <label for="ambulance-model">Modelo <input id="ambulance-model" name="modelo" type="text" maxlength="100" placeholder="Ej. Mercedes-Benz Sprinter" required></label>
-        <label for="ambulance-capacity">Capacidad (plazas) <input id="ambulance-capacity" name="capacidad" type="number" min="1" max="99" step="1" placeholder="Ej. 4" required></label>
-        <label for="ambulance-status">Estado operativo <select id="ambulance-status" name="estado_operativo" required><option value="OPERATIVA">Operativa</option><option value="MANTENIMIENTO">Mantenimiento</option><option value="FUERA_SERVICIO">Fuera de servicio</option></select></label>
+        <label for="ambulance-plate">Matrícula <span class="field-control"><img src="../../../assets/Icons/id-badge.svg" alt="" aria-hidden="true"><input id="ambulance-plate" name="matricula" type="text" maxlength="20" pattern="[A-Za-z0-9]+([ \-][A-Za-z0-9]+)*" placeholder="Ej. SAB 001" autocomplete="off" required></span></label>
+        <label for="ambulance-model">Modelo <span class="field-control"><img src="../../../assets/Icons/ambulance-icon.png" alt="" aria-hidden="true"><input id="ambulance-model" name="modelo" type="text" maxlength="100" placeholder="Ej. Mercedes-Benz Sprinter" required></span></label>
+        <label for="ambulance-capacity">Capacidad (plazas) <span class="field-control"><img src="../../../assets/Icons/seats-icon.svg" alt="" aria-hidden="true"><input id="ambulance-capacity" name="capacidad" type="number" min="1" max="99" step="1" placeholder="Ej. 4" required></span></label>
+        <label for="ambulance-status">Estado operativo <span class="field-control"><img src="../../../assets/Icons/operative-icon.svg" alt="" aria-hidden="true"><select id="ambulance-status" name="estado_operativo" required><option value="OPERATIVA">Operativa</option><option value="MANTENIMIENTO">Mantenimiento</option><option value="FUERA_SERVICIO">Fuera de servicio</option></select></span></label>
       </div>
       <p class="form-error" id="form-error" role="alert" hidden></p>
       <div class="dialog-actions"><button type="button" class="cancel-button" id="cancel-ambulance">Cancelar</button><button type="submit" class="save-button"><img src="../../../assets/Icons/save-floppy.svg" alt="" aria-hidden="true"><span id="save-label">Guardar ambulancia</span></button></div>

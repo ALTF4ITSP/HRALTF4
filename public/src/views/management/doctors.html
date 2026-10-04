@@ -6,13 +6,13 @@
   <title>Médicos | Hospital de Clínicas</title>
   <link rel="icon" type="image/x-icon" href="../../../assets/hospital-dark.ico">
   <link rel="stylesheet" href="../../css/main-menu.css?v=20260927-brand-fix">
-  <link rel="stylesheet" href="../../css/management/doctors.css?v=20261002-fill-rows">
+  <link rel="stylesheet" href="../../css/management/doctors.css?v=20261004-directory-design">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&amp;display=swap" rel="stylesheet">
   <script src="../../js/main-menu.js?v=20260927-global" defer></script>
   <script src="../../js/universal-search.js?v=20261001-doctors" defer></script>
-  <script src="../../js/management/doctors.js?v=20261002-fill-rows" defer></script>
+  <script src="../../js/management/doctors.js?v=20261004-detail-arrow" defer></script>
 </head>
 <body class="doctors-page">
   <main class="app-shell">
@@ -70,8 +70,7 @@
           </div>
 
           <div class="doctor-table-container">
-            <table class="doctor-table">
-              <thead><tr><th scope="col">Médico / Registro</th><th scope="col">Especialidad / Servicio</th><th scope="col">Turno / Contacto</th><th scope="col">Disponibilidad</th><th scope="col">Acciones</th></tr></thead>
+            <table class="doctor-table" aria-label="Listado de médicos">
               <tbody id="doctor-rows"></tbody>
             </table>
             <div class="doctor-empty" id="doctor-empty" hidden>
