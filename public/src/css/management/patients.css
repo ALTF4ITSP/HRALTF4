@@ -516,7 +516,7 @@
 
 .patient-dialog {
   width: min(720px, calc(100vw - 30px));
-  max-height: min(90vh, 850px);
+  max-height: 88vh;
   padding: 0;
   border: 1px solid var(--patient-line-bright);
   border-radius: 20px;
@@ -526,45 +526,63 @@
 }
 .patient-dialog::backdrop { background: rgba(5, 8, 22, .75); backdrop-filter: blur(5px); }
 .patient-dialog form { padding: 22px; }
-.patient-dialog .dialog-heading { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
+.patient-dialog .dialog-heading { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
 .patient-dialog h2 { margin: 0; font-size: 22px; }
-.patient-dialog .dialog-heading p:last-child { margin: 7px 0 0; color: var(--patient-muted); font-size: 12px; }
-.dialog-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-height: 56vh; overflow-y: auto; padding: 5px; margin: -5px; }
+.patient-dialog .dialog-heading p:last-child { margin: 7px 0 0; color: var(--patient-muted); font-size: 12px; line-height: 1.5; }
+.dialog-fields { display: grid; gap: 22px; max-height: 58vh; overflow-y: auto; padding: 5px; margin: 17px -5px 0; scrollbar-width: thin; scrollbar-color: var(--patient-line-bright) transparent; }
 .patient-form-section { grid-column: 1 / -1; min-width: 0; margin: 0; padding: 0; border: 0; }
 .patient-form-section legend {
   width: 100%;
-  margin-bottom: 12px;
-  padding: 0 0 9px;
-  border-bottom: 1px solid rgba(150, 163, 209, .16);
-  color: var(--patient-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 13px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--patient-line);
+  color: #dce1ef;
   font-size: 12px;
   font-weight: 600;
 }
+.patient-form-section legend img { width: 16px; height: 16px; opacity: .8; }
 .form-section-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
-.dialog-fields label { display: grid; gap: 7px; color: #d8dbe6; font-size: 11px; font-weight: 600; transition: color .24s ease; }
+.dialog-fields label { min-width: 0; display: grid; gap: 7px; color: #d8ddea; font-size: 11px; font-weight: 600; transition: color .24s ease; }
 .dialog-fields label:focus-within { color: var(--patient-accent); }
-.dialog-fields input,
-.dialog-fields select {
-  width: 100%;
-  min-width: 0;
+.field-control {
   height: 40px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
   padding: 0 11px;
   border: 1px solid var(--patient-line-bright);
-  border-radius: 9px;
-  outline: none;
-  background: #111934;
-  color: var(--patient-text);
-  font-size: 12px;
+  border-radius: 10px;
+  background: var(--patient-control);
   transition: border-color .24s ease, background-color .24s ease, box-shadow .24s ease;
 }
-.dialog-fields :is(input, select):hover { border-color: rgba(171, 186, 234, .55); }
-.patient-dialog .dialog-fields :is(input, select):focus {
+.field-control img { width: 16px; height: 16px; opacity: .7; }
+.field-control input,
+.field-control select {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
   outline: none;
+  background: transparent;
+  color: var(--patient-text);
+  font-size: 12px;
+  font-weight: 400;
+}
+.field-control select { cursor: pointer; }
+.patient-dialog select option { background: #111934; color: var(--patient-text); }
+.field-control:hover { border-color: rgba(171, 186, 234, .5); }
+.field-control:focus-within {
   border-color: var(--patient-accent);
   background-color: #17213f;
-  box-shadow: 0 0 0 3px rgba(170, 191, 255, .16);
+  box-shadow: 0 0 0 3px rgba(170, 191, 255, .1);
 }
-.dialog-fields input::placeholder { color: #7f879a; }
+.patient-dialog .field-control :is(input, select):focus-visible { outline: none; }
+.field-control input::placeholder { color: #818ca5; }
 .form-error { margin: 14px 0 0; color: #ff9cab; font-size: 12px; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 .dialog-actions button {
@@ -574,14 +592,15 @@
   justify-content: center;
   gap: 8px;
   padding: 0 16px;
-  border-radius: 9px;
+  border-radius: 10px;
   font-size: 12px;
   font-weight: 600;
 }
 .cancel-button { border: 1px solid var(--patient-line-bright); background: rgba(27, 36, 63, .48); color: var(--patient-text); }
 .save-button { border: 1px solid #c9cddc; background: #eeeeee; color: #101732; }
 .save-button:hover { background: #fff; }
-.patient-dialog .save-button img { width: 16px; height: 16px; filter: brightness(0); }
+.patient-dialog .save-button { border-color: #6689ef; background: #4b6dde url("../../../assets/special-bg.png") center / cover no-repeat; color: #fff; }
+.patient-dialog .save-button img { width: 15px; height: 15px; filter: brightness(0) invert(1); }
 
 .delete-dialog { width: min(460px, calc(100vw - 30px)); }
 .delete-dialog-content { padding: 22px; }
@@ -628,6 +647,13 @@
   border-color: #fff;
   background-color: #fff;
   box-shadow: 0 6px 18px rgba(0, 0, 0, .2), 0 0 0 3px rgba(170, 191, 255, .14);
+}
+
+.patient-dialog .save-button:is(:hover, :focus-visible) {
+  border-color: #6689ef;
+  background-color: #4b6dde;
+  filter: brightness(1.12);
+  box-shadow: 0 5px 16px rgba(45, 72, 163, .25);
 }
 
 .icon-button img {

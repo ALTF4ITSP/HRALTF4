@@ -125,7 +125,7 @@
       <td><div class="doctor-info">${icon("specialty-icon.svg")}<div><b title="${escapeHtml(doctor.specialty)}">${escapeHtml(doctor.specialty)}</b><small title="${escapeHtml(doctor.service)}">${escapeHtml(doctor.service)}</small></div></div></td>
       <td><div class="doctor-info">${icon("time-icon.svg")}<div><b>${escapeHtml(doctor.shift)} <span class="shift-hours">· ${escapeHtml(hours(doctor))}</span></b><small>${escapeHtml(doctor.phone)}</small></div></div></td>
       <td>${pill(doctor)}</td>
-      <td><div class="row-actions">${actionButton(doctor, "view", "Ver detalle de", "eye.svg")}</div></td>
+      <td><div class="row-actions">${actionButton(doctor, "view", "Ver detalle de", "arrow-left.svg")}</div></td>
     </tr>`;
   }
 
