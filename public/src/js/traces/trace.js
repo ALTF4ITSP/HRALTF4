@@ -277,8 +277,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const newTransferForm = document.getElementById("newTransferForm");
 
     if (newTransferForm) {
-        const fileInput = document.getElementById("patientDocuments");
-        const fileName = document.getElementById("fileName");
         const saveDraftButton = document.getElementById("saveDraft");
         const cancelButton = document.getElementById("cancelTransfer");
         const formMessage = document.getElementById("formMessage");
@@ -371,14 +369,6 @@ document.addEventListener("DOMContentLoaded", function () {
             showMessage("Se recuperó el borrador guardado.", false);
         }
 
-        fileInput.addEventListener("change", function () {
-            if (fileInput.files.length > 0) {
-                fileName.textContent = fileInput.files[0].name;
-            } else {
-                fileName.textContent = "Buscar...";
-            }
-        });
-
         transferType.addEventListener("change", updatePatientRequirement);
         saveDraftButton.addEventListener("click", saveDraft);
 
@@ -391,6 +381,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             window.location.href = "trace.html";
         });
+
+        newTransferForm.addEventListener("invalid", function () {
+            showMessage("Completa los campos obligatorios y revisa los valores indicados.", true);
+        }, true);
 
         newTransferForm.addEventListener("submit", function (event) {
             event.preventDefault();
@@ -408,7 +402,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             newTransferForm.reset();
-            fileName.textContent = "Buscar...";
             updatePatientRequirement();
             showMessage("Traslado creado correctamente.", false);
         });

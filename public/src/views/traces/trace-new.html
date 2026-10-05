@@ -13,10 +13,10 @@
         rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../../../assets/hospital-dark.ico">
     <link rel="stylesheet" href="../../css/main-menu.css?v=20260927-brand-fix">
-    <link rel="stylesheet" href="../../css/traces/trace-new.css">
+    <link rel="stylesheet" href="../../css/traces/trace-new.css?v=20261005-general-field-sizing">
     <script src="../../js/main-menu.js?v=20260927-global" defer></script>
     <script src="../../js/universal-search.js?v=20260927-global" defer></script>
-    <script src="../../js/traces/trace.js" defer></script>
+    <script src="../../js/traces/trace.js?v=20261004-patient-cedula" defer></script>
 </head>
 
 <body>
@@ -94,7 +94,7 @@
             <section class="new-transfer-panel">
                 <div class="new-transfer-content">
                     <a href="trace.html" class="back-link">
-                        <span aria-hidden="true">←</span>
+                        <img src="../../../assets/Icons/arrow-left.svg" alt="" aria-hidden="true">
                         Volver a traslados
                     </a>
 
@@ -111,8 +111,11 @@
                     <form id="newTransferForm">
                         <div class="form-layout">
                             <div class="form-column">
-                                <section class="form-section">
-                                    <h2><span class="text-icon" aria-hidden="true">ⓘ</span> Información General</h2>
+                                <section class="form-section general-section">
+                                    <h2>
+                                        <img src="../../../assets/Icons/information-icon.svg" alt="" aria-hidden="true">
+                                        Información General
+                                    </h2>
 
                                     <div class="field full-field">
                                         <label for="ambulance">Ambulancia</label>
@@ -124,28 +127,26 @@
                                         </select>
                                     </div>
 
-<!-- Conductor -->
-<div class="field full-field">
-    <label for="driver">Conductor</label>
-    <div class="search-input-wrapper">
-        <input class="search-field" type="text" id="driver" name="driver"
-            placeholder="Buscar conductor..." autocomplete="off" required>
-        <img src="../../../assets/Icons/search-icon.svg" class="search-icon" alt="" aria-hidden="true">
-    </div>
-</div>
-
-<!-- Acompañante -->
-<div class="field full-field">
-    <label for="companion">Acompañante <span>(Opcional)</span></label>
-    <div class="search-input-wrapper">
-        <input class="search-field" type="text" id="companion" name="companion"
-            placeholder="Buscar acompañante..." autocomplete="off">
-        <img src="../../../assets/Icons/search-icon.svg" class="search-icon" alt="" aria-hidden="true">
-    </div>
-</div>
+                                    <div class="field full-field">
+                                        <label for="driver">Conductor</label>
+                                        <div class="input-wrapper">
+                                            <input type="text" id="driver" name="driver"
+                                                placeholder="Buscar conductor..." autocomplete="off" required>
+                                            <img src="../../../assets/Icons/search-icon.svg" class="field-icon" alt="" aria-hidden="true">
+                                        </div>
+                                    </div>
 
                                     <div class="field full-field">
-                                        <label>Fecha y Hora de Inicio</label>
+                                        <label for="companion">Acompañante <span>(Opcional)</span></label>
+                                        <div class="input-wrapper">
+                                            <input type="text" id="companion" name="companion"
+                                                placeholder="Buscar acompañante..." autocomplete="off">
+                                            <img src="../../../assets/Icons/search-icon.svg" class="field-icon" alt="" aria-hidden="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="field full-field">
+                                        <label for="startDate">Fecha y Hora de Inicio</label>
                                         <div class="date-time-fields">
                                             <input type="date" id="startDate" name="startDate" aria-label="Fecha de inicio"
                                                 required>
@@ -181,13 +182,12 @@
                                         </div>
 
                                         <div class="field">
-                                            <label for="patientDocuments">Documentos / Historia Médica</label>
-                                            <input class="file-input" type="file" id="patientDocuments"
-                                                name="patientDocuments" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                                            <label class="file-button" for="patientDocuments">
-                                                <img src="../../../assets/Icons/folder-icon.svg" alt="" aria-hidden="true">
-                                                <span id="fileName">Buscar...</span>
-                                            </label>
+                                            <label for="patientCedula">Cédula del Paciente</label>
+                                            <div class="input-wrapper">
+                                                <input type="text" id="patientCedula" name="patientCedula" inputmode="numeric"
+                                                    placeholder="Ej.: 1.234.567-8" autocomplete="off">
+                                                <img src="../../../assets/Icons/id-badge.svg" class="field-icon" alt="" aria-hidden="true">
+                                            </div>
                                         </div>
 
                                         <div class="field">
@@ -219,14 +219,20 @@
 
                                     <div class="field full-field">
                                         <label for="origin">Origen</label>
-                                        <input class="search-field" type="text" id="origin" name="origin"
-                                            placeholder="Buscar dirección..." autocomplete="off" required>
+                                        <div class="input-wrapper">
+                                            <input type="text" id="origin" name="origin"
+                                                placeholder="Buscar dirección..." autocomplete="off" required>
+                                            <img src="../../../assets/Icons/search-icon.svg" class="field-icon" alt="" aria-hidden="true">
+                                        </div>
                                     </div>
 
                                     <div class="field full-field">
                                         <label for="destination">Destino</label>
-                                        <input class="search-field" type="text" id="destination" name="destination"
-                                            placeholder="Buscar destino..." autocomplete="off" required>
+                                        <div class="input-wrapper">
+                                            <input type="text" id="destination" name="destination"
+                                                placeholder="Buscar destino..." autocomplete="off" required>
+                                            <img src="../../../assets/Icons/search-icon.svg" class="field-icon" alt="" aria-hidden="true">
+                                        </div>
                                     </div>
 
                                     <div class="two-fields">

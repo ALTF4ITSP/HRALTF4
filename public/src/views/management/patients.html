@@ -112,10 +112,10 @@
         <fieldset class="patient-form-section">
           <legend><img src="../../../assets/Icons/person-icon.svg" alt="" aria-hidden="true">Información del paciente</legend>
           <div class="form-section-fields">
-            <label>Nombre completo <span class="field-control"><img src="../../../assets/Icons/person-icon.svg" alt="" aria-hidden="true"><input name="name" type="text" maxlength="100" autocomplete="name" required></span></label>
-            <label>Documento (DNI) <span class="field-control"><img src="../../../assets/Icons/id-badge.svg" alt="" aria-hidden="true"><input name="dni" type="text" maxlength="25" required></span></label>
-            <label>Edad <span class="field-control"><img src="../../../assets/Icons/calendar-icon.svg" alt="" aria-hidden="true"><input name="age" type="number" min="0" max="120" required></span></label>
-            <label>Teléfono <span class="field-control"><img src="../../../assets/Icons/phone-icon.svg" alt="" aria-hidden="true"><input name="phone" type="tel" maxlength="25" autocomplete="tel" required></span></label>
+            <label>Nombre completo <span class="field-control"><img src="../../../assets/Icons/person-icon.svg" alt="" aria-hidden="true"><input name="name" type="text" maxlength="100" autocomplete="name" placeholder="Ej. María González López" required></span></label>
+            <label>Documento (DNI) <span class="field-control"><img src="../../../assets/Icons/id-badge.svg" alt="" aria-hidden="true"><input name="dni" type="text" maxlength="25" placeholder="Ej. 32.456.789" required></span></label>
+            <label>Edad <span class="field-control"><img src="../../../assets/Icons/calendar-icon.svg" alt="" aria-hidden="true"><input name="age" type="number" min="0" max="120" placeholder="Ej. 34" required></span></label>
+            <label>Teléfono <span class="field-control"><img src="../../../assets/Icons/phone-icon.svg" alt="" aria-hidden="true"><input name="phone" type="tel" maxlength="25" autocomplete="tel" placeholder="Ej. 099 123 456" required></span></label>
             <label>Grupo sanguíneo <span class="field-control"><img src="../../../assets/Icons/bloodtype-icon.svg" alt="" aria-hidden="true"><input name="bloodType" type="text" maxlength="5" placeholder="Ej. O+"></span></label>
             <label>Alergias <span class="field-control"><img src="../../../assets/Icons/alert-icon.svg" alt="" aria-hidden="true"><input name="allergies" type="text" maxlength="100" placeholder="Ninguna conocida"></span></label>
           </div>
@@ -123,19 +123,19 @@
         <fieldset class="patient-form-section">
           <legend><img src="../../../assets/Icons/phone-icon.svg" alt="" aria-hidden="true">Contacto de emergencia</legend>
           <div class="form-section-fields">
-            <label>Nombre completo <span class="field-control"><img src="../../../assets/Icons/person-icon.svg" alt="" aria-hidden="true"><input name="emergencyName" type="text" maxlength="100"></span></label>
-            <label>Teléfono <span class="field-control"><img src="../../../assets/Icons/phone-icon.svg" alt="" aria-hidden="true"><input name="emergencyPhone" type="tel" maxlength="25"></span></label>
-            <label>Parentesco <span class="field-control"><img src="../../../assets/Icons/people-svgrepo-com.svg" alt="" aria-hidden="true"><input name="emergencyRelationship" type="text" maxlength="50"></span></label>
+            <label>Nombre completo <span class="field-control"><img src="../../../assets/Icons/person-icon.svg" alt="" aria-hidden="true"><input name="emergencyName" type="text" maxlength="100" placeholder="Ej. José González"></span></label>
+            <label>Teléfono <span class="field-control"><img src="../../../assets/Icons/phone-icon.svg" alt="" aria-hidden="true"><input name="emergencyPhone" type="tel" maxlength="25" placeholder="Ej. 098 765 432"></span></label>
+            <label>Parentesco <span class="field-control"><img src="../../../assets/Icons/people-svgrepo-com.svg" alt="" aria-hidden="true"><input name="emergencyRelationship" type="text" maxlength="50" placeholder="Ej. Padre, hermana o cónyuge"></span></label>
           </div>
         </fieldset>
         <fieldset class="patient-form-section">
           <legend><img src="../../../assets/Icons/doctor-icon.svg" alt="" aria-hidden="true">Estado clínico</legend>
           <div class="form-section-fields">
             <label>Estado <span class="field-control"><img src="../../../assets/Icons/hrate-icon.svg" alt="" aria-hidden="true"><select name="status" required><option value="Internado">Internado</option><option value="Ambulatorio">Ambulatorio</option><option value="Urgencias">Urgencias</option></select></span></label>
-            <label>Habitación o área <span class="field-control"><img src="../../../assets/Icons/location-icon.svg" alt="" aria-hidden="true"><input name="room" type="text" maxlength="80" required></span></label>
-            <label>Servicio <span class="field-control"><img src="../../../assets/Icons/ambulatory-icon.svg" alt="" aria-hidden="true"><input name="department" type="text" maxlength="80" required></span></label>
-            <label>Médico asignado <span class="field-control"><img src="../../../assets/Icons/doctor-icon.svg" alt="" aria-hidden="true"><input name="doctor" type="text" maxlength="100" required></span></label>
-            <label>Especialidad <span class="field-control"><img src="../../../assets/Icons/specialty-icon.svg" alt="" aria-hidden="true"><input name="doctorSpecialty" type="text" maxlength="80"></span></label>
+            <label>Habitación o área <span class="field-control"><img src="../../../assets/Icons/location-icon.svg" alt="" aria-hidden="true"><input name="room" type="text" maxlength="80" placeholder="Ej. Habitación 204" required></span></label>
+            <label>Servicio <span class="field-control"><img src="../../../assets/Icons/ambulatory-icon.svg" alt="" aria-hidden="true"><input name="department" type="text" maxlength="80" placeholder="Ej. Medicina Interna" required></span></label>
+            <label>Médico asignado <span class="field-control"><img src="../../../assets/Icons/doctor-icon.svg" alt="" aria-hidden="true"><input name="doctor" type="text" maxlength="100" placeholder="Ej. Dr. Carlos Méndez" required></span></label>
+            <label>Especialidad <span class="field-control"><img src="../../../assets/Icons/specialty-icon.svg" alt="" aria-hidden="true"><input name="doctorSpecialty" type="text" maxlength="80" placeholder="Ej. Clínica Médica"></span></label>
             <label>Fecha de ingreso <span class="field-control"><input name="admissionDate" type="date"></span></label>
           </div>
         </fieldset>
