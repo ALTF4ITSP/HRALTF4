@@ -417,3 +417,48 @@ document.addEventListener("DOMContentLoaded", function () {
         loadDraft();
     }
 });
+
+//geo localizacion mapa trace-view//
+document.addEventListener("DOMContentLoaded", function () {
+  // Coordenadas por defecto (Paysandú, Uruguay)
+  const defaultLat = -32.3214;
+  const defaultLng = -58.0756;
+
+  const mapContainer = document.getElementById("map");
+  if (!mapContainer) return;
+
+  // 1. Inicializar el mapa centrado en Paysandú
+  const map = L.map("map").setView([defaultLat, defaultLng], 13);
+
+  // 2. Cargar la capa del mapa (OpenStreetMap)
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // 3. Crear el marcador inicial de la ambulancia
+  let marker = L.marker([defaultLat, defaultLng]).addTo(map)
+    .bindPopup("<b>Ambulancia TRASLADO 1</b><br>Rastreo activo.")
+    .openPopup();
+
+  // 4. Intentar obtener y rastrear la ubicación GPS real del dispositivo
+  if ("geolocation" in navigator) {
+    navigator.geolocation.watchPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        // Mover el marcador y recentrar el mapa con la ubicación real
+        marker.setLatLng([lat, lng]);
+        map.setView([lat, lng], 15);
+      },
+      (error) => {
+        console.warn("No se pudo obtener la ubicación GPS real, se usa la posición por defecto:", error.message);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  }
+});
