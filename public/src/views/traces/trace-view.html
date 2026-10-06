@@ -9,8 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <link rel="icon" href="../../../assets/hospital-dark.ico">
   <link rel="stylesheet" href="../../css/main-menu.css?v=20260927-brand-fix">
-  <link rel="stylesheet" href="../../css/traces/trace-view.css">
-  
+  <link rel="stylesheet" href="../../css/traces/trace-view.css?v=20261006-dialog-polish">
   <script src="../../js/main-menu.js?v=20260927-global" defer></script>
   <script src="../../js/universal-search.js?v=20260927-global" defer></script>
   <script src="../../js/traces/trace-view.js?v=20261006-layout" defer></script>
@@ -75,35 +74,37 @@
         <span>HOSPITAL DE CLINICAS</span>
       </div>
 
-        <div class="search-wrapper">
-          <input type="search" class="search-input" placeholder="Buscar..." autocomplete="off">
-          <button type="button" class="topbar-action search-action" aria-label="Buscar">
-            <img src="../../../assets/Icons/search-icon.svg" alt="" aria-hidden="true">
-          </button>
+      <div class="search-wrapper" role="search">
+        <input type="text" id="quick-search" class="search-input" placeholder="Buscar una acción o sección..."
+          aria-label="Buscar una acción o sección" role="combobox" aria-autocomplete="list"
+          aria-controls="search-results-list" aria-expanded="false" autocomplete="off" tabindex="-1">
+        <button type="button" class="topbar-action search-action" aria-label="Abrir búsqueda"
+          aria-controls="quick-search" aria-expanded="false">
+          <img src="../../../assets/Icons/search-icon.svg" alt="" aria-hidden="true">
+        </button>
+      </div>
+
+      <div class="search-results" id="search-results" hidden>
+        <div class="search-results-heading">
+          <span id="search-results-title">Accesos rápidos</span>
         </div>
-      </header>
+        <ul id="search-results-list" class="search-results-list" role="listbox" aria-label="Resultados de búsqueda"></ul>
+        <p class="search-results-footer">Haz clic en una opción disponible para ir a esa sección.</p>
+      </div>
+      <span id="search-status" class="visually-hidden" role="status" aria-live="polite"></span>
+    </header>
 
-      
-      <section class="traslado-wrapper">
-        <article class="traslado-card">
-          
-          
-          <button type="button" class="btn-close" aria-label="Cerrar" onclick="window.location.href='trace.html';">&times;</button>
-
-          
-          <div class="ambulance-icon-container">
-            <img src="../../../assets/Icons/ambulance-icon.png" alt="Ambulancia" class="ambulance-icon">
-          </div>
-
-          <h1 class="traslado-title">TRASLADO 1</h1>
-
-          <div class="traslado-body">
-            
-            
-            <div class="map-column">
-              <span class="map-label">Rastreo en Vivo:</span>
-              <div class="map-container">
-                <img src="../../../assets/map-placeholder.png" alt="Mapa de rastreo" class="map-image">
+    <section class="hero-panel trace-view-hero" aria-labelledby="transfer-title">
+      <article class="transfer-detail" id="transfer-detail" data-status="in-progress">
+        <header class="transfer-header">
+          <a class="back-link" href="trace.html"><span class="detail-icon color-icon back-icon" aria-hidden="true"></span><span>Volver a Traslados</span></a>
+          <div class="transfer-heading">
+            <div class="transfer-identity">
+              <div class="vehicle-icon"><img src="../../../assets/Icons/ambulance-icon.png" alt=""></div>
+              <div class="transfer-heading-copy">
+                <div class="transfer-title-row"><h1 id="transfer-title">TRASLADO 1</h1><span class="status-badge" data-status-label>En curso</span></div>
+                <p>Ambulancia <span data-field="ambulance">A-12</span><span class="identity-divider" aria-hidden="true">·</span>ACT-1234</p>
+                <p class="created-at">Creado el 12/07/2026 a las 09:15</p>
               </div>
             </div>
             <div class="header-actions">
