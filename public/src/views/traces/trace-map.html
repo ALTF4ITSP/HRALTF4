@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101732">
+  <meta name="description" content="Mapa de traslados de ambulancias en Montevideo. Consulta rutas, estados y llegadas estimadas.">
+  <!-- Optional public CARTO basemap key. Leave empty to use the free OpenStreetMap layer. -->
+  <meta name="carto-basemap-key" content="">
+  <title>Mapa de Traslados · Hospital de Clínicas</title>
+  <link rel="icon" href="../../../assets/hospital-dark.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+  <link rel="stylesheet" href="../../css/main-menu.css?v=20260927-brand-fix">
+  <link rel="stylesheet" href="../../css/traces/trace-map.css?v=20261005-site-ui">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous" defer></script>
+  <script src="../../js/traces/trace-map.js?v=20261005-site-ui" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#map-heading">Ir al mapa de traslados</a>
+  <div class="app-shell" id="app-shell">
+    <aside class="sidebar" id="navigation" aria-label="Navegación principal">
+      <button class="sidebar-action" id="menu-toggle" type="button" aria-label="Abrir menú"
+        aria-expanded="false" aria-controls="sidebar-links">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="sidebar-nav" id="sidebar-links" aria-label="Secciones" aria-hidden="true" inert>
+        <div class="nav-indicator" aria-hidden="true"></div>
+        <a class="nav-item" href="../main-menu.html" title="Inicio">
+          <img class="icon" src="../../../assets/Icons/house-icon.svg" alt=""><span>Inicio</span>
+        </a>
+        <a class="nav-item" href="../documents/documents.html" title="Documentos">
+          <img class="icon" src="../../../assets/Icons/folder-icon.svg" alt=""><span>Documentos</span>
+        </a>
+        <a class="nav-item active" href="trace.html" aria-current="page" title="Ambulancias">
+          <img class="icon" src="../../../assets/Icons/location-icon.svg" alt=""><span>Ambulancias</span>
+        </a>
+        <a class="nav-item" href="../analytics/analytics.html" title="Reportes">
+          <img class="icon" src="../../../assets/Icons/analytics-icon.svg" alt=""><span>Reportes</span>
+        </a>
+        <a class="nav-item" href="../calendar/calendar.html" title="Calendario">
+          <img class="icon" src="../../../assets/Icons/calendar-icon.svg" alt=""><span>Calendario</span>
+        </a>
+        <a class="nav-item" href="../surveys/surveys.html" title="Encuestas">
+          <img class="icon" src="../../../assets/Icons/survey-icon.svg" alt=""><span>Encuestas</span>
+        </a>
+        <a class="nav-item" href="../management/management.html" title="Gestión">
+          <img class="icon" src="../../../assets/Icons/database-cog.svg" alt=""><span>Gestión</span>
+        </a>
+        <div class="nav-spacer"></div>
+        <a class="nav-item" href="../settings.html" title="Configuración">
+          <img class="icon" src="../../../assets/Icons/settings-icon.svg" alt=""><span>Configuración</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="content-card">
+      <header class="topbar quick-search-topbar map-site-header" id="map-site-header">
+        <div class="brand">
+          <img src="../../../assets/Icons/hospital-logo.png" alt="Hospital de Clínicas">
+          <span>HOSPITAL DE CLINICAS</span>
+        </div>
+        <div class="search-wrapper" role="search">
+          <input class="search-input" id="transfer-search" type="search" placeholder="Buscar un traslado, ambulancia u hospital..."
+            autocomplete="off" aria-label="Buscar por traslado, ambulancia u hospital" aria-controls="transfer-list"
+            aria-hidden="true" tabindex="-1">
+          <button class="topbar-action search-action" id="search-toggle" type="button" aria-label="Abrir búsqueda"
+            aria-expanded="false" aria-controls="transfer-search">
+            <img src="../../../assets/Icons/search-icon.svg" alt="">
+          </button>
+        </div>
+      </header>
+
+      <section class="map-page" aria-labelledby="map-heading">
+        <div class="map-toolbar">
+          <div class="heading-copy">
+            <div class="page-title">
+              <h1 id="map-heading" tabindex="-1">Mapa de Traslados</h1>
+              <span class="live-indicator"><span class="status-dot"></span>En vivo</span>
+            </div>
+            <p>Seguimiento en tiempo real de la flota de ambulancias</p>
+          </div>
+          <div class="metrics-pill" aria-label="Resumen de traslados" id="metrics">
+            <span class="metric metric-total"><img class="icon" src="../../../assets/Icons/analytics-icon.svg" alt=""><strong id="total-count">5</strong> traslados</span>
+            <span class="metric"><i class="metric-dot progress-dot"></i><strong id="progress-count">3</strong> en curso</span>
+            <span class="metric"><i class="metric-dot scheduled-dot"></i><strong id="scheduled-count">1</strong> programado</span>
+            <span class="metric"><i class="metric-dot delayed-dot"></i><strong id="delayed-count">1</strong> demorado</span>
+          </div>
+          <div class="toolbar-actions">
+            <a class="toolbar-button return-link" href="trace.html">
+              <img class="icon" src="../../../assets/Icons/arrow-left.svg" alt="">Ver traslados
+            </a>
+            <div class="filter-wrapper">
+              <button class="toolbar-button" id="filter-toggle" type="button" aria-expanded="false" aria-controls="filter-panel">
+                <span class="filter-icon" aria-hidden="true"></span>Filtros<span class="filter-count" id="filter-count" hidden>0</span>
+              </button>
+              <form class="popover filter-panel" id="filter-panel" hidden>
+                <div class="popover-heading"><h2>Filtrar traslados</h2><button class="text-button" id="reset-filters" type="button">Restablecer</button></div>
+                <p class="popover-eyebrow">ESTADO DEL TRASLADO</p>
+                <label><input type="checkbox" name="status" value="EN CURSO" checked><span class="metric-dot progress-dot"></span>En curso<span class="filter-number">3</span></label>
+                <label><input type="checkbox" name="status" value="PROGRAMADO" checked><span class="metric-dot scheduled-dot"></span>Programado<span class="filter-number">1</span></label>
+                <label><input type="checkbox" name="status" value="DEMORADO" checked><span class="metric-dot delayed-dot"></span>Demorado<span class="filter-number">1</span></label>
+                <p class="filter-note">Los filtros se aplican al mapa y a la lista.</p>
+              </form>
+            </div>
+            <button class="toolbar-button list-toggle" id="list-toggle" type="button" aria-expanded="true" aria-controls="transfer-panel">
+              <img class="icon" src="../../../assets/Icons/list-icon.svg" alt="">Ver lista
+            </button>
+          </div>
+        </div>
+
+        <section class="map-stage" id="map-stage" aria-label="Seguimiento de ambulancias en Montevideo">
+          <div id="fleet-map" aria-label="Mapa interactivo de Montevideo"></div>
+          <div class="map-loading" id="map-loading" role="status"><span class="loading-spinner"></span>Cargando mapa de Montevideo…</div>
+
+          <aside class="transfer-panel glass-panel" id="transfer-panel" aria-labelledby="transfer-panel-title">
+            <div class="transfer-panel-header">
+              <div><img class="icon" src="../../../assets/Icons/grid-icon.svg" alt=""><h2 id="transfer-panel-title">Traslados activos</h2></div>
+              <span class="panel-count" id="visible-count">5</span>
+            </div>
+            <div class="transfer-list" id="transfer-list" aria-label="Seleccionar un traslado"></div>
+            <div class="empty-state" id="empty-state" hidden>
+              <img class="icon" src="../../../assets/Icons/search-icon.svg" alt="">
+              <h3>Sin traslados</h3><p>No hay resultados para estos filtros.</p>
+              <button class="text-button" id="clear-search" type="button">Limpiar búsqueda y filtros</button>
+            </div>
+            <footer class="transfer-panel-footer"><span class="status-dot"></span><span>Seguimiento de flota</span><span class="panel-update" id="panel-update">Ahora</span></footer>
+          </aside>
+
+          <div class="map-controls glass-panel" role="group" aria-label="Controles del mapa">
+            <button class="map-control" id="zoom-in" type="button" aria-label="Acercar mapa" title="Acercar"><img class="icon" src="../../../assets/Icons/zoom-in.svg" alt=""></button>
+            <button class="map-control" id="zoom-out" type="button" aria-label="Alejar mapa" title="Alejar"><img class="icon" src="../../../assets/Icons/zoom-out.svg" alt=""></button>
+            <span class="control-divider"></span>
+            <button class="map-control" id="locate" type="button" aria-label="Centrar en mi ubicación" title="Mi ubicación"><span class="target-icon" aria-hidden="true"></span></button>
+            <button class="map-control" id="layers-toggle" type="button" aria-label="Capas del mapa" aria-expanded="false" aria-controls="layers-panel" title="Capas"><img class="icon" src="../../../assets/Icons/select-multiple-icon.svg" alt=""></button>
+            <span class="control-divider"></span>
+            <button class="map-control" id="fullscreen-toggle" type="button" aria-label="Pantalla completa" aria-pressed="false" title="Pantalla completa"><img class="icon" src="../../../assets/Icons/full-screen.svg" alt=""></button>
+          </div>
+          <div class="popover layers-panel" id="layers-panel" hidden>
+            <h2>Capas del mapa</h2>
+            <label><input type="checkbox" id="show-routes" checked>Rutas de traslados</label>
+            <label><input type="checkbox" id="show-destinations" checked>Orígenes y destinos</label>
+            <label><input type="checkbox" id="show-neighborhoods" checked>Barrios de Montevideo</label>
+            <button class="text-button" id="fit-fleet" type="button">Ver toda la flota <span aria-hidden="true">↗</span></button>
+          </div>
+
+          <aside class="route-legend glass-panel" aria-labelledby="legend-heading">
+            <h2 id="legend-heading">RUTAS EN EL MAPA</h2>
+            <div id="legend-list"></div>
+          </aside>
+          <div class="map-location glass-panel"><img class="icon" src="../../../assets/Icons/location-icon.svg" alt=""><div><strong>Montevideo, Uruguay</strong><span>Datos de demostración · GPS simulado</span></div><button id="reset-view" class="icon-button" type="button" aria-label="Restablecer vista de Montevideo" title="Restablecer vista"><img class="icon" src="../../../assets/Icons/reload-icon.svg" alt=""></button></div>
+          <div class="toast glass-panel" id="toast" role="status" hidden></div>
+          <span class="visually-hidden" id="result-announcement" role="status" aria-live="polite"></span>
+          <noscript><p class="noscript-message">Activa JavaScript para usar el mapa y consultar los traslados.</p></noscript>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="detail-dialog" id="detail-dialog" aria-labelledby="detail-title">
+    <div class="detail-dialog-content" id="detail-content"></div>
+    <button class="dialog-close icon-button" id="close-details" type="button" aria-label="Cerrar detalles"><img class="icon" src="../../../assets/Icons/cross-icon.svg" alt=""></button>
+  </dialog>
+</body>
+
+</html>
