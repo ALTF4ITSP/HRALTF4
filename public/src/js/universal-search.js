@@ -68,15 +68,23 @@
                 title: 'Gestionar pacientes',
                 section: 'Gestión',
                 detail: 'Abrir la sección de pacientes',
-                href: 'management/management.html',
+                href: 'management/patients.html',
                 icon: '../../assets/Icons/database-cog.svg',
                 terms: 'cargar paciente registrar paciente agregar paciente nuevo paciente'
+            },
+            {
+                title: 'Gestionar médicos',
+                section: 'Gestión',
+                detail: 'Equipo médico y especialidades',
+                href: 'management/doctors.html',
+                icon: '../../assets/Icons/doctor-icon.svg',
+                terms: 'doctores medicos médicos especialistas registrar agregar nuevo médico doctor'
             },
             {
                 title: 'Gestionar ambulancias',
                 section: 'Gestión',
                 detail: 'Abrir la sección de ambulancias',
-                href: 'management/management.html',
+                href: 'management/ambulances.html',
                 icon: '../../assets/Icons/ambulance-icon.png',
                 terms: 'cargar vehiculo cargar vehículo registrar ambulancia agregar vehiculo transporte'
             },

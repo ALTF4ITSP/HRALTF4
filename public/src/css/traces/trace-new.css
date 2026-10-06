@@ -4,7 +4,13 @@
     --field-color: rgba(11, 18, 42, 0.42);
     --border-color: rgba(150, 163, 209, 0.24);
     --text-color: rgba(238, 238, 238, 0.88);
-    --muted-color: rgba(238, 238, 238, 0.55);
+    --muted-color: rgba(238, 238, 238, 0.65);
+    --focus-color: #9aafff;
+    --focus-ring: rgba(125, 153, 255, 0.2);
+    --control-height: 28px;
+    --section-gap: 4px;
+    --section-padding: 6px;
+    --column-gap: 6px;
     font-family: "Inclusive Sans", "Segoe UI", sans-serif;
 }
 
@@ -16,13 +22,19 @@
     display: none !important;
 }
 
+/* The reference trace panel leaves 34px below the card. */
+.app-shell {
+    padding-bottom: 34px;
+}
+
 .content-card {
     width: calc(100% - 108px);
-    height: calc(100vh - 87px);
-    max-height: calc(100vh - 87px);
+    height: calc(100vh - 66px);
+    max-height: calc(100vh - 66px);
+    min-height: 0;
     margin-left: 108px;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 100px minmax(0, 1fr);
     gap: 10px;
     transition:
         margin-left 0.6s cubic-bezier(0.34, 1.35, 0.64, 1),
@@ -44,7 +56,10 @@
 .new-transfer-panel {
     width: 100%;
     margin-left: 0;
-    padding: 18px 28px 16px;
+    padding: 12px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
     border: 1px solid rgba(238, 238, 238, 0.18);
     border-radius: 30px;
     background: var(--panel-color);
@@ -57,43 +72,86 @@
     width: 100%;
     max-width: 1500px;
     margin: 0 auto;
+    min-height: 0;
+    flex: 1;
+    display: grid;
+    grid-template-rows: 20px 46px minmax(0, 1fr);
+    row-gap: 4px;
 }
 
-
+#newTransferForm {
+    min-height: 0;
+    display: grid;
+}
 
 .back-link {
     width: fit-content;
-    min-height: 28px;
-    margin-bottom: 8px;
+    min-height: 20px;
+    margin-bottom: 0;
+    flex-shrink: 0;
     display: inline-flex;
     align-items: center;
-    gap: 9px;
+    gap: 10px;
     color: rgba(160, 175, 229, 0.68);
-    font-size: 0.92rem;
+    font-size: 0.82rem;
+    line-height: 1.3;
     text-decoration: none;
+    border-radius: 6px;
     transition: color 0.2s ease;
 }
 
-.back-link span {
-    font-size: 1.75rem;
-    line-height: 1;
+.back-link img {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.7;
 }
 
 .back-link:hover {
     color: #dbe2ff;
 }
 
+.back-link:hover img {
+    opacity: 1;
+}
+
+.back-link:active {
+    color: var(--focus-color);
+}
+
+.back-link:focus-visible,
+.sidebar-action:focus-visible,
+.nav-item:focus-visible,
+.topbar-action:focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: -3px;
+}
+
+.sidebar-action:active,
+.topbar-action:active {
+    background-color: rgba(154, 175, 255, 0.14);
+}
+
+.content-card .search-wrapper:focus-within {
+    border-color: var(--focus-color);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
 .new-transfer-heading {
-    min-height: 64px;
-    margin-bottom: 14px;
+    min-height: 46px;
+    margin-bottom: 0;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 14px;
 }
 
 .heading-icon {
-    width: 54px;
-    height: 54px;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
     border-radius: 11px;
     display: grid;
     place-items: center;
@@ -101,8 +159,8 @@
 }
 
 .heading-icon img {
-    width: 35px;
-    height: 35px;
+    width: 65%;
+    height: 65%;
     object-fit: contain;
     filter: brightness(0) invert(1);
     opacity: 0.82;
@@ -111,7 +169,7 @@
 .new-transfer-heading h1 {
     margin: 0 0 2px;
     color: var(--text-color);
-    font-size: clamp(1.45rem, 2vw, 2rem);
+    font-size: 1.5rem;
     line-height: 1.1;
     font-weight: 700;
 }
@@ -119,151 +177,219 @@
 .new-transfer-heading p {
     margin: 0;
     color: var(--muted-color);
-    font-size: 0.9rem;
+    font-size: 0.78rem;
+    line-height: 1.35;
 }
 
-
-
 .form-layout {
+    min-height: 0;
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    align-items: start;
+    grid-template-rows: minmax(0, 1fr);
+    align-items: stretch;
     gap: 18px;
 }
 
 .form-column {
+    min-height: 0;
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: var(--column-gap);
+}
+
+.form-column:last-child {
+    grid-template-rows: minmax(0, 1fr) auto auto 38px;
 }
 
 .form-section {
     min-width: 0;
-    padding: 14px 16px;
+    padding: var(--section-padding) 14px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--section-gap);
     border: 1px solid var(--border-color);
     border-radius: 10px;
     background: var(--section-color);
 }
 
+.form-column > .form-section:first-child {
+    min-height: 0;
+}
+
+.general-section {
+    --control-height: 38px;
+    justify-content: space-between;
+    gap: 7px;
+}
+
+.general-section .field {
+    gap: 5px;
+}
+
+.general-section :is(input, select) {
+    font-size: 0.875rem;
+}
+
 .form-section h2 {
-    min-height: 28px;
-    margin: 0 0 10px;
+    min-height: 22px;
+    margin: 0;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 10px;
     color: rgba(238, 238, 238, 0.87);
-    font-size: 1.15rem;
-    line-height: 1.2;
+    font-size: 1rem;
+    line-height: 1.25;
     font-weight: 700;
 }
 
 .form-section h2 img {
     width: 22px;
     height: 22px;
+    flex: 0 0 22px;
+    display: block;
     object-fit: contain;
     filter: brightness(0) invert(1);
     opacity: 0.78;
 }
 
-.text-icon {
-    color: rgba(238, 238, 238, 0.78);
-    font-size: 1.35rem;
-    font-weight: 400;
-}
-
 .field {
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex-shrink: 0;
 }
 
-.full-field + .full-field {
-    margin-top: 8px;
-}
-
-.field label {
-    margin: 0 0 4px 2px;
+.field > label {
+    margin: 0;
     display: block;
-    color: rgba(238, 238, 238, 0.58);
-    font-size: 0.84rem;
-    line-height: 1.1;
+    color: var(--muted-color);
+    font-size: 0.75rem;
+    line-height: 1.25;
+    transition: color 0.2s ease;
 }
 
 .field label span {
-    color: rgba(238, 238, 238, 0.42);
+    color: rgba(238, 238, 238, 0.52);
 }
 
 .field input,
 .field select,
-.field textarea,
-.file-button {
+.field textarea {
     width: 100%;
+    min-width: 0;
     border: 1px solid rgba(150, 163, 209, 0.28);
     border-radius: 6px;
     background-color: var(--field-color);
     color: rgba(238, 238, 238, 0.84);
     font-family: "Inclusive Sans", "Segoe UI", sans-serif;
     font-size: 0.82rem;
+    line-height: 1.35;
     outline: none;
     transition:
         border-color 0.2s ease,
-        background-color 0.2s ease;
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .field input,
-.field select,
-.file-button {
-    height: 38px;
+.field select {
+    display: block;
+    height: var(--control-height);
     padding: 0 11px;
+    flex-shrink: 0;
 }
 
 .field select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 32px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23bac6e5' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 11px center;
+    background-size: 16px 16px;
     color-scheme: dark;
     cursor: pointer;
 }
 
 .field textarea {
-    min-height: 86px;
-    padding: 10px 11px;
+    min-height: 36px;
+    height: 0;
+    padding: 8px 11px;
+    flex: 1;
     resize: vertical;
+}
+
+.route-section > .field:last-child {
+    flex: 1;
+    min-height: 0;
 }
 
 .field input::placeholder,
 .field textarea::placeholder {
-    color: rgba(238, 238, 238, 0.46);
+    color: rgba(238, 238, 238, 0.5);
     opacity: 1;
 }
 
-.field input:focus,
-.field select:focus,
-.field textarea:focus,
-.file-button:focus-visible {
-    border-color: rgba(110, 139, 236, 0.78);
-    background-color: rgba(18, 28, 61, 0.64);
+.field :is(input, select, textarea):hover:not(:disabled) {
+    border-color: rgba(154, 175, 255, 0.6);
+    background-color: rgba(28, 40, 78, 0.62);
 }
 
-/* Remove background icon properties, keep padding so text doesn't run under the icon */
-.search-field {
-    padding-right: 38px !important;
+.field :is(input, select, textarea):active:not(:disabled),
+.field :is(input, select, textarea):focus:not(:disabled) {
+    border-color: var(--focus-color);
+    background-color: rgba(29, 43, 85, 0.76);
+    box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
-/* Wrapper to anchor the icon relative to the input */
-.search-input-wrapper {
+.field:focus-within > label {
+    color: #ccd7ff;
+}
+
+.field :is(input, select, textarea):user-invalid:not(:disabled) {
+    border-color: #ef7b85;
+}
+
+.field :is(input, select, textarea):user-invalid:focus:not(:disabled) {
+    box-shadow: 0 0 0 3px rgba(239, 123, 133, 0.2);
+}
+
+.field :is(input, select, textarea):disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.input-wrapper {
     position: relative;
     width: 100%;
 }
 
-/* Position and color the SVG */
-.search-input-wrapper .search-icon {
+.input-wrapper input {
+    padding-right: 38px;
+}
+
+.input-wrapper .field-icon {
     position: absolute;
     right: 11px;
     top: 50%;
     transform: translateY(-50%);
     width: 16px;
     height: 16px;
+    display: block;
     object-fit: contain;
     filter: brightness(0) invert(1);
-    opacity: 0.75;
-    pointer-events: none; /* Allows clicks on the icon to focus the input */
+    opacity: 0.6;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.input-wrapper:hover .field-icon,
+.input-wrapper:focus-within .field-icon {
+    opacity: 1;
 }
 
 .date-time-fields {
@@ -277,99 +403,160 @@ input[type="time"] {
     color-scheme: dark;
 }
 
+.field input::-webkit-calendar-picker-indicator {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.field input:focus::-webkit-calendar-picker-indicator,
+.field input:hover::-webkit-calendar-picker-indicator {
+    opacity: 1;
+}
+
 .two-fields,
 .patient-fields {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 14px;
+    gap: 6px 14px;
 }
 
 .priority-field {
-    max-width: 235px;
-    justify-self: end;
     width: 100%;
 }
 
-
-
-.file-input {
-    position: absolute;
-    width: 1px !important;
-    height: 1px !important;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
+.two-fields select {
+    font-size: 0.82rem;
 }
-
-.file-button {
-    margin: 0 !important;
-    display: flex !important;
-    align-items: center;
-    gap: 9px;
-    cursor: pointer;
-}
-
-.file-button img {
-    width: 17px;
-    height: 17px;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
-    opacity: 0.7;
-}
-
-.file-button span {
-    overflow: hidden;
-    color: rgba(238, 238, 238, 0.55);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
 
 .option-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 9px;
+    gap: 7px;
 }
 
 .check-option {
     min-width: 0;
-    min-height: 38px;
-    padding: 4px 9px;
+    min-height: var(--control-height);
+    padding: 4px 8px;
     border: 1px solid rgba(150, 163, 209, 0.22);
     border-radius: 6px;
+    background-color: var(--field-color);
     display: flex;
     align-items: center;
     gap: 8px;
-    color: rgba(238, 238, 238, 0.58);
-    font-size: 0.78rem;
+    color: var(--muted-color);
+    font-size: 0.72rem;
+    line-height: 1.35;
     cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 }
 
 .check-option input {
-    width: 20px;
-    height: 20px;
+    appearance: none;
+    -webkit-appearance: none;
+    display: grid;
+    place-content: center;
+    width: 18px;
+    height: 18px;
     margin: 0;
     flex: 0 0 auto;
-    accent-color: #4b6dde;
+    border: 1px solid rgba(174, 190, 239, 0.55);
+    border-radius: 4px;
+    background-color: rgba(11, 18, 42, 0.65);
     cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.check-option span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.check-option input::before {
+    content: "";
+    width: 6px;
+    height: 11px;
+    margin-top: -2px;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(45deg) scale(0);
+}
+
+.check-option input:checked {
+    background-color: #5879e2;
+    border-color: #9aafff;
+}
+
+.check-option input:checked::before {
+    transform: rotate(45deg) scale(1);
+}
+
+.check-option:hover {
+    border-color: rgba(154, 175, 255, 0.6);
+    background-color: rgba(28, 40, 78, 0.62);
+    color: var(--text-color);
+}
+
+.check-option:has(input:checked) {
+    border-color: rgba(154, 175, 255, 0.75);
+    background-color: rgba(72, 100, 188, 0.22);
+    color: #dbe3ff;
+}
+
+.check-option:active,
+.check-option:focus-within {
+    border-color: var(--focus-color);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.check-option input:focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: 3px;
 }
 
 .critical-option {
-    color: rgba(222, 73, 87, 0.88);
+    color: #ef7b85;
     border-color: rgba(189, 49, 63, 0.45);
 }
 
-.critical-option input {
-    accent-color: #c53748;
+.critical-option:hover,
+.critical-option:has(input:checked) {
+    border-color: #ef7b85;
+    background-color: rgba(189, 49, 63, 0.16);
+    color: #ffabb3;
+}
+
+.critical-option input:checked {
+    background-color: #c53748;
+    border-color: #ef7b85;
+}
+
+.critical-option:active,
+.critical-option:focus-within {
+    border-color: #ef7b85;
+    box-shadow: 0 0 0 3px rgba(239, 123, 133, 0.2);
+}
+
+.critical-option input:focus-visible {
+    outline-color: #ef7b85;
 }
 
 .form-message {
-    min-height: 17px;
-    margin: -3px 3px -7px;
+    margin: 0;
+    min-height: 14px;
+    flex-shrink: 0;
     color: rgba(157, 226, 195, 0.85);
-    font-size: 0.76rem;
+    font-size: 0.72rem;
+    line-height: 1.25;
     text-align: right;
+}
+
+.form-message:empty {
+    visibility: hidden;
 }
 
 .form-message.error {
@@ -377,8 +564,8 @@ input[type="time"] {
 }
 
 .form-actions {
-    min-height: 48px;
-    padding: 0 0 0 1px;
+    min-height: 38px;
+    flex-shrink: 0;
     border: 1px solid rgba(150, 163, 209, 0.28);
     border-radius: 8px;
     display: grid;
@@ -388,17 +575,20 @@ input[type="time"] {
 
 .form-actions button {
     min-width: 0;
+    padding: 6px 8px;
     border: 0;
     border-right: 1px solid rgba(150, 163, 209, 0.16);
     background: transparent;
     color: rgba(238, 238, 238, 0.76);
     font-family: "Krub", sans-serif;
-    font-size: 0.77rem;
+    font-size: 0.75rem;
+    line-height: 1.3;
     font-weight: 600;
     cursor: pointer;
     transition:
         color 0.2s ease,
-        background-color 0.2s ease;
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .form-actions button:last-child {
@@ -407,7 +597,17 @@ input[type="time"] {
 
 .form-actions button:hover {
     color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.035);
+    background-color: rgba(154, 175, 255, 0.12);
+}
+
+.form-actions button:active {
+    background-color: rgba(154, 175, 255, 0.22);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.form-actions button:focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: -4px;
 }
 
 .form-actions .cancel-button {
@@ -415,8 +615,8 @@ input[type="time"] {
 }
 
 .form-actions .cancel-button:hover {
-    color: #eb2c2c;
-    background-color: rgba(255, 255, 255, 0.035);
+    color: #ff8b95;
+    background-color: rgba(189, 49, 63, 0.14);
 }
 
 .form-actions .create-button {
@@ -432,180 +632,32 @@ input[type="time"] {
 
 .form-actions .create-button:hover {
     background-color: #5979e5;
+    box-shadow: inset 0 0 0 100px rgba(171, 186, 234, 0.14);
 }
 
+.form-actions .create-button:active {
+    box-shadow: inset 0 0 0 100px rgba(10, 20, 58, 0.3);
+}
 
-
-@media (min-width: 1101px) and (max-width: 1440px),
-       (min-width: 1101px) and (max-height: 900px) {
-    .new-transfer-panel {
-        padding-top: 12px;
-        padding-bottom: 12px;
-    }
-
-    .back-link {
-        min-height: 22px;
-        margin-bottom: 4px;
-        font-size: 0.82rem;
-    }
-
-    .new-transfer-heading {
-        min-height: 50px;
-        margin-bottom: 8px;
-    }
-
-    .heading-icon {
-        width: 46px;
-        height: 46px;
-    }
-
-    .heading-icon img {
-        width: 30px;
-        height: 30px;
-    }
-
-    .form-column {
-        gap: 9px;
-    }
-
-    .form-section {
-        padding: 9px 11px;
-    }
-
-    .form-section h2 {
-        min-height: 23px;
-        margin-bottom: 6px;
-        font-size: 1rem;
-    }
-
-    .full-field + .full-field {
-        margin-top: 5px;
-    }
-
-    .field label {
-        margin-bottom: 3px;
-        font-size: 0.76rem;
-    }
-
-    .field input,
-    .field select,
-    .file-button {
-        height: 33px;
-    }
-
-    .field textarea {
-        min-height: 66px;
-    }
-
-    .check-option {
-        min-height: 33px;
-        font-size: 0.72rem;
-    }
-
-    .form-actions {
-        min-height: 42px;
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
     }
 }
 
-@media (max-width: 1100px) {
-    .content-card {
-        width: calc(100% - 96px);
-        margin-left: 96px;
+@media (forced-colors: active) {
+    .check-option input {
+        appearance: auto;
     }
 
-    .app-shell.menu-open .content-card {
-        width: calc(100% - 260px);
-        margin-left: 260px;
+    .check-option input::before {
+        display: none;
     }
 
-    .new-transfer-panel {
-        padding-right: 18px;
-        padding-left: 18px;
-    }
-
-    .form-layout {
-        gap: 12px;
-    }
-}
-
-@media (max-width: 920px) {
-    .form-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .priority-field {
-        max-width: none;
-    }
-}
-
-@media (max-width: 770px) {
-    .content-card,
-    .app-shell.menu-open .content-card {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .content-card {
-        min-height: calc(100vh - 44px);
-    }
-
-    .new-transfer-panel {
-        width: 100%;
-        margin-left: 0;
-    }
-}
-
-@media (max-width: 600px) {
-    .new-transfer-heading {
-        align-items: flex-start;
-    }
-
-    .new-transfer-heading p {
-        line-height: 1.3;
-    }
-
-    .two-fields,
-    .patient-fields,
-    .option-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .date-time-fields {
-        grid-template-columns: 1fr;
-    }
-
-    .form-actions {
-        grid-template-columns: 1fr;
-    }
-
-    .form-actions button {
-        min-height: 42px;
-        border-right: 0;
-        border-bottom: 1px solid rgba(150, 163, 209, 0.16);
-    }
-
-    .form-actions button:last-child {
-        border-bottom: 0;
-    }
-}
-
-@media (max-width: 500px) {
-    .content-card {
-        min-height: calc(100vh - 36px);
-    }
-
-    .new-transfer-panel {
-        padding: 14px;
-        border-radius: 24px;
-    }
-
-    .heading-icon {
-        width: 46px;
-        height: 46px;
-        flex: 0 0 auto;
-    }
-
-    .new-transfer-heading h1 {
-        font-size: 1.35rem;
+    .field select {
+        appearance: auto;
+        background-image: none;
     }
 }
