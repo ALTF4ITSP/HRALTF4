@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Encuestas · Hospital de Clínicas</title>
+<script>try{if(localStorage.getItem('menuAbierto')==='1')document.documentElement.classList.add('open')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="encuestas.css">
+</head>
+<body>
+<div class="app">
+
+  <nav class="side" aria-label="Menú principal">
+    <div class="box">
+    <button class="x" id="cerrar" aria-label="Cerrar menú"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    <!-- Cambia los href por los nombres reales de tus páginas -->
+    <a href="index.html"><svg width="24" height="24" class="f" viewBox="0 0 24 24"><path d="M12 2.5l9.5 8.3c.4.4.1 1.2-.5 1.2H19v8a1 1 0 0 1-1 1h-3.5v-6h-5v6H6a1 1 0 0 1-1-1v-8H3c-.6 0-.9-.8-.5-1.2z"/></svg><span>Inicio</span></a>
+    <a href="documentos.html"><svg width="24" height="24" class="f" viewBox="0 0 24 24"><path d="M2 6a2 2 0 0 1 2-2h5l2 2.5h9a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/></svg><span>Documentos</span></a>
+    <a href="ambulancias.html"><svg width="24" height="24" class="f" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 22s-7.5-7-7.5-12.5a7.5 7.5 0 0 1 15 0C19.5 15 12 22 12 22zm0-9.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg><span>Ambulancias</span></a>
+    <a href="reportes.html"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 20v-5M9 20v-8M14 20v-6M19 20V9M3 21h18"/><path d="M4 10l5-4 4 2 6-5"/></svg><span>Reportes</span></a>
+    <a href="calendario.html"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" stroke-width="2.6"/></svg><span>Calendario</span></a>
+    <a href="encuestas.html" class="on" aria-current="page"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v3H9zM9 11h6M9 15h6"/></svg><span>Encuestas</span></a>
+    <a href="gestion.html"><svg width="24" height="24" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3M4 12c0 1.7 3.6 3 8 3"/></svg><span>Gestión</span></a>
+    <a href="configuracion.html" class="cfg"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg><span>Configuración</span></a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="bar">
+      <button class="burger" id="abrir" aria-label="Abrir menú"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <header class="top">
+        <svg width="24" height="24" class="h" viewBox="0 0 24 24"><path d="M4 21V8h5V4h6v4h5v13M2 21h20M10 12h4M12 10v4M8 17h2M14 17h2"/></svg>
+        <h1>HOSPITAL DE CLINICAS</h1>
+        <input id="q" type="search" placeholder="Buscar encuesta…" aria-label="Buscar encuesta">
+        <button class="lupa" id="lupa" aria-label="Buscar"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+      </header>
+    </div>
+
+    <div class="content">
+      <div class="intro" id="intro">
+        <h2>Encuestas</h2>
+        <p class="lead">Cuéntanos cómo fue tu experiencia. Son pocas preguntas y toman menos de 2 minutos.</p>
+      </div>
+      <section class="grid" id="list" aria-live="polite"></section>
+      <section class="wiz" id="wiz" hidden></section>
+    </div>
+  </main>
+</div>
+
+<div class="prof" aria-label="Perfil"><svg width="24" height="24" class="f" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4.5"/><path d="M3.5 21c0-4 3.8-6.5 8.5-6.5s8.5 2.5 8.5 6.5z"/></svg></div>
+
+<script src="encuestas.js"></script>
+</body>
+</html>

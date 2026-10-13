@@ -1,0 +1,101 @@
+/* Si tus otras páginas usan otra tipografía o colores, cámbialos acá */
+:root{--font:'Bricolage Grotesque',system-ui,sans-serif;--bg:#0e1433;--panel:#12172f;--card:#171b3a;--line:rgba(255,255,255,.16);--text:#f2f3fa;--muted:#9aa0bd;--accent:#8fa8ff}
+*{box-sizing:border-box;margin:0}
+body{background:linear-gradient(160deg,#0d1230,#0f1738);color:var(--text);font-family:var(--font);min-height:100vh}
+svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.f{fill:currentColor;stroke:none}
+button{font:inherit;color:inherit;cursor:pointer}
+a{text-decoration:none;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+
+.app{display:grid;grid-template-columns:1fr;gap:20px;padding:32px 42px}
+html.open .app{grid-template-columns:260px 1fr}
+
+/* Barra lateral (menú abierto) */
+.side{display:none;position:sticky;top:32px;align-self:start;flex-direction:column;gap:14px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:36px;padding:28px 16px;display:flex;flex-direction:column;gap:6px;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+html.open .side{display:flex}
+.x{background:none;border:0;padding:8px 16px 28px;text-align:left}
+.x svg{width:34px;height:34px;stroke-width:2.6}
+.side a{display:flex;align-items:center;gap:16px;padding:13px 16px;border-radius:16px;color:var(--muted);font-weight:600;font-size:.95rem;border:1px solid transparent}
+.side a svg{width:24px;height:24px}
+.side a:hover{color:var(--text)}
+.side a.on{background:#1c2140;border-color:var(--line);color:#dfe5ff}
+.side a.on svg{color:var(--accent)}
+.side .cfg{margin-top:8px}
+
+/* Encabezado + botón hamburguesa (menú cerrado) */
+.bar{display:flex;gap:16px}
+.burger{width:92px;height:98px;flex:none;border-radius:36px;border:1px solid var(--line);background:rgba(15,20,48,.4);display:grid;place-items:center}
+.burger svg{width:40px;height:40px;stroke-width:2.8}
+html.open .burger{display:none}
+.top{flex:1;border:1px solid var(--line);border-radius:36px;background:rgba(15,20,48,.4);height:98px;display:flex;align-items:center;justify-content:center;gap:18px;position:relative}
+.top h1{font-size:1.65rem;font-weight:400;letter-spacing:.05em}
+.top svg.h{width:46px;height:46px;stroke-width:1.5}
+.lupa{position:absolute;right:30px;background:none;border:0;padding:6px;display:grid}
+.top input{display:none;position:absolute;right:76px;width:min(260px,28%);background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:999px;padding:10px 16px;color:var(--text);font:inherit;font-size:.9rem}
+.top.searching input{display:block}
+
+/* Contenido */
+main{min-width:0}
+.content{max-width:1080px;margin:0 auto;padding:0 17px}
+html.open .content{max-width:none;margin:0}
+.intro{margin:26px 0 24px}
+h2{font-size:2.2rem;font-weight:700}
+.lead{color:var(--muted);max-width:480px;font-size:.95rem;line-height:1.5;margin-top:6px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:40px;padding:16px 28px 28px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.inset{width:150px;height:105px;border-radius:22px;background:#1c2040;border:1px solid var(--line);display:grid;place-items:center}
+.inset svg{width:56px;height:56px;stroke-width:1.7}
+.card h3{font-size:1.55rem;font-weight:700;margin-top:10px;line-height:1.2}
+.card p{color:var(--muted);font-size:.95rem;line-height:1.55;max-width:340px}
+.card small{color:var(--accent);font-weight:600}
+.go{margin-top:auto;width:58px;height:58px;border-radius:50%;border:1px solid var(--line);background:none;display:grid;place-items:center}
+.go:hover{background:#1f2447;border-color:var(--accent)}
+.go svg{width:26px;height:26px}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:30px}
+
+/* Encuesta paso a paso */
+.wiz{background:var(--card);border:1px solid var(--line);border-radius:40px;padding:34px;max-width:780px;margin:26px auto 0}
+.back{background:none;border:0;color:var(--muted);font-weight:600;padding:6px 0}
+.back:hover{color:var(--text)}
+.sv{font-size:1.1rem;font-weight:600;color:var(--accent);margin-top:14px}
+.prog{height:8px;background:rgba(255,255,255,.1);border-radius:9px;overflow:hidden;margin:14px 0 8px}
+.prog i{display:block;height:100%;background:var(--accent);border-radius:9px;transition:width .3s}
+.wiz small{color:var(--muted)}
+.qt{font-size:1.65rem;font-weight:700;line-height:1.3;margin:24px 0}
+.qt:focus{outline:none}
+.opts{display:grid;gap:12px}
+.opt{min-height:62px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.04);padding:14px 20px;text-align:left;font-size:1.1rem;font-weight:600}
+.opt:hover{background:#1f2447;border-color:var(--accent)}
+.opt.sel{background:var(--accent);color:#0e1433;border-color:var(--accent)}
+.scale{grid-template-columns:repeat(5,1fr);gap:8px}
+.scale .opt{text-align:center;display:grid;gap:6px;padding:14px 2px;font-size:.82rem}
+.scale .e{font-size:2.1rem;line-height:1}
+textarea{width:100%;min-height:130px;resize:vertical;background:var(--panel);border:1px solid var(--line);border-radius:20px;color:var(--text);font:inherit;font-size:1.05rem;padding:16px}
+.row{display:flex;gap:12px;margin-top:20px}
+.btn{flex:1;padding:14px;border-radius:999px;border:1px solid var(--line);background:none;font-weight:600;font-size:1rem}
+.btn.p{background:var(--accent);border-color:var(--accent);color:#0e1433}
+.thanks{text-align:center;padding:30px 0 10px}
+.thanks svg{width:72px;height:72px;color:#7fd6a6;stroke-width:1.6}
+.thanks h3{font-size:1.8rem;margin:16px 0 8px}
+.thanks .btn{margin-top:26px;max-width:320px;flex:none;padding-inline:30px}
+
+.prof{position:fixed;right:24px;bottom:24px;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:rgba(15,20,48,.7);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.prof svg{width:34px;height:34px}
+
+@media (max-width:860px){
+ .app,html.open .app{grid-template-columns:1fr;padding:16px}
+ .side{position:static}
+ .burger{width:64px;height:72px;border-radius:26px}
+ .top{height:72px;border-radius:26px}
+ .top h1{font-size:1.05rem}
+ .top svg.h{width:34px;height:34px}
+ .lupa{right:14px}
+ .top input{right:50px;width:36%}
+ .wiz{padding:22px;border-radius:30px}
+ .qt{font-size:1.35rem}
+}
+@media (prefers-reduced-motion:reduce){.prog i{transition:none}}
