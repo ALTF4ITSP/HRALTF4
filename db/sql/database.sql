@@ -63,7 +63,7 @@ VALUES
 
 CREATE TABLE `funcionario` (
   `id_persona` int(11) NOT NULL,
-  `legajo` varchar(20) NOT NULL,
+  `legajo` varchar(20) DEFAULT NULL COMMENT 'Opcional: los funcionarios que se registran solos no tienen legajo',
   `cargo` varchar(100) NOT NULL,
   `sector` varchar(100) NOT NULL,
   `licencia_conducir` varchar(30) DEFAULT NULL,

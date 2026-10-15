@@ -17,10 +17,38 @@
     method="POST"
     action="../../api-connection/users/register.php">
 
+    <div class="field-row">
+        <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre"
+            maxlength="100"
+            autocomplete="given-name"
+            required>
+
+        <input
+            type="text"
+            name="apellido"
+            placeholder="Apellido"
+            maxlength="100"
+            autocomplete="family-name"
+            required>
+    </div>
+
+    <label class="field-label" for="fechaNacimiento">Fecha de nacimiento</label>
+    <input
+        type="date"
+        id="fechaNacimiento"
+        name="fecha_nacimiento"
+        required>
+
     <input
         type="text"
         name="usuario"
         placeholder="Usuario"
+        minlength="6"
+        maxlength="50"
+        autocomplete="username"
         required>
 
     <div class="password-wrapper">
@@ -63,7 +91,10 @@
     <input
         type="text"
         name="CI"
-        placeholder="CI"
+        placeholder="CI (sin puntos ni guion)"
+        inputmode="numeric"
+        pattern="[0-9]{7,8}"
+        title="Ingresá la cédula sin puntos ni guion (7 u 8 números)"
         required>
 
     <button type="submit">
