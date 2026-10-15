@@ -661,3 +661,9 @@ input[type="time"] {
         background-image: none;
     }
 }
+
+.field-hint {
+    margin: 6px 0 0 2px;
+    color: rgba(238, 238, 238, 0.45);
+    font-size: 0.8rem;
+}

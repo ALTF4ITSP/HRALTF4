@@ -10,7 +10,7 @@ try {
     $totales = $conexion->query(
         "SELECT
             (SELECT COUNT(*) FROM documento WHERE estado = 'ACTIVO') AS documentos,
-            (SELECT COUNT(*) FROM traslado) AS traslados,
+            (SELECT COUNT(*) FROM gestion_traslado) AS traslados,
             (SELECT COUNT(*) FROM gestion_paciente) AS pacientes,
             (SELECT COUNT(*) FROM envio_encuesta WHERE completada = 1) AS respuestas"
     )->fetch();
@@ -44,8 +44,8 @@ try {
     )->fetchAll();
 
     $traslados = $conexion->query(
-        'SELECT estado_solicitud AS estado, COUNT(*) AS total
-         FROM solicitud_traslado GROUP BY estado_solicitud ORDER BY total DESC'
+        'SELECT estado, COUNT(*) AS total
+         FROM gestion_traslado GROUP BY estado ORDER BY total DESC'
     )->fetchAll();
 
     $encuestas = $conexion->query(

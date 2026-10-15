@@ -277,6 +277,10 @@ document.addEventListener('DOMContentLoaded', () => {
       notes: notesInput.value.trim(),
       status: statusInput.value
     };
+    // Al editar se conservan las coordenadas del mapa (el formulario no las muestra)
+    const previous = destinations.find(destination => destination.id === editingId);
+    record.lat = previous?.lat ?? null;
+    record.lng = previous?.lng ?? null;
     const duplicate = destinations.some(destination => destination.id !== editingId &&
       ['name', 'address', 'locality'].every(key => normalize(destination[key]) === normalize(record[key])));
     if (duplicate) {

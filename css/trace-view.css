@@ -364,3 +364,7 @@
 @media (prefers-reduced-motion: reduce) {
   .trace-view-hero, .transfer-detail *, .transfer-dialog * { transition: none !important; }
 }
+
+/* Enlace al mapa en la pestaña Ruta */
+a.map-space { display: grid; place-items: center; min-height: 120px; color: #abbaea; text-decoration: none; transition: background .2s ease; }
+a.map-space:hover { background: rgba(255, 255, 255, .04); }

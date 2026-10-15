@@ -1,8 +1,114 @@
-document.addEventListener("DOMContentLoaded", function () {
+// Traslados de ambulancias: lista (trace.html) y formulario nuevo/editar (trace-new.html).
+// Los datos vienen de php/traslados.php
+const TRASLADOS_API = "../php/traslados.php";
+
+const TIPO_TEXTO = { PACIENTE: "Paciente", EQUIPO: "Equipo", BIOLOGICO: "Biológico" };
+const TIPO_COLOR = { PACIENTE: "blue-card", EQUIPO: "green-card", BIOLOGICO: "purple-card" };
+const TIPO_ICONO = { PACIENTE: "human-icon.svg", EQUIPO: "medkit-icon.png", BIOLOGICO: "biohazard-icon.svg" };
+const ESTADO_TEXTO = { ASIGNADO: "ASIGNADO", EN_CURSO: "EN CURSO", EN_DESTINO: "EN DESTINO", FINALIZADO: "FINALIZADO", CANCELADO: "CANCELADO" };
+const ESTADO_CLASE = { ASIGNADO: "assigned-label", EN_CURSO: "progress-label", EN_DESTINO: "progress-label", FINALIZADO: "completed-label", CANCELADO: "completed-label" };
+const ACTIVOS = ["ASIGNADO", "EN_CURSO", "EN_DESTINO"];
+
+async function trasladosApi(query = "", options = {}) {
+    const response = await fetch(TRASLADOS_API + query, {
+        credentials: "same-origin",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        ...options
+    });
+    const data = await response.json().catch(() => null);
+    if (!response.ok || data?.success !== true) {
+        throw new Error(data?.error?.message || "No se pudo conectar con el servidor.");
+    }
+    return data;
+}
+
+function escapeHtml(value) {
+    const element = document.createElement("span");
+    element.textContent = value ?? "";
+    return element.innerHTML;
+}
+
+// "2026-10-15T09:30" → "15/10/2026 · 9:30 AM" (el orden por fecha de la lista lee este formato)
+function fechaHora(valor) {
+    if (!valor) return "—";
+    const [fecha, hora] = valor.split("T");
+    const [anio, mes, dia] = fecha.split("-");
+    let [h, m] = hora.split(":").map(Number);
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return `${dia}/${mes}/${anio} · ${h}:${String(m).padStart(2, "0")} ${ampm}`;
+}
+
+function tarjetaTraslado(t) {
+    const activo = ACTIVOS.includes(t.estado);
+    return `
+        <article class="transfer-card ${TIPO_COLOR[t.tipo]}" data-status="${activo ? "active" : "completed"}">
+            <div class="card-heading">
+                <div class="ambulance-icon">
+                    <img src="../imagenes/ambulance-icon.png" alt="" aria-hidden="true">
+                </div>
+                <div class="card-title">
+                    <h2>TRASLADO ${t.id}</h2>
+                    <p>Ambulancia ${escapeHtml(t.matricula)}</p>
+                </div>
+                <span class="status-label ${ESTADO_CLASE[t.estado]}">${ESTADO_TEXTO[t.estado]}</span>
+            </div>
+
+            <div class="card-divider"></div>
+
+            <div class="transfer-information">
+                <div class="info-group">
+                    <p class="information-label">Conductor</p>
+                    <div class="info-value">
+                        <img src="../imagenes/steering-wheel.svg" alt="" aria-hidden="true" class="info-icon">
+                        <p>${escapeHtml(t.chofer)}</p>
+                    </div>
+                </div>
+                <div class="info-group">
+                    <p class="information-label">Acompañante</p>
+                    <div class="info-value">
+                        <img src="../imagenes/person-icon.svg" alt="" aria-hidden="true" class="info-icon">
+                        <p>${escapeHtml(t.acompanante || "—")}</p>
+                    </div>
+                </div>
+                <div class="info-group">
+                    <p class="information-label">Elemento</p>
+                    <div class="info-value">
+                        <img src="../imagenes/${TIPO_ICONO[t.tipo]}" alt="" aria-hidden="true" class="info-icon">
+                        <p>${TIPO_TEXTO[t.tipo]}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="route-box">
+                <div class="route-line"><span></span><span></span></div>
+                <div class="route-text">
+                    <div><small>Origen</small><strong>${escapeHtml(t.origen)}</strong>
+                        <p>${fechaHora(t.fecha_salida)}</p>
+                    </div>
+                    <div><small>Destino</small><strong>${escapeHtml(t.destino)}</strong>
+                        <p>${t.llegada_estimada ? "ETA " + fechaHora(t.llegada_estimada) : "Sin hora estimada"}</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="details-button"
+                onclick="window.location.href='trace-view.html?id=${t.id}';">Ver detalles</button>
+        </article>`;
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
 
     const transferGrid = document.getElementById("transferGrid");
 
     if (transferGrid) {
+        // Primero se arman las tarjetas con los traslados de la base; el resto del código las usa
+        try {
+            const { data } = await trasladosApi();
+            transferGrid.innerHTML = data.map(tarjetaTraslado).join("");
+        } catch (error) {
+            document.getElementById("emptyMessage").textContent = error.message;
+        }
         const filterButtons = document.querySelectorAll(".filter-button");
         const transferCards = Array.from(document.querySelectorAll(".transfer-card"));
         const allTransfers = document.getElementById("allTransfers");
@@ -281,46 +387,35 @@ document.addEventListener("DOMContentLoaded", function () {
         const cancelButton = document.getElementById("cancelTransfer");
         const formMessage = document.getElementById("formMessage");
         const transferType = document.getElementById("transferType");
-        const patientName = document.getElementById("patientName");
-        const startDate = document.getElementById("startDate");
+        const patient = document.getElementById("patient");
+        const editId = new URLSearchParams(window.location.search).get("id");
         const draftName = "hospitalNewTransferDraft";
-
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, "0");
-        const day = String(today.getDate()).padStart(2, "0");
-        startDate.min = year + "-" + month + "-" + day;
+        const opcionesExtra = ["specialEquipment", "withFamily", "interdepartmental", "criticalPatient"];
 
         function showMessage(message, isError) {
             formMessage.textContent = message;
-
-            if (isError) {
-                formMessage.classList.add("error");
-            } else {
-                formMessage.classList.remove("error");
-            }
+            formMessage.classList.toggle("error", Boolean(isError));
         }
 
         function updatePatientRequirement() {
-            patientName.required = transferType.value === "patient";
+            patient.required = transferType.value === "PACIENTE";
         }
 
+        function fillSelect(id, items, label, firstOption) {
+            document.getElementById(id).innerHTML = `<option value="">${firstOption}</option>` +
+                items.map(item => `<option value="${item.id}">${escapeHtml(label(item))}</option>`).join("");
+        }
+
+        // El texto de cada casilla de "Opciones adicionales"
+        const optionLabel = name => newTransferForm.elements[name].closest("label").textContent.trim();
+
+        // Borrador: solo para traslados nuevos, se guarda en este navegador
         function saveDraft() {
             const draft = {};
-            const controls = newTransferForm.querySelectorAll("input, select, textarea");
-
-            controls.forEach(function (control) {
-                if (!control.name || control.type === "file") {
-                    return;
-                }
-
-                if (control.type === "checkbox") {
-                    draft[control.name] = control.checked;
-                } else {
-                    draft[control.name] = control.value;
-                }
+            newTransferForm.querySelectorAll("input, select, textarea").forEach(function (control) {
+                if (!control.name) return;
+                draft[control.name] = control.type === "checkbox" ? control.checked : control.value;
             });
-
             try {
                 localStorage.setItem(draftName, JSON.stringify(draft));
                 showMessage("Borrador guardado en este navegador.", false);
@@ -330,128 +425,114 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function loadDraft() {
-            let savedDraft = null;
-
-            try {
-                savedDraft = localStorage.getItem(draftName);
-            } catch (error) {
-                return;
-            }
-
-            if (!savedDraft) {
-                return;
-            }
-
             let draft;
-
             try {
-                draft = JSON.parse(savedDraft);
+                draft = JSON.parse(localStorage.getItem(draftName) || "null");
             } catch (error) {
-                localStorage.removeItem(draftName);
                 return;
             }
-
-            const controls = newTransferForm.querySelectorAll("input, select, textarea");
-
-            controls.forEach(function (control) {
-                if (!control.name || control.type === "file" || draft[control.name] === undefined) {
-                    return;
-                }
-
-                if (control.type === "checkbox") {
-                    control.checked = draft[control.name];
-                } else {
-                    control.value = draft[control.name];
-                }
+            if (!draft) return;
+            newTransferForm.querySelectorAll("input, select, textarea").forEach(function (control) {
+                if (!control.name || draft[control.name] === undefined) return;
+                if (control.type === "checkbox") control.checked = draft[control.name];
+                else control.value = draft[control.name];
             });
-
             updatePatientRequirement();
             showMessage("Se recuperó el borrador guardado.", false);
+        }
+
+        function fillForm(t) {
+            const f = newTransferForm.elements;
+            ["id_ambulancia", "id_chofer", "id_acompanante", "id_origen", "id_destino", "id_gestion_paciente"]
+                .forEach(name => { f[name].value = t[name] ?? ""; });
+            f.reason.value = t.motivo;
+            f.tipo.value = t.tipo;
+            f.prioridad.value = t.prioridad;
+            f.notas.value = t.notas ?? "";
+            [f.startDate.value, f.startTime.value] = t.fecha_salida.split("T");
+            f.etaTime.value = t.llegada_estimada ? t.llegada_estimada.split("T")[1] : "";
+            const marcadas = (t.opciones || "").split(", ");
+            opcionesExtra.forEach(name => { f[name].checked = marcadas.includes(optionLabel(name)); });
+            updatePatientRequirement();
+        }
+
+        async function init() {
+            try {
+                const { data } = await trasladosApi("?opciones=1");
+                const estadoAmbulancia = { OPERATIVA: "", MANTENIMIENTO: " (en mantenimiento)", FUERA_SERVICIO: " (fuera de servicio)" };
+                fillSelect("ambulance", data.ambulancias, a => `${a.matricula} · ${a.modelo}${estadoAmbulancia[a.estado_operativo] ?? ""}`, "Elegir ambulancia...");
+                fillSelect("driver", data.personal, p => `${p.nombre} (${p.rol})`, "Elegir conductor...");
+                fillSelect("companion", data.personal, p => `${p.nombre} (${p.rol})`, "Sin acompañante");
+                fillSelect("origin", data.destinos, d => `${d.nombre} · ${d.localidad}`, "Elegir origen...");
+                fillSelect("destination", data.destinos, d => `${d.nombre} · ${d.localidad}`, "Elegir destino...");
+                fillSelect("patient", data.pacientes, p => `${p.nombre} (${p.documento})`, "Sin paciente");
+
+                if (editId) {
+                    document.getElementById("formTitle").textContent = `Editar Traslado ${editId}`;
+                    document.title = `Editar Traslado ${editId}`;
+                    document.getElementById("submitTransfer").textContent = "Guardar Cambios";
+                    saveDraftButton.hidden = true;
+                    fillForm((await trasladosApi(`?id=${encodeURIComponent(editId)}`)).data);
+                } else {
+                    const today = new Date();
+                    newTransferForm.elements.startDate.min =
+                        `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+                    loadDraft();
+                }
+            } catch (error) {
+                showMessage(error.message, true);
+            }
         }
 
         transferType.addEventListener("change", updatePatientRequirement);
         saveDraftButton.addEventListener("click", saveDraft);
 
         cancelButton.addEventListener("click", function () {
-            try {
-                localStorage.removeItem(draftName);
-            } catch (error) {
-
+            if (!editId) {
+                try { localStorage.removeItem(draftName); } catch (error) { /* sin almacenamiento */ }
             }
-
-            window.location.href = "trace.html";
+            window.location.href = editId ? `trace-view.html?id=${editId}` : "trace.html";
         });
 
-        newTransferForm.addEventListener("invalid", function () {
-            showMessage("Completa los campos obligatorios y revisa los valores indicados.", true);
-        }, true);
-
-        newTransferForm.addEventListener("submit", function (event) {
+        newTransferForm.addEventListener("submit", async function (event) {
             event.preventDefault();
             updatePatientRequirement();
-
             if (!newTransferForm.checkValidity()) {
                 showMessage("Completa los campos obligatorios.", true);
                 newTransferForm.reportValidity();
                 return;
             }
 
-            try {
-                localStorage.removeItem(draftName);
-            } catch (error) {
-            }
+            const f = newTransferForm.elements;
+            const traslado = {
+                id: editId,
+                id_ambulancia: f.id_ambulancia.value,
+                id_chofer: f.id_chofer.value,
+                id_acompanante: f.id_acompanante.value,
+                id_origen: f.id_origen.value,
+                id_destino: f.id_destino.value,
+                id_gestion_paciente: f.id_gestion_paciente.value,
+                tipo: f.tipo.value,
+                motivo: f.reason.value,
+                prioridad: f.prioridad.value,
+                fecha_salida: `${f.startDate.value}T${f.startTime.value}`,
+                llegada_estimada: f.etaTime.value ? `${f.startDate.value}T${f.etaTime.value}` : "",
+                opciones: opcionesExtra.filter(name => f[name].checked).map(optionLabel).join(", "),
+                notas: f.notas.value
+            };
 
-            newTransferForm.reset();
-            updatePatientRequirement();
-            showMessage("Traslado creado correctamente.", false);
+            try {
+                const { id } = await trasladosApi("", {
+                    method: "POST",
+                    body: JSON.stringify({ accion: "guardar", traslado })
+                });
+                try { localStorage.removeItem(draftName); } catch (error) { /* sin almacenamiento */ }
+                window.location.href = `trace-view.html?id=${id}`;
+            } catch (error) {
+                showMessage(error.message, true);
+            }
         });
 
-        updatePatientRequirement();
-        loadDraft();
+        init();
     }
-});
-
-//geo localizacion mapa trace-view//
-document.addEventListener("DOMContentLoaded", function () {
-  // Coordenadas por defecto (Paysandú, Uruguay)
-  const defaultLat = -32.3214;
-  const defaultLng = -58.0756;
-
-  const mapContainer = document.getElementById("map");
-  if (!mapContainer) return;
-
-  // 1. Inicializar el mapa centrado en Paysandú
-  const map = L.map("map").setView([defaultLat, defaultLng], 13);
-
-  // 2. Cargar la capa del mapa (OpenStreetMap)
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
-
-  // 3. Crear el marcador inicial de la ambulancia
-  let marker = L.marker([defaultLat, defaultLng]).addTo(map)
-    .bindPopup("<b>Ambulancia TRASLADO 1</b><br>Rastreo activo.")
-    .openPopup();
-
-  // 4. Intentar obtener y rastrear la ubicación GPS real del dispositivo
-  if ("geolocation" in navigator) {
-    navigator.geolocation.watchPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-
-        // Mover el marcador y recentrar el mapa con la ubicación real
-        marker.setLatLng([lat, lng]);
-        map.setView([lat, lng], 15);
-      },
-      (error) => {
-        console.warn("No se pudo obtener la ubicación GPS real, se usa la posición por defecto:", error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-      }
-    );
-  }
 });

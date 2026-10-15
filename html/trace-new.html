@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../css/trace-new.css?v=20261005-general-field-sizing">
     <script src="../js/main-menu.js?v=20260927-global" defer></script>
     <script src="../js/universal-search.js?v=20260927-global" defer></script>
-    <script src="../js/trace.js?v=20261004-patient-cedula" defer></script>
+    <script src="../js/trace.js" defer></script>
 </head>
 
 <body>
@@ -103,7 +103,7 @@
                             <img src="../imagenes/ambulance-icon.png" alt="" aria-hidden="true">
                         </div>
                         <div>
-                            <h1>Nuevo Traslado</h1>
+                            <h1 id="formTitle">Nuevo Traslado</h1>
                             <p>Completa la información para registrar un nuevo traslado de ambulancia</p>
                         </div>
                     </div>
@@ -119,30 +119,23 @@
 
                                     <div class="field full-field">
                                         <label for="ambulance">Ambulancia</label>
-                                        <select id="ambulance" name="ambulance" required>
-                                            <option value="">Buscar ambulancia...</option>
-                                            <option value="A-12">Ambulancia A-12</option>
-                                            <option value="B-27">Ambulancia B-27</option>
-                                            <option value="C-08">Ambulancia C-08</option>
+                                        <select id="ambulance" name="id_ambulancia" required>
+                                            <option value="">Cargando ambulancias...</option>
                                         </select>
                                     </div>
 
                                     <div class="field full-field">
                                         <label for="driver">Conductor</label>
-                                        <div class="input-wrapper">
-                                            <input type="text" id="driver" name="driver"
-                                                placeholder="Buscar conductor..." autocomplete="off" required>
-                                            <img src="../imagenes/search-icon.svg" class="field-icon" alt="" aria-hidden="true">
-                                        </div>
+                                        <select id="driver" name="id_chofer" required>
+                                            <option value="">Cargando personal...</option>
+                                        </select>
                                     </div>
 
                                     <div class="field full-field">
                                         <label for="companion">Acompañante <span>(Opcional)</span></label>
-                                        <div class="input-wrapper">
-                                            <input type="text" id="companion" name="companion"
-                                                placeholder="Buscar acompañante..." autocomplete="off">
-                                            <img src="../imagenes/search-icon.svg" class="field-icon" alt="" aria-hidden="true">
-                                        </div>
+                                        <select id="companion" name="id_acompanante">
+                                            <option value="">Sin acompañante</option>
+                                        </select>
                                     </div>
 
                                     <div class="field full-field">
@@ -156,14 +149,19 @@
                                     </div>
 
                                     <div class="field full-field">
+                                        <label for="etaTime">Hora estimada de llegada <span>(Opcional)</span></label>
+                                        <input type="time" id="etaTime" name="etaTime">
+                                    </div>
+
+                                    <div class="field full-field">
                                         <label for="reason">Motivo del Traslado</label>
                                         <select id="reason" name="reason" required>
                                             <option value="">Seleccionar motivo...</option>
-                                            <option value="consulta">Consulta médica</option>
-                                            <option value="estudio">Estudio o tratamiento</option>
-                                            <option value="alta">Alta médica</option>
-                                            <option value="emergencia">Emergencia</option>
-                                            <option value="insumos">Traslado de insumos</option>
+                                            <option>Consulta médica</option>
+                                            <option>Estudio o tratamiento</option>
+                                            <option>Alta médica</option>
+                                            <option>Emergencia</option>
+                                            <option>Traslado de insumos</option>
                                         </select>
                                     </div>
                                 </section>
@@ -174,38 +172,12 @@
                                         Paciente
                                     </h2>
 
-                                    <div class="patient-fields">
-                                        <div class="field">
-                                            <label for="patientName">Nombre del Paciente</label>
-                                            <input type="text" id="patientName" name="patientName" placeholder="Nombre..."
-                                                autocomplete="off">
-                                        </div>
-
-                                        <div class="field">
-                                            <label for="patientCedula">Cédula del Paciente</label>
-                                            <div class="input-wrapper">
-                                                <input type="text" id="patientCedula" name="patientCedula" inputmode="numeric"
-                                                    placeholder="Ej.: 1.234.567-8" autocomplete="off">
-                                                <img src="../imagenes/id-badge.svg" class="field-icon" alt="" aria-hidden="true">
-                                            </div>
-                                        </div>
-
-                                        <div class="field">
-                                            <label for="patientAge">Edad</label>
-                                            <input type="number" id="patientAge" name="patientAge" min="0" max="120"
-                                                placeholder="Ej: 45">
-                                        </div>
-
-                                        <div class="field">
-                                            <label for="patientSex">Sexo</label>
-                                            <select id="patientSex" name="patientSex">
-                                                <option value="">Seleccionar...</option>
-                                                <option value="femenino">Femenino</option>
-                                                <option value="masculino">Masculino</option>
-                                                <option value="otro">Otro</option>
-                                                <option value="no-indica">Prefiere no indicar</option>
-                                            </select>
-                                        </div>
+                                    <div class="field full-field">
+                                        <label for="patient">Paciente <span>(obligatorio si el tipo es Paciente)</span></label>
+                                        <select id="patient" name="id_gestion_paciente">
+                                            <option value="">Sin paciente</option>
+                                        </select>
+                                        <p class="field-hint">Los pacientes se cargan en Gestión → Pacientes.</p>
                                     </div>
                                 </section>
                             </div>
@@ -219,48 +191,44 @@
 
                                     <div class="field full-field">
                                         <label for="origin">Origen</label>
-                                        <div class="input-wrapper">
-                                            <input type="text" id="origin" name="origin"
-                                                placeholder="Buscar dirección..." autocomplete="off" required>
-                                            <img src="../imagenes/search-icon.svg" class="field-icon" alt="" aria-hidden="true">
-                                        </div>
+                                        <select id="origin" name="id_origen" required>
+                                            <option value="">Cargando destinos...</option>
+                                        </select>
                                     </div>
 
                                     <div class="field full-field">
                                         <label for="destination">Destino</label>
-                                        <div class="input-wrapper">
-                                            <input type="text" id="destination" name="destination"
-                                                placeholder="Buscar destino..." autocomplete="off" required>
-                                            <img src="../imagenes/search-icon.svg" class="field-icon" alt="" aria-hidden="true">
-                                        </div>
+                                        <select id="destination" name="id_destino" required>
+                                            <option value="">Cargando destinos...</option>
+                                        </select>
                                     </div>
 
                                     <div class="two-fields">
                                         <div class="field">
                                             <label for="transferType">Tipo de Traslado</label>
-                                            <select id="transferType" name="transferType" required>
+                                            <select id="transferType" name="tipo" required>
                                                 <option value="">Seleccionar tipo...</option>
-                                                <option value="patient">Paciente</option>
-                                                <option value="biological">Biológico</option>
-                                                <option value="equipment">Elemento o equipo</option>
+                                                <option value="PACIENTE">Paciente</option>
+                                                <option value="BIOLOGICO">Biológico</option>
+                                                <option value="EQUIPO">Elemento o equipo</option>
                                             </select>
                                         </div>
 
                                         <div class="field priority-field">
                                             <label for="priority">Prioridad</label>
-                                            <select id="priority" name="priority" required>
+                                            <select id="priority" name="prioridad" required>
                                                 <option value="">Seleccionar...</option>
-                                                <option value="low">Baja</option>
-                                                <option value="normal">Normal</option>
-                                                <option value="high">Alta</option>
-                                                <option value="critical">Crítica</option>
+                                                <option value="BAJA">Baja</option>
+                                                <option value="NORMAL">Normal</option>
+                                                <option value="ALTA">Alta</option>
+                                                <option value="CRITICA">Crítica</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="field full-field">
                                         <label for="notes">Notas Adicionales <span>(Opcional)</span></label>
-                                        <textarea id="notes" name="notes" rows="4"
+                                        <textarea id="notes" name="notas" rows="4" maxlength="500"
                                             placeholder="Información relevante..."></textarea>
                                     </div>
                                 </section>
@@ -299,7 +267,7 @@
                                 <div class="form-actions">
                                     <button type="button" class="cancel-button" id="cancelTransfer">Cancelar</button>
                                     <button type="button" class="draft-button" id="saveDraft">Guardar Borrador</button>
-                                    <button type="submit" class="create-button">Crear Traslado</button>
+                                    <button type="submit" class="create-button" id="submitTransfer">Crear Traslado</button>
                                 </div>
                             </div>
                         </div>

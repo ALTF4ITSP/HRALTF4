@@ -296,6 +296,13 @@ No hace falta tocar nada más: el PHP lee la lista de campos para saber qué gua
 
 > Como se guarda la lista completa, si dos personas editan **la misma pantalla al mismo tiempo**, queda lo que guardó la última.
 
+**Traslados y Calendario tienen su propio PHP** (`php/traslados.php` y `php/turnos.php`), porque cada traslado o turno se guarda por separado y combina datos de varias tablas:
+
+- `gestion_traslado` usa la ambulancia (`ambulancia`), el chofer y el acompañante (`gestion_personal`), el origen y el destino (`gestion_destino`) y el paciente (`gestion_paciente`).
+- `turno` usa el paciente (`gestion_paciente`) y el médico (`gestion_medico`).
+
+Por eso no se puede borrar en Gestión algo que un traslado o un turno está usando: la base lo impide y aparece un aviso.
+
 ## Cómo se armaron las encuestas (ejemplo real del proyecto)
 
 Las encuestas usan 4 tablas encadenadas:

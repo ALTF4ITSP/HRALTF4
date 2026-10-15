@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="../css/trace-view.css?v=20261006-dialog-polish">
   <script src="../js/main-menu.js?v=20260927-global" defer></script>
   <script src="../js/universal-search.js?v=20260927-global" defer></script>
-  <script src="../js/trace-view.js?v=20261006-layout" defer></script>
+  <script src="../js/trace-view.js" defer></script>
 </head>
 <body>
   <div class="page-background"></div>
@@ -95,16 +95,16 @@
     </header>
 
     <section class="hero-panel trace-view-hero" aria-labelledby="transfer-title">
-      <article class="transfer-detail" id="transfer-detail" data-status="in-progress">
+      <article class="transfer-detail" id="transfer-detail" data-status="in-progress" hidden>
         <header class="transfer-header">
           <a class="back-link" href="trace.html"><span class="detail-icon color-icon back-icon" aria-hidden="true"></span><span>Volver a Traslados</span></a>
           <div class="transfer-heading">
             <div class="transfer-identity">
               <div class="vehicle-icon"><img src="../imagenes/ambulance-icon.png" alt=""></div>
               <div class="transfer-heading-copy">
-                <div class="transfer-title-row"><h1 id="transfer-title">TRASLADO 1</h1><span class="status-badge" data-status-label>En curso</span></div>
-                <p>Ambulancia <span data-field="ambulance">A-12</span><span class="identity-divider" aria-hidden="true">·</span>ACT-1234</p>
-                <p class="created-at">Creado el 12/07/2026 a las 09:15</p>
+                <div class="transfer-title-row"><h1 id="transfer-title">TRASLADO</h1><span class="status-badge" data-status-label>—</span></div>
+                <p>Ambulancia <span data-field="ambulance">—</span><span class="identity-divider" aria-hidden="true">·</span><span data-field="model">—</span></p>
+                <p class="created-at" data-field="created">—</p>
               </div>
             </div>
             <div class="header-actions">
@@ -115,10 +115,10 @@
         </header>
 
         <dl class="transfer-summary">
-          <div class="summary-item"><img class="detail-icon" src="../imagenes/time-icon.svg" alt=""><div><dt>Estado</dt><dd class="status-value" data-status-label>En curso</dd></div></div>
-          <div class="summary-item"><img class="detail-icon" src="../imagenes/calendar-icon.svg" alt=""><div><dt>Fecha y hora de inicio</dt><dd><time datetime="2026-07-12T09:32">12/07/2026 · 09:32</time></dd></div></div>
-          <div class="summary-item summary-route"><img class="detail-icon" src="../imagenes/location-icon.svg" alt=""><div><dt>Origen → Destino</dt><dd><span data-field="origin">Hospital de Clínicas</span><span class="route-arrow" aria-hidden="true">→</span><span data-field="destination">Sanatorio de Velen</span></dd></div></div>
-          <div class="summary-item"><img class="detail-icon" src="../imagenes/steering-wheel.svg" alt=""><div><dt>Conductor</dt><dd data-field="driver">Benjamín Genolet</dd></div></div>
+          <div class="summary-item"><img class="detail-icon" src="../imagenes/time-icon.svg" alt=""><div><dt>Estado</dt><dd class="status-value" data-status-label>—</dd></div></div>
+          <div class="summary-item"><img class="detail-icon" src="../imagenes/calendar-icon.svg" alt=""><div><dt>Fecha y hora de inicio</dt><dd data-field="start">—</dd></div></div>
+          <div class="summary-item summary-route"><img class="detail-icon" src="../imagenes/location-icon.svg" alt=""><div><dt>Origen → Destino</dt><dd><span data-field="origin">—</span><span class="route-arrow" aria-hidden="true">→</span><span data-field="destination">—</span></dd></div></div>
+          <div class="summary-item"><img class="detail-icon" src="../imagenes/steering-wheel.svg" alt=""><div><dt>Conductor</dt><dd data-field="driver">—</dd></div></div>
         </dl>
 
         <div class="detail-tabs" role="tablist" aria-label="Información del traslado">
@@ -133,55 +133,46 @@
           <section class="detail-panel patient-panel is-selected" id="patient-panel" aria-labelledby="patient-heading">
             <h2 id="patient-heading"><img class="detail-icon" src="../imagenes/human-icon.svg" alt="">Información del paciente</h2>
             <dl class="patient-information">
-              <div class="wide-field"><dt>Nombre</dt><dd data-field="patient">Juan Pérez</dd></div>
-              <div><dt>Edad</dt><dd><span data-field="age">45</span> años</dd></div>
-              <div><dt>Sexo</dt><dd data-field="sex">Masculino</dd></div>
-              <div class="wide-field"><dt>Documento / Historia clínica</dt><dd data-field="document">CI 4.123.456-7</dd></div>
-              <div class="wide-field"><dt>Acompañante</dt><dd data-field="companion">Nicolás Peluffo</dd></div>
-              <div class="wide-field"><dt>Notas</dt><dd data-field="patientNotes">Paciente estable. Requiere monitoreo.</dd></div>
+              <div class="wide-field"><dt>Nombre</dt><dd data-field="patient">—</dd></div>
+              <div><dt>Edad</dt><dd><span data-field="age">—</span> años</dd></div>
+                            <div><dt>Documento</dt><dd data-field="document">—</dd></div>
+              <div class="wide-field"><dt>Acompañante</dt><dd data-field="companion">—</dd></div>
+              <div class="wide-field"><dt>Diagnóstico</dt><dd data-field="patientNotes">—</dd></div>
             </dl>
           </section>
 
           <section class="detail-panel transfer-panel" id="transfer-panel" aria-labelledby="details-heading">
             <h2 id="details-heading"><img class="detail-icon" src="../imagenes/list-icon.svg" alt="">Detalles del traslado</h2>
             <dl class="transfer-information">
-              <div><dt>Motivo del traslado</dt><dd data-field="reason">Estudios especializados</dd></div>
-              <div><dt>Tipo de traslado</dt><dd>Programado</dd></div>
-              <div><dt>Prioridad</dt><dd class="priority-value"><span class="priority-dot" aria-hidden="true"></span><span data-field="priority">Normal</span></dd></div>
-              <div><dt>Acompañado por médico</dt><dd>Sí</dd></div>
-              <div><dt>Equipamiento especial</dt><dd data-field="equipment">Monitor cardíaco, O₂, camilla</dd></div>
-              <div class="additional-notes"><dt>Notas adicionales</dt><dd data-field="notes">Traslado para estudios de cardiología.</dd></div>
+              <div><dt>Motivo del traslado</dt><dd data-field="reason">—</dd></div>
+              <div><dt>Tipo de traslado</dt><dd data-field="type">—</dd></div>
+              <div><dt>Prioridad</dt><dd class="priority-value"><span class="priority-dot" aria-hidden="true"></span><span data-field="priority">—</span></dd></div>
+                            <div><dt>Opciones adicionales</dt><dd data-field="options">—</dd></div>
+              <div class="additional-notes"><dt>Notas adicionales</dt><dd data-field="notes">—</dd></div>
             </dl>
           </section>
 
           <section class="detail-panel route-panel" id="route-panel" aria-labelledby="route-heading">
             <h2 id="route-heading"><img class="detail-icon" src="../imagenes/map-icon.svg" alt="">Ruta del traslado</h2>
-            <!-- Reserved for the ambulance map. Intentionally empty. -->
-            <div class="map-space" id="ambulance-map" role="img" aria-label="Espacio reservado para el mapa del traslado"></div>
+                        <a class="map-space" href="trace-map.html" id="ambulance-map">Ver el recorrido en el mapa →</a>
             <dl class="route-metrics">
-              <div><img class="detail-icon" src="../imagenes/location-icon.svg" alt=""><div><dt>Distancia total</dt><dd>8,7 km</dd></div></div>
-              <div><img class="detail-icon" src="../imagenes/time-icon.svg" alt=""><div><dt>Tiempo estimado</dt><dd>40 min</dd></div></div>
-              <div><img class="detail-icon" src="../imagenes/time-icon.svg" alt=""><div><dt>Tiempo transcurrido</dt><dd id="elapsed-time">12 min</dd></div></div>
+              <div><img class="detail-icon" src="../imagenes/location-icon.svg" alt=""><div><dt>Distancia (en línea recta)</dt><dd data-field="distance">—</dd></div></div>
+              <div><img class="detail-icon" src="../imagenes/time-icon.svg" alt=""><div><dt>Tiempo estimado</dt><dd data-field="duration">—</dd></div></div>
+              <div><img class="detail-icon" src="../imagenes/time-icon.svg" alt=""><div><dt>Tiempo transcurrido</dt><dd id="elapsed-time">—</dd></div></div>
             </dl>
           </section>
 
           <section class="detail-panel timeline-panel" id="timeline-panel" aria-labelledby="timeline-heading">
             <h2 id="timeline-heading"><img class="detail-icon" src="../imagenes/time-icon.svg" alt="">Línea de tiempo</h2>
-            <ol class="transfer-timeline">
-              <li class="timeline-start"><span class="timeline-dot" aria-hidden="true"></span><strong>Traslado iniciado</strong><time datetime="2026-07-12T09:32">12/07/2026 · 09:32</time><p>Inicio en <span data-field="origin">Hospital de Clínicas</span>.</p></li>
-              <li class="timeline-current"><span class="timeline-dot" aria-hidden="true"></span><strong>En camino</strong><time datetime="2026-07-12T09:36">12/07/2026 · 09:36</time><p>Ambulancia en ruta hacia el destino.</p></li>
-              <li class="timeline-estimated"><span class="timeline-dot" aria-hidden="true"></span><strong>Llegada estimada</strong><time datetime="2026-07-12T10:12">12/07/2026 · 10:12</time><p>Tiempo previsto de llegada al destino.</p></li>
-              <li class="timeline-final"><span class="timeline-dot" aria-hidden="true"></span><strong id="final-event-title">Traslado finalizado</strong><span id="final-event-time">Pendiente</span><p id="final-event-description">Se finalizará al llegar al destino.</p></li>
-            </ol>
+            <ol class="transfer-timeline" id="timeline"></ol>
           </section>
 
           <section class="detail-panel personnel-panel" id="personnel-panel" aria-labelledby="personnel-heading">
             <h2 id="personnel-heading"><img class="detail-icon" src="../imagenes/people-svgrepo-com.svg" alt="">Acompañantes y personal</h2>
             <dl class="personnel-information">
-              <div><dt><img class="detail-icon" src="../imagenes/steering-wheel.svg" alt="">Conductor</dt><dd data-field="driver">Benjamín Genolet</dd></div>
-              <div><dt><img class="detail-icon" src="../imagenes/person-icon.svg" alt="">Acompañante 1</dt><dd data-field="companion">Nicolás Peluffo</dd></div>
-              <div><dt><img class="detail-icon" src="../imagenes/person-icon.svg" alt="">Acompañante 2</dt><dd>—</dd></div>
-              <div><dt><img class="detail-icon" src="../imagenes/doctor-icon.svg" alt="">Médico a cargo</dt><dd data-field="doctor">Dr. Martín López</dd></div>
+              <div><dt><img class="detail-icon" src="../imagenes/steering-wheel.svg" alt="">Conductor</dt><dd data-field="driver">—</dd></div>
+              <div><dt><img class="detail-icon" src="../imagenes/person-icon.svg" alt="">Acompañante</dt><dd data-field="companion">—</dd></div>
+                            <div><dt><img class="detail-icon" src="../imagenes/doctor-icon.svg" alt="">Médico del paciente</dt><dd data-field="doctor">—</dd></div>
             </dl>
           </section>
           <footer class="transfer-footer">
@@ -193,29 +184,11 @@
     </section>
   </main>
 
-  <dialog class="transfer-dialog" id="edit-dialog" aria-labelledby="edit-dialog-title">
-    <form id="edit-form">
-      <header class="dialog-heading"><h2 id="edit-dialog-title">Editar traslado</h2><button class="icon-button" type="button" data-close-dialog aria-label="Cerrar"><span class="detail-icon color-icon close-icon" aria-hidden="true"></span></button></header>
-      <div class="edit-fields">
-        <label>Ambulancia<input name="ambulance" required maxlength="16"></label>
-        <label>Conductor<input name="driver" required maxlength="50"></label>
-        <label>Origen<input name="origin" required maxlength="65"></label>
-        <label>Destino<input name="destination" required maxlength="65"></label>
-        <label>Paciente<input name="patient" required maxlength="50"></label>
-        <label>Acompañante<input name="companion" maxlength="50"></label>
-        <label>Motivo<input name="reason" required maxlength="65"></label>
-        <label>Prioridad<span class="dialog-select"><select name="priority"><option>Normal</option><option>Baja</option><option>Alta</option><option>Crítica</option></select></span></label>
-        <label class="wide-field">Notas adicionales<textarea name="notes" rows="2" maxlength="140"></textarea></label>
-      </div>
-      <p class="dialog-message" id="edit-message" role="status"></p>
-      <div class="dialog-actions"><button class="detail-button" type="button" data-close-dialog>Volver</button><button class="detail-button primary-button" type="submit"><img class="detail-icon" src="../imagenes/save-floppy.svg" alt="">Guardar cambios</button></div>
-    </form>
-  </dialog>
 
   <dialog class="transfer-dialog compact-dialog" id="status-dialog" aria-labelledby="status-dialog-title">
     <form id="status-form">
       <header class="dialog-heading"><h2 id="status-dialog-title">Actualizar estado</h2><button class="icon-button" type="button" data-close-dialog aria-label="Cerrar"><span class="detail-icon color-icon close-icon" aria-hidden="true"></span></button></header>
-      <label>Estado del traslado<span class="dialog-select"><select id="transfer-status" name="status"><option value="in-progress">En curso</option><option value="arrived">En destino</option><option value="completed">Finalizado</option></select></span></label>
+      <label>Estado del traslado<span class="dialog-select"><select id="transfer-status" name="status"><option value="EN_CURSO">En curso</option><option value="EN_DESTINO">En destino</option><option value="FINALIZADO">Finalizado</option></select></span></label>
       <div class="dialog-actions"><button class="detail-button" type="button" data-close-dialog>Volver</button><button class="detail-button primary-button" type="submit">Guardar estado</button></div>
     </form>
   </dialog>
@@ -223,7 +196,7 @@
   <dialog class="transfer-dialog compact-dialog" id="cancel-dialog" aria-labelledby="cancel-dialog-title">
     <form id="cancel-form">
       <header class="dialog-heading"><h2 id="cancel-dialog-title">Cancelar traslado</h2><button class="icon-button" type="button" data-close-dialog aria-label="Cerrar"><span class="detail-icon color-icon close-icon" aria-hidden="true"></span></button></header>
-      <p>¿Deseas cancelar el traslado 1? Esta acción marcará el traslado como cancelado.</p>
+      <p id="cancel-text">¿Deseas cancelar este traslado? Esta acción marcará el traslado como cancelado.</p>
       <div class="dialog-actions"><button class="detail-button" type="button" data-close-dialog>Volver</button><button class="detail-button danger-button" type="submit">Cancelar traslado</button></div>
     </form>
   </dialog>

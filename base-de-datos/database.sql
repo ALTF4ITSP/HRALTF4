@@ -17,6 +17,7 @@ USE `altf4`;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS `gestion_traslado`;
 DROP TABLE IF EXISTS `turno`;
 DROP TABLE IF EXISTS `gestion_ruta`;
 DROP TABLE IF EXISTS `gestion_destino`;
@@ -582,6 +583,8 @@ CREATE TABLE `gestion_destino` (
   `telefono` varchar(30) DEFAULT NULL,
   `referencia` varchar(500) DEFAULT NULL,
   `estado` varchar(20) NOT NULL COMMENT 'Activo o Inactivo',
+  `latitud` decimal(9,6) DEFAULT NULL COMMENT 'Para el mapa de traslados (aproximada)',
+  `longitud` decimal(9,6) DEFAULT NULL,
   PRIMARY KEY (`id_gestion_destino`),
   UNIQUE KEY `uq_gestion_destino_codigo` (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
@@ -635,14 +638,14 @@ INSERT INTO `gestion_personal` VALUES (4,'seed-4','Fernando López','Chofer','09
 INSERT INTO `gestion_personal` VALUES (5,'seed-5','Ricardo Sosa','Chofer','099 876 543','','E3210987','Activo');
 INSERT INTO `gestion_personal` VALUES (6,'seed-6','Daniel Giménez','Chofer','098 111 222','','F6543210','Activo');
 INSERT INTO `gestion_personal` VALUES (12,'seed-1','Carlos Fernández','Chofer','099 123 456','','A1234567','Activo');
-INSERT INTO `gestion_destino` VALUES (1,'seed-1','Hospital de Clínicas','Av. Italia 2870','Montevideo','Hospital','','Ingreso de ambulancias por emergencia.','Activo');
-INSERT INTO `gestion_destino` VALUES (2,'seed-2','Hospital Maciel','25 de Mayo 174','Montevideo','Hospital','','Coordinar el acceso con el personal de recepción.','Activo');
-INSERT INTO `gestion_destino` VALUES (3,'seed-3','Hospital Pasteur','Larravide 2458','Montevideo','Hospital','','','Activo');
-INSERT INTO `gestion_destino` VALUES (4,'seed-4','Sanatorio Central','Av. 18 de Julio 1820','Montevideo','Sanatorio','','Acceso lateral para traslados programados.','Activo');
-INSERT INTO `gestion_destino` VALUES (5,'seed-5','Centro de Rehabilitación','Camino Maldonado 5680','Montevideo','Centro de salud','','Destino temporalmente fuera de servicio.','Inactivo');
-INSERT INTO `gestion_destino` VALUES (6,'seed-6','Policlínica Las Piedras','Av. Artigas 560','Las Piedras','Centro de salud','','','Activo');
-INSERT INTO `gestion_destino` VALUES (7,'seed-7','Centro de Diagnóstico','Bv. Artigas 1450','Montevideo','Centro de salud','','Confirmar el horario del estudio antes del traslado.','Activo');
-INSERT INTO `gestion_destino` VALUES (8,'seed-8','Laboratorio Central','Av. Italia 2890','Montevideo','Otro','','Recepción de muestras por la entrada principal.','Inactivo');
+INSERT INTO `gestion_destino` VALUES (1,'seed-1','Hospital de Clínicas','Av. Italia 2870','Montevideo','Hospital','','Ingreso de ambulancias por emergencia.','Activo',-34.893000,-56.153000);
+INSERT INTO `gestion_destino` VALUES (2,'seed-2','Hospital Maciel','25 de Mayo 174','Montevideo','Hospital','','Coordinar el acceso con el personal de recepción.','Activo',-34.906700,-56.208500);
+INSERT INTO `gestion_destino` VALUES (3,'seed-3','Hospital Pasteur','Larravide 2458','Montevideo','Hospital','','','Activo',-34.871700,-56.141600);
+INSERT INTO `gestion_destino` VALUES (4,'seed-4','Sanatorio Central','Av. 18 de Julio 1820','Montevideo','Sanatorio','','Acceso lateral para traslados programados.','Activo',-34.900500,-56.174500);
+INSERT INTO `gestion_destino` VALUES (5,'seed-5','Centro de Rehabilitación','Camino Maldonado 5680','Montevideo','Centro de salud','','Destino temporalmente fuera de servicio.','Inactivo',-34.855000,-56.100000);
+INSERT INTO `gestion_destino` VALUES (6,'seed-6','Policlínica Las Piedras','Av. Artigas 560','Las Piedras','Centro de salud','','','Activo',-34.727000,-56.219000);
+INSERT INTO `gestion_destino` VALUES (7,'seed-7','Centro de Diagnóstico','Bv. Artigas 1450','Montevideo','Centro de salud','','Confirmar el horario del estudio antes del traslado.','Activo',-34.893500,-56.164000);
+INSERT INTO `gestion_destino` VALUES (8,'seed-8','Laboratorio Central','Av. Italia 2890','Montevideo','Otro','','Recepción de muestras por la entrada principal.','Inactivo',-34.892800,-56.152000);
 INSERT INTO `gestion_ruta` VALUES (1,'route-001','RT-001','Clínicas → Hospital Maciel','Interhospitalario','Solo ida','Activa','Hospital de Clínicas','Av. Italia 2870, Montevideo','Hospital Maciel','25 de Mayo 174, Montevideo','[]',7.8,25,'Salida por el acceso de ambulancias. Coordinar la recepción con el equipo de destino.');
 INSERT INTO `gestion_ruta` VALUES (2,'route-002','RT-002','Circuito de rehabilitación','Tratamiento','Ida y vuelta','Activa','Hospital de Clínicas','Av. Italia 2870, Montevideo','Centro de rehabilitación','Av. 8 de Octubre 3250, Montevideo','[{\"name\":\"Policlínica La Unión\",\"address\":\"Larravide 2450, Montevideo\"}]',6.2,30,'Confirmar el punto de encuentro antes de la salida. Contemplar asistencia en el ascenso y descenso.');
 INSERT INTO `gestion_ruta` VALUES (3,'route-003','RT-003','Clínicas → Hospital Pasteur','Interhospitalario','Solo ida','Activa','Hospital de Clínicas','Av. Italia 2870, Montevideo','Hospital Pasteur','Larravide 2458, Montevideo','[]',4.5,18,'Ingreso por el acceso de traslados. Avisar al servicio receptor al iniciar el recorrido.');
@@ -696,6 +699,58 @@ VALUES
   (12, 1, 1, '2026-10-21', '10:30:00', '11:00:00', 'Control de neumonía', 'PROGRAMADO', NULL);
 
 -- =========================================================
+-- TRASLADOS DE AMBULANCIAS
+-- Usa las ambulancias, el personal, los destinos y los pacientes de Gestión.
+-- (Las tablas solicitud_traslado, traslado e historial_estado son el diseño anterior y la página ya no las usa.)
+-- =========================================================
+
+CREATE TABLE `gestion_traslado` (
+  `id_gestion_traslado` int(11) NOT NULL AUTO_INCREMENT,
+  `id_ambulancia` int(11) NOT NULL,
+  `id_chofer` int(11) NOT NULL COMMENT 'gestion_personal',
+  `id_acompanante` int(11) DEFAULT NULL COMMENT 'gestion_personal',
+  `id_origen` int(11) NOT NULL COMMENT 'gestion_destino',
+  `id_destino` int(11) NOT NULL COMMENT 'gestion_destino',
+  `id_gestion_paciente` int(11) DEFAULT NULL,
+  `tipo` varchar(20) NOT NULL COMMENT 'PACIENTE, EQUIPO o BIOLOGICO',
+  `motivo` varchar(100) NOT NULL,
+  `prioridad` varchar(20) NOT NULL COMMENT 'BAJA, NORMAL, ALTA o CRITICA',
+  `estado` varchar(20) NOT NULL DEFAULT 'ASIGNADO' COMMENT 'ASIGNADO, EN_CURSO, EN_DESTINO, FINALIZADO o CANCELADO',
+  `fecha_salida` datetime NOT NULL,
+  `llegada_estimada` datetime DEFAULT NULL,
+  `fecha_fin` datetime DEFAULT NULL COMMENT 'cuando se finalizó o canceló',
+  `opciones` varchar(300) DEFAULT NULL COMMENT 'Opciones adicionales marcadas, separadas por coma',
+  `notas` varchar(500) DEFAULT NULL,
+  `fecha_creacion` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id_gestion_traslado`),
+  KEY `idx_traslado_estado` (`estado`),
+  KEY `idx_traslado_ambulancia` (`id_ambulancia`),
+  KEY `idx_traslado_chofer` (`id_chofer`),
+  KEY `idx_traslado_acompanante` (`id_acompanante`),
+  KEY `idx_traslado_origen` (`id_origen`),
+  KEY `idx_traslado_destino` (`id_destino`),
+  KEY `idx_traslado_paciente` (`id_gestion_paciente`),
+  CONSTRAINT `fk_traslado_ambulancia` FOREIGN KEY (`id_ambulancia`) REFERENCES `ambulancia` (`id_ambulancia`) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT `fk_traslado_chofer` FOREIGN KEY (`id_chofer`) REFERENCES `gestion_personal` (`id_gestion_personal`) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT `fk_traslado_acompanante` FOREIGN KEY (`id_acompanante`) REFERENCES `gestion_personal` (`id_gestion_personal`) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT `fk_traslado_origen` FOREIGN KEY (`id_origen`) REFERENCES `gestion_destino` (`id_gestion_destino`) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT `fk_traslado_destino` FOREIGN KEY (`id_destino`) REFERENCES `gestion_destino` (`id_gestion_destino`) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT `fk_traslado_paciente` FOREIGN KEY (`id_gestion_paciente`) REFERENCES `gestion_paciente` (`id_gestion_paciente`) ON UPDATE CASCADE ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+
+INSERT INTO `gestion_traslado`
+  (`id_gestion_traslado`, `id_ambulancia`, `id_chofer`, `id_acompanante`, `id_origen`, `id_destino`, `id_gestion_paciente`,
+   `tipo`, `motivo`, `prioridad`, `estado`, `fecha_salida`, `llegada_estimada`, `fecha_fin`, `opciones`, `notas`, `fecha_creacion`)
+VALUES
+  (1, 1, 2, 3, 1, 2, 4, 'PACIENTE', 'Estudio o tratamiento', 'ALTA', 'EN_CURSO', '2026-10-15 09:30:00', '2026-10-15 10:00:00', NULL, 'Requiere equipamiento especial', 'Monitor cardíaco y oxígeno.', '2026-10-15 08:50:00'),
+  (2, 2, 5, NULL, 1, 7, NULL, 'EQUIPO', 'Traslado de insumos', 'NORMAL', 'ASIGNADO', '2026-10-15 16:00:00', '2026-10-15 16:20:00', NULL, NULL, 'Retirar el ecógrafo en recepción.', '2026-10-15 09:10:00'),
+  (3, 4, 6, NULL, 1, 3, NULL, 'BIOLOGICO', 'Traslado de insumos', 'ALTA', 'EN_DESTINO', '2026-10-15 11:00:00', '2026-10-15 11:25:00', NULL, NULL, 'Muestras refrigeradas.', '2026-10-15 10:30:00'),
+  (4, 6, 3, 2, 1, 4, 2, 'PACIENTE', 'Consulta médica', 'NORMAL', 'FINALIZADO', '2026-10-14 08:00:00', '2026-10-14 08:25:00', '2026-10-14 08:40:00', 'Acompañado por familiar', NULL, '2026-10-13 17:00:00'),
+  (5, 1, 2, NULL, 1, 6, 7, 'PACIENTE', 'Alta médica', 'BAJA', 'FINALIZADO', '2026-10-13 14:00:00', '2026-10-13 14:45:00', '2026-10-13 14:50:00', NULL, NULL, '2026-10-13 11:20:00'),
+  (6, 8, 5, NULL, 1, 2, NULL, 'EQUIPO', 'Traslado de insumos', 'NORMAL', 'FINALIZADO', '2026-10-12 10:00:00', '2026-10-12 10:30:00', '2026-10-12 10:35:00', NULL, NULL, '2026-10-12 08:00:00'),
+  (7, 2, 6, NULL, 1, 7, NULL, 'BIOLOGICO', 'Estudio o tratamiento', 'NORMAL', 'CANCELADO', '2026-10-12 15:00:00', '2026-10-12 15:20:00', '2026-10-12 13:00:00', NULL, 'Se canceló: el laboratorio reprogramó.', '2026-10-12 09:00:00');
+
+-- =========================================================
 -- VALORES AUTO_INCREMENT
 -- =========================================================
 
@@ -707,6 +762,7 @@ ALTER TABLE `gestion_personal` AUTO_INCREMENT = 8;
 ALTER TABLE `gestion_destino` AUTO_INCREMENT = 9;
 ALTER TABLE `gestion_ruta` AUTO_INCREMENT = 9;
 ALTER TABLE `turno` AUTO_INCREMENT = 13;
+ALTER TABLE `gestion_traslado` AUTO_INCREMENT = 8;
 ALTER TABLE `ruta` AUTO_INCREMENT = 4;
 ALTER TABLE `solicitud_traslado` AUTO_INCREMENT = 3;
 ALTER TABLE `carga_transportada` AUTO_INCREMENT = 4;

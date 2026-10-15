@@ -1,75 +1,136 @@
+// Detalle de un traslado (trace-view.html?id=3). Los datos vienen de php/traslados.php
 document.addEventListener('DOMContentLoaded', () => {
+  const API = '../php/traslados.php';
+  const id = new URLSearchParams(window.location.search).get('id');
   const detail = document.getElementById('transfer-detail');
-  const editForm = document.getElementById('edit-form');
-  const editDialog = document.getElementById('edit-dialog');
   const statusDialog = document.getElementById('status-dialog');
   const cancelDialog = document.getElementById('cancel-dialog');
   const statusSelect = document.getElementById('transfer-status');
   const message = document.getElementById('view-message');
-  const editableFields = ['ambulance', 'driver', 'origin', 'destination', 'patient', 'companion', 'reason', 'priority', 'notes'];
-  const statusLabels = { 'in-progress': 'En curso', arrived: 'En destino', completed: 'Finalizado', cancelled: 'Cancelado' };
-  // This view uses the site's sample transfer; retain edits only in this browser tab.
-  const storageKey = 'hospitalTransfer1View';
-  let transfer = { status: 'in-progress', finishedAt: '' };
-  editableFields.forEach((field) => {
-    transfer[field] = detail.querySelector(`[data-field="${field}"]`).textContent;
-  });
 
-  try {
-    const saved = JSON.parse(sessionStorage.getItem(storageKey));
-    if (saved && Object.hasOwn(statusLabels, saved.status) &&
-        editableFields.every((field) => typeof saved[field] === 'string' &&
-          saved[field].length <= (editForm.elements.namedItem(field).maxLength || 16) &&
-          (!editForm.elements.namedItem(field).required || saved[field].trim())) &&
-        ['Normal', 'Baja', 'Alta', 'Crítica'].includes(saved.priority) &&
-        typeof saved.finishedAt === 'string' &&
-        (!saved.finishedAt || Number.isFinite(Date.parse(saved.finishedAt)))) {
-      transfer = { ...transfer, ...saved };
-    }
-  } catch (error) {
-    // A restricted browser session can still use all controls without storage.
+  const ESTADOS = { ASIGNADO: 'Asignado', EN_CURSO: 'En curso', EN_DESTINO: 'En destino', FINALIZADO: 'Finalizado', CANCELADO: 'Cancelado' };
+  // data-status que usa el CSS del diseño original
+  const ESTILO = { ASIGNADO: 'in-progress', EN_CURSO: 'in-progress', EN_DESTINO: 'arrived', FINALIZADO: 'completed', CANCELADO: 'cancelled' };
+  const PASOS = { ASIGNADO: ['EN_CURSO'], EN_CURSO: ['EN_DESTINO', 'FINALIZADO'], EN_DESTINO: ['FINALIZADO'], FINALIZADO: [], CANCELADO: [] };
+  const TIPOS = { PACIENTE: 'Paciente', EQUIPO: 'Elemento o equipo', BIOLOGICO: 'Biológico' };
+  const PRIORIDADES = { BAJA: 'Baja', NORMAL: 'Normal', ALTA: 'Alta', CRITICA: 'Crítica' };
+  let transfer = null;
+
+  // "2026-10-15T09:30" → "15/10/2026 · 09:30"
+  const fechaHora = value => {
+    if (!value) return '—';
+    const [fecha, hora] = value.split('T');
+    return `${fecha.split('-').reverse().join('/')} · ${hora}`;
+  };
+  const minutos = (desde, hasta) => Math.round((new Date(hasta) - new Date(desde)) / 60000);
+  const duracion = total => total >= 60 ? `${Math.floor(total / 60)} h ${total % 60} min` : `${total} min`;
+
+  // Distancia en línea recta entre dos coordenadas (fórmula de Haversine)
+  function kilometros(lat1, lng1, lat2, lng2) {
+    const rad = Math.PI / 180;
+    const a = Math.sin((lat2 - lat1) * rad / 2) ** 2 +
+      Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin((lng2 - lng1) * rad / 2) ** 2;
+    return 6371 * 2 * Math.asin(Math.sqrt(a));
   }
 
-  function renderTransfer() {
-    editableFields.forEach((field) => {
-      detail.querySelectorAll(`[data-field="${field}"]`).forEach((element) => {
-        element.textContent = transfer[field] || '—';
-      });
+  function setField(name, value) {
+    detail.querySelectorAll(`[data-field="${name}"]`).forEach((element) => {
+      element.textContent = value === null || value === undefined || value === '' ? '—' : value;
     });
-    detail.dataset.status = transfer.status;
-    detail.dataset.priority = transfer.priority;
-    detail.querySelectorAll('[data-status-label]').forEach((element) => {
-      element.textContent = statusLabels[transfer.status];
-    });
-    const finished = transfer.status === 'completed' || transfer.status === 'cancelled';
-    document.getElementById('cancel-transfer').disabled = finished;
-    document.getElementById('update-status').disabled = finished;
-    document.getElementById('edit-transfer').disabled = finished;
-    document.getElementById('final-event-title').textContent = transfer.status === 'cancelled' ? 'Traslado cancelado' : 'Traslado finalizado';
-    document.getElementById('final-event-time').textContent = finished && transfer.finishedAt
-      ? new Intl.DateTimeFormat('es-UY', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date(transfer.finishedAt))
-      : 'Pendiente';
-    document.getElementById('final-event-description').textContent = transfer.status === 'cancelled'
-      ? 'El traslado fue cancelado.'
-      : transfer.status === 'completed' ? 'El traslado ha finalizado.' : 'Se finalizará al llegar al destino.';
-    document.getElementById('elapsed-time').textContent = finished ? '—' : '12 min';
-    const arrival = detail.querySelector('.timeline-estimated');
-    arrival.querySelector('strong').textContent = transfer.status === 'arrived' ? 'En destino' : 'Llegada estimada';
-    arrival.querySelector('p').textContent = transfer.status === 'arrived'
-      ? 'La ambulancia se encuentra en el destino.' : 'Tiempo previsto de llegada al destino.';
-    arrival.querySelector('time').hidden = transfer.status === 'arrived';
   }
 
-  function saveTransfer(nextTransfer, successMessage) {
-    transfer = nextTransfer;
-    let stored = true;
+  function timelineItem(className, title, time, text) {
+    return `<li class="${className}"><span class="timeline-dot" aria-hidden="true"></span><strong>${title}</strong>` +
+      `<span>${time}</span><p>${text}</p></li>`;
+  }
+
+  function render() {
+    const t = transfer;
+    document.title = `Traslado ${t.id} | Hospital de Clínicas`;
+    document.getElementById('transfer-title').textContent = `TRASLADO ${t.id}`;
+    detail.dataset.status = ESTILO[t.estado];
+    detail.dataset.priority = PRIORIDADES[t.prioridad];
+    detail.querySelectorAll('[data-status-label]').forEach((element) => { element.textContent = ESTADOS[t.estado]; });
+
+    setField('ambulance', t.matricula);
+    setField('model', t.modelo);
+    setField('created', `Creado el ${fechaHora(t.fecha_creacion).replace(' · ', ' a las ')}`);
+    setField('start', fechaHora(t.fecha_salida));
+    setField('origin', t.origen);
+    setField('destination', t.destino);
+    setField('driver', t.chofer);
+    setField('companion', t.acompanante);
+    setField('patient', t.paciente);
+    setField('age', t.paciente_edad);
+    setField('document', t.paciente_documento ? `CI ${t.paciente_documento}` : '');
+    setField('patientNotes', t.paciente_diagnostico);
+    setField('doctor', t.paciente_medico);
+    setField('reason', t.motivo);
+    setField('type', TIPOS[t.tipo]);
+    setField('priority', PRIORIDADES[t.prioridad]);
+    setField('options', t.opciones);
+    setField('notes', t.notas);
+
+    const conCoordenadas = [t.origen_lat, t.origen_lng, t.destino_lat, t.destino_lng].every(v => v !== null);
+    setField('distance', conCoordenadas
+      ? `${kilometros(+t.origen_lat, +t.origen_lng, +t.destino_lat, +t.destino_lng).toFixed(1).replace('.', ',')} km` : '');
+    setField('duration', t.llegada_estimada ? duracion(minutos(t.fecha_salida, t.llegada_estimada)) : '');
+    const enViaje = ['EN_CURSO', 'EN_DESTINO'].includes(t.estado);
+    document.getElementById('elapsed-time').textContent =
+      enViaje ? duracion(Math.max(0, minutos(t.fecha_salida, new Date()))) : '—';
+
+    // Línea de tiempo
+    const terminado = t.estado === 'FINALIZADO' || t.estado === 'CANCELADO';
+    document.getElementById('timeline').innerHTML = [
+      timelineItem('timeline-start', 'Traslado creado', fechaHora(t.fecha_creacion), 'Se registró el traslado.'),
+      timelineItem(t.estado === 'ASIGNADO' ? 'timeline-current' : 'timeline-start', 'Salida',
+        fechaHora(t.fecha_salida), `Desde ${t.origen}.`),
+      timelineItem(t.estado === 'EN_DESTINO' ? 'timeline-current' : 'timeline-estimated',
+        t.estado === 'EN_DESTINO' ? 'En destino' : 'Llegada estimada',
+        fechaHora(t.llegada_estimada), `A ${t.destino}.`),
+      timelineItem('timeline-final', t.estado === 'CANCELADO' ? 'Traslado cancelado' : 'Traslado finalizado',
+        terminado ? fechaHora(t.fecha_fin) : 'Pendiente',
+        terminado ? (t.estado === 'CANCELADO' ? 'El traslado fue cancelado.' : 'El traslado ha finalizado.') : 'Se finalizará al llegar al destino.')
+    ].join('');
+
+    // Un traslado terminado no se puede editar ni cambiar de estado
+    document.getElementById('cancel-transfer').disabled = terminado;
+    document.getElementById('update-status').disabled = terminado;
+    document.getElementById('edit-transfer').disabled = terminado;
+    document.getElementById('cancel-text').textContent =
+      `¿Deseas cancelar el traslado ${t.id}? Esta acción marcará el traslado como cancelado.`;
+    detail.hidden = false;
+  }
+
+  async function load() {
     try {
-      sessionStorage.setItem(storageKey, JSON.stringify(transfer));
+      const response = await fetch(`${API}?id=${encodeURIComponent(id || '')}`, { headers: { Accept: 'application/json' } });
+      const data = await response.json();
+      if (!response.ok || data.success !== true) throw new Error(data?.error?.message);
+      transfer = data.data;
+      render();
     } catch (error) {
-      stored = false;
+      detail.hidden = false;
+      document.getElementById('transfer-title').textContent = 'Traslado no encontrado';
+      message.textContent = error.message || 'No se pudo cargar el traslado.';
     }
-    renderTransfer();
-    message.textContent = successMessage + (stored ? ' En esta sesión.' : ' Solo en esta vista.');
+  }
+
+  async function changeStatus(estado, successMessage) {
+    try {
+      const response = await fetch(API, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ accion: 'estado', id: transfer.id, estado })
+      });
+      const data = await response.json();
+      if (!response.ok || data.success !== true) throw new Error(data?.error?.message);
+      message.textContent = successMessage;
+      await load();
+    } catch (error) {
+      message.textContent = error.message || 'No se pudo cambiar el estado.';
+    }
   }
 
   const dialogTriggers = new Map();
@@ -88,49 +149,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  document.getElementById('edit-transfer').addEventListener('click', (event) => {
-    editableFields.forEach((field) => { editForm.elements.namedItem(field).value = transfer[field]; });
-    document.getElementById('edit-message').textContent = '';
-    openDialog(editDialog, event.currentTarget);
-  });
-  editForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const nextTransfer = { ...transfer };
-    for (const field of editableFields) {
-      const control = editForm.elements.namedItem(field);
-      const value = control.value.trim();
-      if (control.required && !value) {
-        document.getElementById('edit-message').textContent = 'Completa los campos obligatorios.';
-        control.focus();
-        return;
-      }
-      nextTransfer[field] = value;
-    }
-    saveTransfer(nextTransfer, 'Cambios guardados.');
-    editDialog.close();
+  // Editar usa el mismo formulario que "Nuevo traslado"
+  document.getElementById('edit-transfer').addEventListener('click', () => {
+    window.location.href = `trace-new.html?id=${transfer.id}`;
   });
 
   document.getElementById('update-status').addEventListener('click', (event) => {
-    statusSelect.value = transfer.status;
-    // State changes only move forward through the transfer lifecycle.
-    statusSelect.querySelector('[value="in-progress"]').disabled = transfer.status === 'arrived';
+    // Solo se ofrecen los estados a los que se puede avanzar
+    statusSelect.querySelectorAll('option').forEach((option) => {
+      option.disabled = !PASOS[transfer.estado].includes(option.value);
+    });
+    statusSelect.value = PASOS[transfer.estado][0] || '';
     openDialog(statusDialog, event.currentTarget);
   });
   document.getElementById('status-form').addEventListener('submit', (event) => {
     event.preventDefault();
-    const status = statusSelect.value;
-    if (!Object.hasOwn(statusLabels, status) || status === 'cancelled' ||
-        (transfer.status === 'arrived' && status === 'in-progress')) return;
-    saveTransfer({ ...transfer, status, finishedAt: status === 'completed' ? new Date().toISOString() : '' }, 'Estado actualizado.');
     statusDialog.close();
+    changeStatus(statusSelect.value, 'Estado actualizado.');
   });
   document.getElementById('cancel-transfer').addEventListener('click', (event) => {
     openDialog(cancelDialog, event.currentTarget);
   });
   document.getElementById('cancel-form').addEventListener('submit', (event) => {
     event.preventDefault();
-    saveTransfer({ ...transfer, status: 'cancelled', finishedAt: new Date().toISOString() }, 'Traslado cancelado.');
     cancelDialog.close();
+    changeStatus('CANCELADO', 'Traslado cancelado.');
   });
 
   // Tabs keep every section accessible when the screen is too narrow for the grid.
@@ -184,5 +227,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   syncNavigation();
-  renderTransfer();
+  load();
 });

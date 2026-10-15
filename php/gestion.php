@@ -84,8 +84,11 @@ const MODULOS = [
             'type' => 'tipo',
             'phone' => 'telefono',
             'notes' => 'referencia',
-            'status' => 'estado'
-        ]
+            'status' => 'estado',
+            'lat' => 'latitud',
+            'lng' => 'longitud'
+        ],
+        'numeros' => ['lat', 'lng']
     ],
     'rutas' => [
         'tabla' => 'gestion_ruta',
@@ -174,6 +177,8 @@ function gestion_a_fila(array $objeto, array $modulo): array
 
         if (in_array($dato, $modulo['listas'] ?? [], true)) {
             $valor = json_encode(is_array($valor) ? $valor : [], JSON_UNESCAPED_UNICODE);
+        } elseif (in_array($dato, $modulo['numeros'] ?? [], true) && !is_numeric($valor)) {
+            $valor = null;
         } elseif (is_array($valor) || is_bool($valor)) {
             $valor = null;
         }
