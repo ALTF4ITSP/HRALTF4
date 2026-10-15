@@ -1,0 +1,7 @@
+# Desarrollo: el navegador siempre pregunta al servidor si hay una versión nueva
+# de las páginas, estilos y scripts (así no se ven versiones viejas después de un cambio).
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html|css|js|php)$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>
