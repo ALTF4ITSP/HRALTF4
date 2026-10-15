@@ -24,8 +24,6 @@ body {
     position: relative;
 }
 
-
-
 .app-shell {
     position: relative;
     width: min(100%, 1880px);
@@ -37,8 +35,6 @@ body {
     gap: 30px;
 }
 
-
-
 .sidebar {
     position: absolute;
     left: 42px;
@@ -48,19 +44,12 @@ body {
     border-radius: 30px;
     border: 1px solid rgba(238, 238, 238, 0.14);
     background: rgba(16, 23, 50, 0.38);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+
     overflow: hidden;
     display: flex;
     flex-direction: column;
     z-index: 50;
 
-    transition:
-        width 0.6s cubic-bezier(0.34, 1.35, 0.64, 1),
-        height 0.6s cubic-bezier(0.34, 1.35, 0.64, 1),
-        background 0.3s ease,
-        border-color 0.3s ease,
-        transform 0.22s ease;
 }
 
 .app-shell.menu-open .sidebar {
@@ -71,7 +60,7 @@ body {
 }
 
 .app-shell:not(.menu-open) .sidebar:hover {
-    transform: translateY(-2px);
+
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(238, 238, 238, 0.28);
 }
@@ -105,7 +94,6 @@ body {
     padding: 0;
     gap: 7px;
 
-    transition: background 0.2s ease;
 }
 
 .sidebar-action span {
@@ -114,9 +102,7 @@ body {
     height: 4px;
     border-radius: 2px;
     background: #eeeeee;
-    transition:
-        transform 0.4s cubic-bezier(0.34, 1.35, 0.64, 1),
-        opacity 0.3s ease;
+
 }
 
 .app-shell.menu-open .sidebar-action span:nth-child(1) {
@@ -145,16 +131,14 @@ body {
     opacity: 0;
     pointer-events: none;
     transform: translateY(-10px);
-    transition:
-        opacity 0.3s ease,
-        transform 0.4s cubic-bezier(0.34, 1.35, 0.64, 1);
+
 }
 
 .app-shell.menu-open .sidebar-nav {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
-    transition-delay: 0.1s;
+
 }
 
 .nav-indicator {
@@ -169,8 +153,6 @@ body {
     pointer-events: none;
     top: var(--indicator-top, 0px);
 
-
-    transition: top 0.4s cubic-bezier(0.34, 1.12, 0.64, 1);
 }
 
 .nav-item {
@@ -185,7 +167,7 @@ body {
     text-decoration: none;
     font-size: 1.05rem;
     border-radius: 16px;
-    transition: color 0.3s ease;
+
 }
 
 .nav-item img {
@@ -194,7 +176,7 @@ body {
     object-fit: contain;
     filter: brightness(0) invert(1);
     opacity: 0.6;
-    transition: opacity 0.3s ease;
+
 }
 
 .nav-item:hover {
@@ -218,8 +200,6 @@ body {
     flex-grow: 1;
 }
 
-
-
 .topbar {
     --search-expanded-width: min(580px, calc(100% - 440px));
     position: relative;
@@ -233,12 +213,7 @@ body {
     border-radius: 30px;
     border: 1px solid rgba(238, 238, 238, 0.18);
     background: rgba(16, 23, 50, 0.38);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
 
-    transition:
-        margin-left 0.6s cubic-bezier(0.34, 1.35, 0.64, 1),
-        width 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
 }
 
 .quick-search-topbar {
@@ -253,13 +228,8 @@ body {
     justify-content: center;
     cursor: pointer;
     color: #eeeeee;
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease;
+
 }
-
-
 
 .brand {
     display: flex;
@@ -275,9 +245,7 @@ body {
     letter-spacing: 0.035em;
     text-transform: uppercase;
     white-space: nowrap;
-    transition:
-        transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-        opacity 0.4s ease;
+
 }
 
 .topbar.search-active .brand {
@@ -291,8 +259,6 @@ body {
     filter: brightness(0) invert(1);
     opacity: 0.88;
 }
-
-
 
 .search-wrapper {
     position: absolute;
@@ -308,10 +274,7 @@ body {
     background: transparent;
     border: 1px solid transparent;
     overflow: hidden;
-    transition:
-        width 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-        background 0.3s ease,
-        border-color 0.3s ease;
+
 }
 
 .topbar.search-active .search-wrapper {
@@ -319,10 +282,7 @@ body {
     background: rgba(8, 12, 28, 0.55);
     border-color: rgba(238, 238, 238, 0.14);
     box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.25);
-    transition:
-        width 0.5s cubic-bezier(0.34, 1.35, 0.64, 1),
-        background 0.3s ease,
-        border-color 0.3s ease;
+
 }
 
 .search-input {
@@ -341,7 +301,7 @@ body {
     padding-right: 52px;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.25s ease;
+
 }
 
 .search-input::placeholder {
@@ -351,7 +311,7 @@ body {
 .topbar.search-active .search-input {
     opacity: 1;
     pointer-events: auto;
-    transition-delay: 0.15s;
+
 }
 
 .search-action {
@@ -395,8 +355,7 @@ body {
     border: 1px solid rgba(238, 238, 238, 0.18);
     border-radius: 24px;
     background: rgba(16, 23, 50, 0.97);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+
     box-shadow: 0 26px 65px rgba(0, 0, 0, 0.42);
     color: #eeeeee;
 }
@@ -406,20 +365,8 @@ body {
 }
 
 .search-results:not([hidden]) {
-    animation: search-results-in 0.32s cubic-bezier(0.25, 1, 0.5, 1) both;
+
     transform-origin: top right;
-}
-
-@keyframes search-results-in {
-    from {
-        opacity: 0;
-        transform: translateY(-12px) scale(0.97);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
 }
 
 .search-results-heading {
@@ -456,7 +403,7 @@ body {
     border-radius: 15px;
     color: #eeeeee;
     text-decoration: none;
-    transition: background 0.18s ease, border-color 0.18s ease;
+
 }
 
 a.search-result:hover,
@@ -547,14 +494,6 @@ a.search-result:focus-visible,
     border: 0;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .search-results:not([hidden]) {
-        animation: none;
-    }
-}
-
-
-
 .hero-panel {
     width: min(100%, 1080px);
     margin-left: 125px;
@@ -562,9 +501,6 @@ a.search-result:focus-visible,
     flex-direction: column;
     gap: 22px;
 
-    transition:
-        margin-left 0.6s cubic-bezier(0.34, 1.35, 0.64, 1),
-        width 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
 }
 
 .hero-copy {
@@ -591,8 +527,6 @@ a.search-result:focus-visible,
     color: rgba(238, 238, 238, 0.55);
 }
 
-
-
 .cards-grid {
     width: 100%;
     display: grid;
@@ -612,13 +546,11 @@ a.search-result:focus-visible,
     background: rgba(255, 255, 255, 0.025);
     border: 1px solid rgba(238, 238, 238, 0.13);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-    transition:
-        transform 0.25s ease,
-        background 0.25s ease;
+
 }
 
 .feature-card:hover {
-    transform: translateY(-3px);
+
     background: rgba(255, 255, 255, 0.035);
 }
 
@@ -676,10 +608,7 @@ a.search-result:focus-visible,
     display: flex;
     align-items: center;
     justify-content: center;
-    transition:
-        transform 0.22s ease,
-        background 0.22s ease,
-        border-color 0.22s ease;
+
 }
 
 .card-button::before {
@@ -692,12 +621,10 @@ a.search-result:focus-visible,
 }
 
 .card-button:hover {
-    transform: translateY(-2px);
+
     background: rgba(255, 255, 255, 0.07);
     border-color: rgba(238, 238, 238, 0.28);
 }
-
-
 
 .profile-wrapper {
     position: fixed;
@@ -720,27 +647,20 @@ a.search-result:focus-visible,
     border-radius: 28px;
     border: 1px solid rgba(238, 238, 238, 0.18);
     background: rgba(16, 23, 50, 0.55);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px) scale(0.85);
     transform-origin: bottom center;
-    transition:
-        opacity 0.25s ease,
-        transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
-        visibility 0.35s ease;
+
 }
 
 .profile-wrapper.profile-active .profile-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0) scale(1);
-    transition:
-        opacity 0.3s ease,
-        transform 0.5s cubic-bezier(0.34, 1.35, 0.64, 1),
-        visibility 0.5s ease;
+
 }
 
 .profile-menu-item {
@@ -751,11 +671,7 @@ a.search-result:focus-visible,
     background: transparent;
     border: none;
     cursor: pointer;
-    transition: transform 0.2s ease;
-}
 
-.profile-menu-item:hover {
-    transform: scale(1.1);
 }
 
 .profile-menu-item img {
@@ -779,13 +695,10 @@ a.search-result:focus-visible,
     border-radius: 50%;
     border: 1px solid rgba(238, 238, 238, 0.55);
     background: rgba(16, 23, 50, 0.45);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
     cursor: pointer;
-    transition:
-        transform 0.22s ease,
-        background 0.22s ease;
+
 }
 
 .profile-button::before {
@@ -814,11 +727,9 @@ a.search-result:focus-visible,
 
 .profile-button:hover,
 .profile-wrapper.profile-active .profile-button {
-    transform: translateY(-3px);
+
     background: rgba(255, 255, 255, 0.08);
 }
-
-
 
 @media (max-width: 1100px) {
     .quick-search-topbar {
@@ -872,8 +783,6 @@ a.search-result:focus-visible,
         height: 54px;
     }
 }
-
-
 
 @media (max-width: 770px) {
     .app-shell {
@@ -971,8 +880,6 @@ a.search-result:focus-visible,
         bottom: 12px;
     }
 }
-
-
 
 @media (max-width: 500px) {
     .app-shell {

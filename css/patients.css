@@ -56,15 +56,15 @@
   background: var(--patient-surface-dark);
   color: var(--patient-text);
   text-decoration: none;
-  transition: transform .24s ease, background-color .24s ease, border-color .24s ease, box-shadow .24s ease;
+
 }
 
 .summary-back:hover,
 .summary-back:focus-visible {
-  transform: translateY(-2px);
+
   border-color: var(--patient-accent);
   background: rgba(150, 163, 209, .18);
-  box-shadow: 0 7px 18px rgba(0, 0, 0, .2), 0 0 0 3px rgba(170, 191, 255, .07);
+
 }
 
 .summary-back:focus-visible {
@@ -208,7 +208,7 @@
   color: var(--patient-text);
   font-size: 11px !important;
   font-weight: 600 !important;
-  transition: background .2s ease, border-color .2s ease;
+
 }
 
 .new-patient-button:hover,
@@ -250,7 +250,7 @@
   border-radius: 11px;
   background: var(--patient-control);
   color: #eeeeee;
-  transition: transform .24s ease, border-color .24s ease, background-color .24s ease, box-shadow .24s ease;
+
 }
 
 .patient-search:hover {
@@ -258,12 +258,12 @@
   background: rgba(150, 163, 209, .07);
 }
 .patient-search:focus-within {
-  transform: translateY(-1px);
+
   border-color: var(--patient-accent);
   background: rgba(150, 163, 209, .1);
-  box-shadow: 0 0 0 3px rgba(170, 191, 255, .12);
+
 }
-.patient-search img { width: 15px; height: 15px; opacity: .7; transition: opacity .24s ease; }
+.patient-search img { width: 15px; height: 15px; opacity: .7;  }
 .patient-search:is(:hover, :focus-within) img { opacity: 1; }
 .patient-search input {
   width: 100%;
@@ -299,7 +299,7 @@
   color: #c6cbd9;
   font-size: 10px !important;
   white-space: nowrap;
-  transition: background .2s ease, border-color .2s ease;
+
 }
 .filter-button:last-child { border-right: 0; }
 .filter-button:hover { background: rgba(171, 186, 234, .11); }
@@ -330,7 +330,7 @@
   border: 1px solid var(--patient-line);
   border-radius: 11px;
   background: var(--patient-surface-dark);
-  transition: border-color .2s ease, background .2s ease;
+
 }
 
 .patient-row:hover { border-color: var(--patient-line-bright); background: rgba(255, 255, 255, .035); }
@@ -390,7 +390,7 @@
   border-radius: 50%;
   background: #111934;
   color: #eeeeee;
-  transition: background .2s ease, border-color .2s ease;
+
 }
 .row-action img,
 .icon-button img { width: 16px; height: 16px; }
@@ -423,22 +423,20 @@
   font-size: 10px;
 }
 .pagination span { border: 0; background: transparent; }
-.pagination button {
-  transition: transform .24s ease, border-color .24s ease, background-color .24s ease, box-shadow .24s ease, filter .24s ease;
-}
+
 .pagination button:not(:disabled):is(:hover, :focus-visible) {
-  transform: translateY(-2px);
+
   border-color: var(--patient-accent);
   background-color: rgba(171, 186, 234, .16);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .18), 0 0 0 2px rgba(170, 191, 255, .08);
+
 }
 .pagination button.is-active {
   border-color: #6689ef;
   background: #4b6dde url("../imagenes/special-bg.png") center / cover no-repeat;
   color: #fff;
 }
-.pagination button.is-active:is(:hover, :focus-visible) { filter: brightness(1.12); }
+
 .pagination button:disabled { opacity: .4; cursor: default; }
 
 .patient-workspace.has-selection::after {
@@ -464,7 +462,7 @@
   box-shadow: -18px 0 48px rgba(0, 0, 0, .28);
   visibility: hidden;
   transform: translateX(105%);
-  transition: transform .42s cubic-bezier(.2, .8, .2, 1), visibility .42s;
+
 }
 .has-selection .detail-panel { visibility: visible; transform: translateX(0); }
 .detail-heading { margin-bottom: 12px; }
@@ -524,7 +522,7 @@
   color: var(--patient-text);
   box-shadow: 0 30px 90px rgba(0, 0, 0, .5);
 }
-.patient-dialog::backdrop { background: rgba(5, 8, 22, .75); backdrop-filter: blur(5px); }
+.patient-dialog::backdrop { background: rgba(5, 8, 22, .75);  }
 .patient-dialog form { padding: 22px; }
 .patient-dialog .dialog-heading { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
 .patient-dialog h2 { margin: 0; font-size: 22px; }
@@ -545,7 +543,7 @@
 }
 .patient-form-section legend img { width: 16px; height: 16px; opacity: .8; }
 .form-section-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
-.dialog-fields label { min-width: 0; display: grid; gap: 7px; color: #d8ddea; font-size: 11px; font-weight: 600; transition: color .24s ease; }
+.dialog-fields label { min-width: 0; display: grid; gap: 7px; color: #d8ddea; font-size: 11px; font-weight: 600;  }
 .dialog-fields label:focus-within { color: var(--patient-accent); }
 .field-control {
   height: 40px;
@@ -557,7 +555,7 @@
   border: 1px solid var(--patient-line-bright);
   border-radius: 10px;
   background: var(--patient-control);
-  transition: border-color .24s ease, background-color .24s ease, box-shadow .24s ease;
+
 }
 .field-control img { width: 16px; height: 16px; opacity: .7; }
 .field-control input,
@@ -579,7 +577,7 @@
 .field-control:focus-within {
   border-color: var(--patient-accent);
   background-color: #17213f;
-  box-shadow: 0 0 0 3px rgba(170, 191, 255, .1);
+
 }
 .patient-dialog .field-control :is(input, select):focus-visible { outline: none; }
 .field-control input::placeholder { color: #818ca5; }
@@ -623,67 +621,48 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
 }
 
-.new-patient-button,
-.row-action,
-.icon-button,
-.cancel-button,
-.save-button,
-.delete-button {
-  transition: transform .24s cubic-bezier(.2, .8, .2, 1), background-color .24s ease,
-    border-color .24s ease, box-shadow .24s ease, color .24s ease;
-}
-
 .new-patient-button:is(:hover, :focus-visible),
 .row-action:is(:hover, :focus-visible),
 .cancel-button:is(:hover, :focus-visible) {
-  transform: translateY(-2px);
+
   border-color: var(--patient-accent);
   background-color: rgba(171, 186, 234, .15);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, .18), 0 0 0 3px rgba(170, 191, 255, .06);
+
 }
 
 .save-button:is(:hover, :focus-visible) {
-  transform: translateY(-2px);
+
   border-color: #fff;
   background-color: #fff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .2), 0 0 0 3px rgba(170, 191, 255, .14);
+
 }
 
 .patient-dialog .save-button:is(:hover, :focus-visible) {
   border-color: #6689ef;
   background-color: #4b6dde;
-  filter: brightness(1.12);
-  box-shadow: 0 5px 16px rgba(45, 72, 163, .25);
+
 }
 
 .icon-button img {
   filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
-  transition: filter .24s ease;
+
 }
 
 .icon-button:is(:hover, :focus-visible) {
-  transform: translateY(-2px);
+
   color: var(--patient-danger);
   border-color: rgba(251, 129, 149, .7);
   background-color: rgba(244, 63, 94, .12);
-  box-shadow: 0 5px 14px rgba(0, 0, 0, .18), 0 0 0 3px rgba(244, 63, 94, .07);
-}
 
-.icon-button:is(:hover, :focus-visible) img { filter: var(--patient-danger-icon); }
+}
 
 .detail-actions .cancel-button:is(:hover, :focus-visible),
 .delete-button:is(:hover, :focus-visible) {
-  transform: translateY(-2px);
+
   color: #ffadba;
   border-color: rgba(251, 129, 149, .75);
   background-color: rgba(244, 63, 94, .16);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, .2), 0 0 0 3px rgba(244, 63, 94, .08);
-}
 
-.summary-back:active,
-.patients-hero button:not(:disabled):active,
-.patient-dialog button:not(:disabled):active {
-  transform: translateY(0) scale(.98);
 }
 
 @media (max-width: 1100px) {
@@ -744,7 +723,3 @@
   .dialog-fields, .form-section-fields { grid-template-columns: 1fr; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .summary-back { transition: none; }
-  .patients-hero *, .patient-dialog * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
-}

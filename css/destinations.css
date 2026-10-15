@@ -40,9 +40,7 @@
   flex-direction: column;
   gap: 16px;
   min-width: 0;
-  transition:
-    width 0.6s cubic-bezier(0.34, 1.35, 0.64, 1),
-    margin-left 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
+
 }
 
 .app-shell.menu-open .destinations-layout {
@@ -97,11 +95,11 @@
   border: 1px solid var(--line-bright);
   border-radius: 16px;
   background: rgba(27, 36, 63, 0.48);
-  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+
 }
 
 .destinations-back:hover {
-  transform: translateY(-2px);
+
   border-color: rgba(171, 186, 234, 0.62);
   background-color: rgba(171, 186, 234, 0.12);
 }
@@ -136,7 +134,7 @@
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
-  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+
 }
 
 .filter-button.is-active {
@@ -150,21 +148,13 @@
   box-shadow: 0 8px 20px rgba(45, 72, 163, 0.18);
 }
 
-.toolbar-button:hover {
-  color: #fff;
-  background-color: rgba(65, 83, 127, 0.28);
-}
-
 .filter-button:not(.is-active):hover {
   color: #fff;
   background: rgba(171, 186, 234, 0.12);
-  box-shadow: inset 0 0 0 1px rgba(171, 186, 234, 0.32);
+
 }
 
-.filter-button.is-active:hover { filter: brightness(1.08); }
-
-.filter-button img,
-.toolbar-button img {
+.filter-button img {
   width: 24px;
   height: 24px;
   object-fit: contain;
@@ -196,7 +186,7 @@
   border: 1px solid var(--line);
   border-radius: 16px;
   background: rgba(8, 14, 31, 0.42);
-  transition: border-color 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+
 }
 
 .list-search:hover {
@@ -209,8 +199,7 @@
 .field-control:hover:focus-within {
   border-color: rgba(171, 186, 234, 0.64);
   background-color: rgba(255, 255, 255, 0.025);
-  box-shadow: 0 0 0 4px rgba(122, 145, 220, 0.08);
-  transform: translateY(-1px);
+
 }
 
 .list-search img {
@@ -238,24 +227,6 @@
   opacity: 1;
 }
 
-.toolbar-button {
-  min-width: 0;
-  width: clamp(176px, 14vw, 225px);
-  height: 55px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  padding: 0 14px;
-  border: 1px solid var(--line-bright);
-  border-radius: 16px;
-  background: rgba(27, 36, 63, 0.48);
-  color: #e9ebf2;
-  font-size: 14px;
-  white-space: nowrap;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
 .destinations-grid {
   flex: 1;
   min-height: 0;
@@ -274,14 +245,14 @@
   background: rgba(11, 18, 38, 0.59);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.015);
   overflow: hidden;
-  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+
 }
 
 .form-card:hover {
-  transform: translateY(-2px);
+
   border-color: rgba(169, 188, 229, 0.3);
   background: rgba(16, 25, 48, 0.68);
-  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.12);
+
 }
 
 .card-heading {
@@ -325,7 +296,6 @@
   font-size: 13px;
 }
 
-
 .destinations-table th:nth-child(1) { width: 31%; }
 .destinations-table th:nth-child(2) { width: 28%; }
 .destinations-table th:nth-child(3) { width: 15%; }
@@ -364,7 +334,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: background 0.2s ease, color 0.2s ease;
+
 }
 
 .destinations-table tbody tr:hover td {
@@ -402,7 +372,7 @@
   border: 1px solid var(--line);
   border-radius: 50%;
   background: rgba(10, 17, 34, 0.6);
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
 }
 
 .destination-avatar img {
@@ -412,7 +382,7 @@
 }
 
 .destinations-table tbody tr:hover .destination-avatar {
-  transform: scale(1.05);
+
   border-color: rgba(169, 188, 229, 0.4);
   background: rgba(40, 56, 96, 0.68);
 }
@@ -454,12 +424,12 @@
   border-radius: 7px;
   background: transparent;
   color: #fff;
-  transition: background 0.2s ease, transform 0.2s ease;
+
 }
 
 .row-action:hover {
   background: rgba(124, 148, 204, 0.18);
-  transform: translateY(-2px);
+
 }
 
 .row-action img {
@@ -513,8 +483,6 @@
   font-size: 17px;
 }
 
-.pagination button { transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease; }
-
 .pagination button:disabled {
   cursor: default;
   opacity: 0.45;
@@ -523,7 +491,7 @@
 .pagination button:not(:disabled):hover {
   border-color: rgba(169, 188, 229, 0.5);
   background: rgba(55, 76, 124, 0.46);
-  transform: translateY(-2px);
+
 }
 
 .page-number {
@@ -573,7 +541,7 @@
   border: 1px solid var(--line-bright);
   border-radius: 12px;
   background: rgba(8, 14, 30, 0.43);
-  transition: border-color 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+
 }
 
 .field-control:hover {
@@ -652,7 +620,7 @@
   height: 46px;
   border-radius: 12px;
   font-size: 14px;
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+
 }
 
 .cancel-button {
@@ -662,7 +630,7 @@
 }
 
 .cancel-button:hover {
-  transform: translateY(-2px);
+
   border-color: rgba(169, 188, 229, 0.45);
   background: rgba(57, 74, 112, 0.45);
 }
@@ -680,11 +648,6 @@
   background-size: cover;
   color: #fff;
   font-weight: 700 !important;
-}
-
-.save-button:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
 }
 
 .save-button img {
@@ -777,7 +740,7 @@
 
 @media (max-width: 1360px) {
   .destinations-toolbar { grid-template-columns: minmax(0, 1.75fr) minmax(340px, 1fr); }
-  .toolbar-button { width: 188px; }
+
   .destinations-grid { grid-template-columns: minmax(0, 1.75fr) minmax(340px, 1fr); }
   .destinations-card { padding-left: 18px; padding-right: 18px; }
   .destinations-table { min-width: 0; font-size: 11px; }
@@ -823,8 +786,7 @@
 @media (max-width: 650px) {
   .toolbar-right { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .list-search { grid-column: 1 / -1; width: 100%; }
-  .toolbar-button { width: 100%; min-height: 52px; font-size: 12px; gap: 7px; }
-  .toolbar-button img { width: 19px; height: 19px; }
+
   .status-filters { min-width: 0; }
   .destinations-table { min-width: 710px; }
 }
@@ -927,24 +889,3 @@
 .delete-button:hover { background: rgba(173, 51, 66, 0.4); }
 .delete-button img { width: 17px; height: 17px; filter: brightness(0) invert(1); opacity: 0.85; }
 
-
-@media (prefers-reduced-motion: reduce) {
-  .destinations-layout,
-  .destinations-card,
-  .destinations-back,
-  .filter-button,
-  .list-search,
-  .field-control,
-  .row-action,
-  .destination-avatar,
-  .form-actions button,
-  .pagination button { transition-duration: 0.01ms; }
-
-  .form-card:hover,
-  .destinations-back:hover,
-  .list-search:focus-within,
-  .field-control:focus-within,
-  .row-action:hover,
-  .form-actions button:hover,
-  .pagination button:not(:disabled):hover { transform: none; }
-}

@@ -17,16 +17,13 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    transition:
-        margin-left 0.6s cubic-bezier(0.34, 1.35, 0.64, 1),
-        width 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
+
 }
 
 .app-shell.menu-open .content-card {
     width: calc(100% - 280px);
     margin-left: 280px;
 }
-
 
 .content-card .topbar,
 .app-shell.menu-open .content-card .topbar {
@@ -42,8 +39,7 @@
     border: 1px solid rgba(238, 238, 238, 0.18);
     border-radius: 30px;
     background: rgba(16, 23, 50, 0.38);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -126,7 +122,7 @@ button {
 
 .settings-heading {
     min-width: 0;
-    transition: opacity 0.25s ease;
+
 }
 
 .settings-heading h1 {
@@ -154,15 +150,12 @@ button {
     font-weight: 400;
     line-height: 1.2;
     cursor: pointer;
-    transition:
-        color 0.24s ease,
-        transform 0.24s ease,
-        text-shadow 0.24s ease;
+
 }
 
 .settings-tab:hover {
     color: rgba(238, 238, 238, 0.86);
-    transform: translateY(-2px);
+
 }
 
 .settings-tab.active {
@@ -193,18 +186,12 @@ button {
     color: rgba(238, 238, 238, 0.58);
     background: transparent;
     cursor: pointer;
-    transition:
-        color 0.24s ease,
-        transform 0.24s ease;
+
 }
 
 .user-control:hover {
     color: #eeeeee;
-    transform: translateY(-2px);
-}
 
-.user-control:active {
-    transform: translateY(0) scale(0.98);
 }
 
 .user-avatar {
@@ -217,9 +204,7 @@ button {
     border: 2px solid rgba(238, 238, 238, 0.45);
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.025);
-    transition:
-        border-color 0.24s ease,
-        background 0.24s ease;
+
 }
 
 .user-control:hover .user-avatar {
@@ -251,7 +236,7 @@ button {
     font-size: 0.63rem;
     line-height: 0.72;
     color: rgba(238, 238, 238, 0.75);
-    transition: transform 0.28s ease;
+
 }
 
 .settings-panels {
@@ -261,18 +246,7 @@ button {
 
 .settings-panel {
     width: 100%;
-    animation: settings-panel-in 0.28s ease both;
-}
 
-@keyframes settings-panel-in {
-    from {
-        opacity: 0;
-        transform: translateY(9px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .general-panel {
@@ -323,11 +297,7 @@ button {
     background: rgba(8, 13, 32, 0.13);
     color: rgba(238, 238, 238, 0.74);
     font-size: 1.05rem;
-transition:
-        border-color 0.22s ease,
-        background-color 0.22s ease, /* Changed from background */
-        box-shadow 0.22s ease,
-        transform 0.22s ease;
+
 }
 
 .settings-field input::placeholder {
@@ -344,9 +314,8 @@ transition:
 .settings-field input:focus,
 .select-setting select:focus {
     border-color: rgba(171, 186, 234, 0.64);
-    background-color: rgba(255, 255, 255, 0.025); /* Changed from background */
-    box-shadow: 0 0 0 4px rgba(122, 145, 220, 0.08);
-    transform: translateY(-1px);
+    background-color: rgba(255, 255, 255, 0.025);
+
 }
 
 .specialties-group {
@@ -368,12 +337,7 @@ transition:
     color: rgba(238, 238, 238, 0.57);
     background: rgba(8, 13, 32, 0.1);
     cursor: pointer;
-    transition:
-        color 0.22s ease,
-        border-color 0.22s ease,
-        background 0.22s ease,
-        transform 0.22s ease,
-        box-shadow 0.22s ease;
+
 }
 
 .specialty-chip {
@@ -396,13 +360,7 @@ transition:
     color: #eeeeee;
     border-color: rgba(171, 186, 234, 0.42);
     background: rgba(255, 255, 255, 0.04);
-    box-shadow: 0 10px 20px rgba(3, 7, 21, 0.18);
-    transform: translateY(-3px);
-}
 
-.specialty-chip:active,
-.specialty-add:active {
-    transform: translateY(0) scale(0.98);
 }
 
 .general-divider {
@@ -432,24 +390,14 @@ transition:
     font-size: 0.95rem;
     font-weight: 700;
     letter-spacing: 0.015em;
-    transition:
-        color 0.24s ease,
-        border-color 0.24s ease,
-        background 0.24s ease,
-        transform 0.24s ease,
-        box-shadow 0.24s ease;
+
 }
 
 .upload-box:hover {
     color: rgba(238, 238, 238, 0.84);
     border-color: rgba(171, 186, 234, 0.58);
     background: rgba(255, 255, 255, 0.025);
-    box-shadow: 0 15px 30px rgba(3, 7, 21, 0.16);
-    transform: translateY(-3px);
-}
 
-.upload-box:active {
-    transform: translateY(0) scale(0.99);
 }
 
 .upload-icon {
@@ -498,7 +446,7 @@ transition:
     border-radius: 999px;
     background: transparent;
     cursor: pointer;
-    transition: transform 0.22s ease;
+
 }
 
 .toggle::before {
@@ -511,7 +459,7 @@ transition:
     border-radius: 999px;
     background: rgba(238, 238, 238, 0.72);
     transform: translateY(-50%);
-    transition: background 0.24s ease;
+
 }
 
 .toggle-knob {
@@ -524,23 +472,12 @@ transition:
     background: #d04a4a;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
     transform: translateX(34px);
-    transition:
-        transform 0.36s cubic-bezier(0.34, 1.35, 0.64, 1),
-        background 0.24s ease,
-        box-shadow 0.24s ease;
+
 }
 
 .toggle.is-on .toggle-knob {
     background: #00c675;
     transform: translateX(0);
-}
-
-.toggle:hover .toggle-knob {
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
-}
-
-.toggle:active {
-    transform: translateY(0) scale(0.97);
 }
 
 .privacy-panel {
@@ -610,9 +547,7 @@ transition:
     height: 100%;
     background: #00c675;
     clip-path: polygon(0 0, 100% 0, 84% 100%, 0 100%);
-    transition:
-        transform 0.42s cubic-bezier(0.34, 1.2, 0.64, 1),
-        clip-path 0.32s ease;
+
 }
 
 .theme-switch[data-theme="light"] .theme-highlight {
@@ -632,18 +567,12 @@ transition:
     background: transparent;
     color: rgba(238, 238, 238, 0.6);
     cursor: pointer;
-    transition:
-        color 0.24s ease,
-        transform 0.22s ease;
+
 }
 
 .theme-option:hover {
     color: #eeeeee;
-    transform: translateY(-2px);
-}
 
-.theme-option:active {
-    transform: translateY(0) scale(0.95);
 }
 
 .theme-option img {
@@ -692,22 +621,13 @@ transition:
     cursor: pointer;
     font-size: 1.18rem;
     font-weight: 700;
-    transition:
-        filter 0.22s ease,
-        border-color 0.22s ease,
-        box-shadow 0.22s ease,
-        transform 0.22s ease;
+
 }
 
 .reset-password:hover {
-    filter: brightness(1.1);
-    border-color: rgba(238, 238, 238, 0.62);
-    box-shadow: 0 16px 30px rgba(5, 16, 62, 0.34);
-    transform: translateY(-3px);
-}
 
-.reset-password:active {
-    transform: translateY(0) scale(0.985);
+    border-color: rgba(238, 238, 238, 0.62);
+
 }
 
 @media (max-width: 1300px) {
@@ -885,26 +805,6 @@ transition:
 
     .reset-password {
         font-size: 1rem;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .settings-panel,
-    .settings-tab,
-    .user-control,
-    .user-arrows,
-    .settings-field input,
-    .select-setting select,
-    .specialty-chip,
-    .specialty-add,
-    .upload-box,
-    .toggle,
-    .toggle-knob,
-    .theme-highlight,
-    .theme-option,
-    .reset-password {
-        animation: none;
-        transition-duration: 0.01ms;
     }
 }
 

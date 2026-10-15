@@ -56,15 +56,15 @@
   background: var(--ambulance-surface-dark);
   color: var(--ambulance-text);
   text-decoration: none;
-  transition: transform .24s ease, background-color .24s ease, border-color .24s ease, box-shadow .24s ease;
+
 }
 
 .summary-back:hover,
 .summary-back:focus-visible {
-  transform: translateY(-2px);
+
   border-color: var(--ambulance-accent);
   background: rgba(150, 163, 209, .18);
-  box-shadow: 0 7px 18px rgba(0, 0, 0, .2), 0 0 0 3px rgba(170, 191, 255, .07);
+
 }
 
 .summary-back:focus-visible {
@@ -208,7 +208,7 @@
   color: var(--ambulance-text);
   font-size: 11px !important;
   font-weight: 600 !important;
-  transition: background .2s ease, border-color .2s ease;
+
 }
 
 .new-ambulance-button:hover,
@@ -250,7 +250,7 @@
   border-radius: 11px;
   background: var(--ambulance-control);
   color: #eeeeee;
-  transition: transform .24s ease, border-color .24s ease, background-color .24s ease, box-shadow .24s ease;
+
 }
 
 .ambulance-search:hover {
@@ -258,12 +258,12 @@
   background: rgba(150, 163, 209, .07);
 }
 .ambulance-search:focus-within {
-  transform: translateY(-1px);
+
   border-color: var(--ambulance-accent);
   background: rgba(150, 163, 209, .1);
-  box-shadow: 0 0 0 3px rgba(170, 191, 255, .12);
+
 }
-.ambulance-search img { width: 15px; height: 15px; opacity: .7; transition: opacity .24s ease; }
+.ambulance-search img { width: 15px; height: 15px; opacity: .7;  }
 .ambulance-search:is(:hover, :focus-within) img { opacity: 1; }
 .ambulance-search input {
   width: 100%;
@@ -299,7 +299,7 @@
   color: #c6cbd9;
   font-size: 10px !important;
   white-space: nowrap;
-  transition: background .2s ease, border-color .2s ease;
+
 }
 .filter-button:last-child { border-right: 0; }
 .filter-button:hover { background: rgba(171, 186, 234, .11); }
@@ -330,7 +330,7 @@
   border: 1px solid var(--ambulance-line);
   border-radius: 11px;
   background: var(--ambulance-surface-dark);
-  transition: border-color .2s ease, background .2s ease;
+
 }
 
 .ambulance-row:hover { border-color: var(--ambulance-line-bright); background: rgba(255, 255, 255, .035); }
@@ -387,7 +387,7 @@
   border-radius: 50%;
   background: #111934;
   color: #eeeeee;
-  transition: background .2s ease, border-color .2s ease;
+
 }
 .row-action img,
 .icon-button img { width: 16px; height: 16px; }
@@ -420,22 +420,20 @@
   font-size: 10px;
 }
 .pagination span { border: 0; background: transparent; }
-.pagination button {
-  transition: transform .24s ease, border-color .24s ease, background-color .24s ease, box-shadow .24s ease, filter .24s ease;
-}
+
 .pagination button:not(:disabled):is(:hover, :focus-visible) {
-  transform: translateY(-2px);
+
   border-color: var(--ambulance-accent);
   background-color: rgba(171, 186, 234, .16);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .18), 0 0 0 2px rgba(170, 191, 255, .08);
+
 }
 .pagination button.is-active {
   border-color: #6689ef;
   background: #4b6dde url("../imagenes/special-bg.png") center / cover no-repeat;
   color: #fff;
 }
-.pagination button.is-active:is(:hover, :focus-visible) { filter: brightness(1.12); }
+
 .pagination button:disabled { opacity: .4; cursor: default; }
 
 .ambulance-workspace.has-selection::after {
@@ -461,7 +459,7 @@
   box-shadow: -18px 0 48px rgba(0, 0, 0, .28);
   visibility: hidden;
   transform: translateX(105%);
-  transition: transform .42s cubic-bezier(.2, .8, .2, 1), visibility .42s;
+
 }
 .has-selection .detail-panel { visibility: visible; transform: translateX(0); }
 .detail-heading { margin-bottom: 12px; }
@@ -504,14 +502,14 @@
   color: var(--ambulance-text);
   box-shadow: 0 30px 90px rgba(0, 0, 0, .5);
 }
-.ambulance-dialog::backdrop { background: rgba(5, 8, 22, .75); backdrop-filter: blur(5px); }
+.ambulance-dialog::backdrop { background: rgba(5, 8, 22, .75);  }
 .ambulance-dialog form { padding: 22px; }
 .ambulance-dialog .dialog-heading { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
 .ambulance-dialog .eyebrow { margin: 0 0 4px; color: var(--ambulance-accent); font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
 .ambulance-dialog h2 { margin: 0; font-size: 22px; }
 .ambulance-dialog .dialog-heading p:last-child { margin: 7px 0 0; color: var(--ambulance-muted); font-size: 12px; line-height: 1.5; }
 .dialog-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; max-height: 58vh; overflow-y: auto; padding: 5px; margin: 17px -5px 0; scrollbar-width: thin; scrollbar-color: var(--ambulance-line-bright) transparent; }
-.dialog-fields label { min-width: 0; display: grid; gap: 7px; color: #d8ddea; font-size: 11px; font-weight: 600; transition: color .24s ease; }
+.dialog-fields label { min-width: 0; display: grid; gap: 7px; color: #d8ddea; font-size: 11px; font-weight: 600;  }
 .dialog-fields label:focus-within { color: var(--ambulance-accent); }
 .field-control {
   height: 40px;
@@ -523,7 +521,7 @@
   border: 1px solid var(--ambulance-line-bright);
   border-radius: 10px;
   background: var(--ambulance-control);
-  transition: border-color .24s ease, background-color .24s ease, box-shadow .24s ease;
+
 }
 .field-control img { width: 16px; height: 16px; opacity: .7; }
 .field-control input,
@@ -545,7 +543,7 @@
 .field-control:focus-within {
   border-color: var(--ambulance-accent);
   background-color: #17213f;
-  box-shadow: 0 0 0 3px rgba(170, 191, 255, .1);
+
 }
 .ambulance-dialog .field-control :is(input, select):focus-visible { outline: none; }
 .field-control input::placeholder { color: #818ca5; }
@@ -567,7 +565,6 @@
 .save-button:hover { background: #fff; }
 .ambulance-dialog .save-button { border-color: #6689ef; background: #4b6dde url("../imagenes/special-bg.png") center / cover no-repeat; color: #fff; }
 .ambulance-dialog .save-button img { width: 15px; height: 15px; filter: brightness(0) invert(1); }
-
 
 /* Desktop mockup: keep the patient page's proportions without mobile layouts. */
 .ambulances-page { min-width: 1100px; overflow-x: auto; }
@@ -602,77 +599,48 @@
 .ambulance-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100; padding: 13px 20px; border: 1px solid var(--ambulance-line-bright); border-radius: 12px; background: #111934; color: var(--ambulance-text); font-size: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, .25); }
 
 /* Consistent hover, keyboard focus, and pressed feedback. */
-.new-ambulance-button,
-.row-action,
-.icon-button,
-.cancel-button,
-.save-button,
-.delete-button {
-  transition: transform .24s cubic-bezier(.2, .8, .2, 1), background-color .24s ease,
-    border-color .24s ease, box-shadow .24s ease, color .24s ease;
-}
 
 .new-ambulance-button:is(:hover, :focus-visible),
 .row-action:is(:hover, :focus-visible),
 .cancel-button:is(:hover, :focus-visible) {
-  transform: translateY(-2px);
+
   border-color: var(--ambulance-accent);
   background-color: rgba(171, 186, 234, .15);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, .18), 0 0 0 3px rgba(170, 191, 255, .06);
+
 }
 
 .save-button:is(:hover, :focus-visible) {
-  transform: translateY(-2px);
+
   border-color: #fff;
   background-color: #fff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .2), 0 0 0 3px rgba(170, 191, 255, .14);
+
 }
 
 .ambulance-dialog .save-button:is(:hover, :focus-visible) {
   border-color: #6689ef;
   background-color: #4b6dde;
-  filter: brightness(1.12);
-  box-shadow: 0 5px 16px rgba(45, 72, 163, .25);
+
 }
 
 .icon-button img {
   filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
-  transition: filter .24s ease;
+
 }
 
 .icon-button:is(:hover, :focus-visible) {
-  transform: translateY(-2px);
+
   color: var(--ambulance-danger);
   border-color: rgba(251, 129, 149, .7);
   background-color: rgba(244, 63, 94, .12);
-  box-shadow: 0 5px 14px rgba(0, 0, 0, .18), 0 0 0 3px rgba(244, 63, 94, .07);
-}
 
-.icon-button:is(:hover, :focus-visible) img,
-.detail-actions .cancel-button img { filter: var(--ambulance-danger-icon); }
+}
 
 .detail-actions .cancel-button:is(:hover, :focus-visible),
 .delete-button:is(:hover, :focus-visible) {
-  transform: translateY(-2px);
+
   color: #ffadba;
   border-color: rgba(251, 129, 149, .75);
   background-color: rgba(244, 63, 94, .16);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, .2), 0 0 0 3px rgba(244, 63, 94, .08);
+
 }
 
-.summary-back:active,
-.ambulances-hero button:not(:disabled):active,
-.ambulance-dialog button:not(:disabled):active {
-  transform: translateY(0) scale(.98);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .summary-back,
-  .ambulances-hero button,
-  .ambulance-search,
-  .ambulance-search img,
-  .ambulance-dialog button,
-  .ambulance-dialog .icon-button img,
-  .dialog-fields :is(label, input, select),
-  .field-control { transition: none; }
-}

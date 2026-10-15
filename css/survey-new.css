@@ -3,7 +3,7 @@
   color: rgba(171, 186, 234, 0.76);
   font-size: 0.92rem;
   text-decoration: none;
-  transition: color 0.2s ease;
+
 }
 
 .back-link:hover {
@@ -66,9 +66,7 @@
   color: rgba(238, 238, 238, 0.9);
   font: inherit;
   font-size: 0.92rem;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+
 }
 
 .survey-field input,
@@ -87,7 +85,7 @@
 
 .survey-form :is(input, select, textarea):focus {
   border-color: rgba(171, 186, 234, 0.52);
-  box-shadow: 0 0 0 3px rgba(171, 186, 234, 0.16);
+
 }
 
 .survey-form ::placeholder {
@@ -148,7 +146,7 @@
   border-radius: 10px;
   background: transparent;
   cursor: pointer;
-  transition: background 0.2s ease;
+
 }
 
 .remove-question:hover {
@@ -171,9 +169,7 @@
   color: #abbaea;
   font: inherit;
   cursor: pointer;
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease;
+
 }
 
 .add-question:hover {

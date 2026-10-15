@@ -17,9 +17,7 @@
   display: flex;
   flex-direction: column;
   gap: clamp(18px, 2.4vh, 24px);
-  transition:
-    width 0.6s cubic-bezier(0.34, 1.35, 0.64, 1),
-    margin-left 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
+
 }
 
 .app-shell.menu-open .management-panel {
@@ -86,18 +84,14 @@
   grid-template-columns: var(--management-icon-size) minmax(0, 1fr) var(--management-arrow-size);
   align-items: center;
   gap: clamp(16px, 1.5vw, 24px);
-  transition:
-    transform 0.24s ease,
-    border-color 0.24s ease,
-    background 0.24s ease,
-    box-shadow 0.24s ease;
+
 }
 
 .management-card:hover {
-  transform: translateY(-3px);
+
   border-color: rgba(238, 238, 238, 0.22);
   background: rgba(255, 255, 255, 0.045);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+
 }
 
 .management-card__icon {
@@ -163,11 +157,7 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition:
-    transform 0.24s ease,
-    background 0.24s ease,
-    border-color 0.24s ease,
-    box-shadow 0.24s ease;
+
 }
 
 .management-card__arrow img {
@@ -178,23 +168,20 @@
   pointer-events: none;
   filter: brightness(0) invert(1);
   transform: rotate(90deg);
-  transition:
-    filter 0.24s ease,
-    opacity 0.24s ease;
+
 }
 
 .management-card__arrow:hover {
-  transform: translateY(-2px);
+
   border-color: rgba(171, 186, 234, 0.55);
   background: rgba(171, 186, 234, 0.1);
-  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.18);
+
 }
 
 .management-card__arrow:hover img,
 .management-card__arrow:focus-visible img {
   opacity: 1;
-  filter: brightness(0) saturate(100%) invert(77%) sepia(11%) saturate(1478%) hue-rotate(189deg) brightness(97%)
-    contrast(96%);
+
 }
 
 .management-card__arrow:focus-visible {
@@ -202,10 +189,6 @@
   outline-offset: 3px;
   border-color: rgba(171, 186, 234, 0.55);
   background: rgba(171, 186, 234, 0.1);
-}
-
-.management-card__arrow:active {
-  transform: translateY(0);
 }
 
 @media (max-width: 1100px) {
@@ -285,10 +268,3 @@
 
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .management-panel,
-  .management-card,
-  .management-card__arrow {
-    transition: none;
-  }
-}

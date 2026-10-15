@@ -62,9 +62,6 @@
 }
 
 /* Tonos oscuros para que el mapa combine con el sitio */
-#transferMap .leaflet-tile-pane {
-  filter: invert(1) hue-rotate(200deg) brightness(0.9) saturate(0.6);
-}
 
 .map-legend {
   position: absolute;
@@ -167,15 +164,6 @@
 }
 
 /* Ventanita que se abre al tocar un recorrido */
-.leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-  background: #121a3a;
-  color: #eeeeee;
-}
-
-.leaflet-popup-content a {
-  color: #abbaea;
-}
 
 .ambulance-marker span {
   width: 30px;

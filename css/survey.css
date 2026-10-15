@@ -40,14 +40,7 @@
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition:
-    filter 0.2s ease,
-    transform 0.2s ease;
-}
 
-.survey-button:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
 }
 
 .survey-button.secondary {
@@ -140,7 +133,7 @@
   align-items: center;
   gap: 14px;
   border-bottom: 1px solid rgba(238, 238, 238, 0.1);
-  transition: background 0.2s ease;
+
 }
 
 .survey-row:last-child {
@@ -211,7 +204,7 @@
   font-size: 0.78rem;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.2s ease;
+
 }
 
 .survey-link:hover {

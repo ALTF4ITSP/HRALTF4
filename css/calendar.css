@@ -37,14 +37,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    filter 0.2s ease,
-    transform 0.2s ease;
-}
 
-.cal-button:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
 }
 
 .cal-button.secondary {
@@ -210,12 +203,12 @@
   line-height: 1.25;
   text-align: left;
   cursor: pointer;
-  transition: filter 0.2s ease;
+
 }
 
 .cal-turn:hover,
 .cal-turn:focus-visible {
-  filter: brightness(1.2);
+
   z-index: 2;
 }
 
@@ -317,7 +310,7 @@
 
 .cal-field :is(input, select, textarea):focus {
   border-color: rgba(171, 186, 234, 0.52);
-  box-shadow: 0 0 0 3px rgba(171, 186, 234, 0.16);
+
 }
 
 .cal-field select option {

@@ -28,7 +28,7 @@
   flex-direction: column;
   gap: 16px;
   min-width: 0;
-  transition: width .6s cubic-bezier(.34, 1.35, .64, 1), margin-left .6s cubic-bezier(.34, 1.35, .64, 1);
+
 }
 .app-shell.menu-open .routes-layout { width: calc(100% - 280px); margin-left: 280px; }
 .routes-layout .topbar, .app-shell.menu-open .routes-layout .topbar { width: 100%; margin-left: 0; flex: none; }
@@ -152,12 +152,12 @@
 .detail-actions .save-button { flex: 1; max-width: 210px; }
 .detail-actions .danger-button { min-height: 36px; gap: 7px; padding: 0 12px; border-color: rgba(150, 163, 209, .3); border-radius: 9px; background: rgba(27, 36, 63, .48); color: var(--route-detail-danger); font-size: 11px !important; font-weight: 400 !important; }
 .detail-actions .danger-button img { width: 18px; height: 18px; filter: var(--route-detail-danger-icon); }
-.detail-actions .danger-button:is(:hover, :focus-visible) { transform: translateY(-2px); color: #ffadba; border-color: rgba(251, 129, 149, .75); background-color: rgba(244, 63, 94, .16); box-shadow: 0 6px 16px rgba(0, 0, 0, .2), 0 0 0 3px rgba(244, 63, 94, .08); }
+.detail-actions .danger-button:is(:hover, :focus-visible) {  color: #ffadba; border-color: rgba(251, 129, 149, .75); background-color: rgba(244, 63, 94, .16);  }
 .detail-placeholder { height: 100%; min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--route-muted); font-size: 12px; line-height: 1.6; }
 .detail-placeholder h2 { font-size: 16px; color: var(--route-text); }
 
 .route-dialog { width: min(760px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); padding: 0; border: 1px solid var(--route-line-bright); border-radius: 22px; color: var(--route-text); background: #101a33; box-shadow: 0 35px 100px rgba(0, 0, 0, .5); overflow: hidden; }
-.route-dialog::backdrop { background: rgba(1, 5, 17, .72); backdrop-filter: blur(6px); }
+.route-dialog::backdrop { background: rgba(1, 5, 17, .72);  }
 .route-dialog form { display: flex; flex-direction: column; max-height: calc(100dvh - 42px); }
 .dialog-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 23px 26px 20px; border-bottom: 1px solid var(--route-line); flex: none; }
 .dialog-heading h2 { margin: 6px 0 7px; font-size: 23px; font-weight: 600; }
@@ -207,22 +207,20 @@
 .delete-content .danger-button { background: rgba(241, 83, 91, .17); }
 .route-toast { position: fixed; left: 50%; bottom: 22px; z-index: 100; transform: translateX(-50%); max-width: calc(100vw - 30px); width: max-content; padding: 13px 20px; border: 1px solid var(--route-line-bright); border-radius: 12px; color: var(--route-text); background: #101a33; box-shadow: 0 12px 32px rgba(0, 0, 0, .3); font-size: 12px; }
 
-.routes-back, .routes-content button, .route-dialog button, .route-search, .sort-control, .form-section :is(input, select, textarea) { transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease; }
-.routes-back:hover, .icon-button:not(:disabled):hover { border-color: rgba(171, 186, 234, .62); background-color: rgba(171, 186, 234, .12); transform: translateY(-2px); }
-.route-dialog .icon-button[data-close-form]:is(:hover, :focus-visible) { color: var(--route-danger); border-color: rgba(241, 83, 91, .6); background-color: rgba(241, 83, 91, .14); transform: translateY(-2px); }
-.route-dialog .icon-button[data-close-form]:is(:hover, :focus-visible) img { filter: brightness(0) saturate(100%) invert(48%) sepia(59%) saturate(1337%) hue-rotate(323deg) brightness(97%) contrast(94%); }
-.secondary-button:hover { border-color: rgba(169, 188, 229, .45); background: rgba(57, 74, 112, .45); transform: translateY(-2px); }
-.pagination button:not(:disabled):not(.is-active):hover { border-color: rgba(169, 188, 229, .5); background: rgba(55, 76, 124, .46); transform: translateY(-2px); }
-.pagination button.is-active:hover, .filter-button.is-active:hover { filter: brightness(1.08); }
+.routes-back:hover, .icon-button:not(:disabled):hover { border-color: rgba(171, 186, 234, .62); background-color: rgba(171, 186, 234, .12);  }
+.route-dialog .icon-button[data-close-form]:is(:hover, :focus-visible) { color: var(--route-danger); border-color: rgba(241, 83, 91, .6); background-color: rgba(241, 83, 91, .14);  }
+
+.secondary-button:hover { border-color: rgba(169, 188, 229, .45); background: rgba(57, 74, 112, .45);  }
+.pagination button:not(:disabled):not(.is-active):hover { border-color: rgba(169, 188, 229, .5); background: rgba(55, 76, 124, .46);  }
+
 .route-card:hover { border-color: rgba(169, 188, 229, .4); background-color: rgba(74, 98, 153, .14); }
-.filter-button:not(.is-active):hover { color: #fff; background: rgba(171, 186, 234, .12); box-shadow: inset 0 0 0 1px rgba(171, 186, 234, .32); }
-.primary-button:hover { border-color: rgba(169, 188, 229, .45); background: rgba(65, 83, 127, .28); transform: translateY(-1px); }
-.save-button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.filter-button:not(.is-active):hover { color: #fff; background: rgba(171, 186, 234, .12);  }
+.primary-button:hover { border-color: rgba(169, 188, 229, .45); background: rgba(65, 83, 127, .28);  }
+
 .danger-button:hover { border-color: rgba(241, 83, 91, .6); background: rgba(241, 83, 91, .14); }
 .add-stop-button:not(:disabled):hover { border-color: var(--route-accent); background: rgba(171, 186, 234, .12); }
 .route-search:hover, .sort-control:hover, .form-section :is(input, select, textarea):hover { border-color: rgba(169, 188, 229, .43); background-color: rgba(19, 29, 55, .56); }
-.route-search:focus-within, .sort-control:focus-within, .form-section :is(input, select, textarea):focus { border-color: rgba(171, 186, 234, .64); background-color: rgba(255, 255, 255, .025); box-shadow: 0 0 0 4px rgba(122, 145, 220, .08); }
-.sort-control:is(:hover, :focus-within) { transform: translateY(-1px); }
+.route-search:focus-within, .sort-control:focus-within, .form-section :is(input, select, textarea):focus { border-color: rgba(171, 186, 234, .64); background-color: rgba(255, 255, 255, .025);  }
 
 @media (max-width: 1250px) {
   .routes-workspace { grid-template-columns: minmax(0, 1.2fr) minmax(325px, 1fr); gap: 13px; }
@@ -326,6 +324,4 @@
   .route-directory { padding-top: 15px; }
   .route-search { margin-top: 13px; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .routes-layout, .routes-content *, .route-dialog * { transition: none !important; scroll-behavior: auto !important; }
-}
+

@@ -71,13 +71,11 @@
   font-weight: 700;
   text-align: left;
   cursor: pointer;
-  transition:
-    transform 0.22s ease,
-    background 0.22s ease;
+
 }
 
 .staff-action:hover {
-  transform: translateY(-2px);
+
   background: rgba(255, 255, 255, 0.055);
 }
 
@@ -183,18 +181,14 @@
   border-radius: 20px;
   background: rgba(8, 12, 28, 0.34);
   text-align: center;
-  transition:
-    transform 0.22s ease,
-    background 0.22s ease,
-    border-color 0.22s ease;
+
 }
 
 .document-folder-card:hover {
-  transform: translateY(-3px);
+
   border-color: rgba(238, 238, 238, 0.22);
   background: rgba(255, 255, 255, 0.045);
 }
-
 
 .more-options {
   position: absolute;
@@ -209,14 +203,13 @@
   padding: 4px 8px;
   border-radius: 6px;
   z-index: 5;
-  transition: background 0.2s ease, color 0.2s ease;
+
 }
 
 .more-options:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
 }
-
 
 .document-dropdown-menu {
   display: none;
@@ -256,7 +249,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background 0.2s ease;
+
 }
 
 .document-dropdown-menu button:hover {
@@ -319,7 +312,7 @@
 }
 
 .documents-grid.list-view .document-folder-card:hover {
-  transform: none;
+
   border-color: rgba(238, 238, 238, 0.16);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.045);
@@ -412,7 +405,6 @@
   right: 8px;
 }
 
-
 .document-folder-card.selected {
   border-color: #abbaea;
   background: rgba(171, 186, 234, 0.12);
@@ -491,7 +483,7 @@
   color: #eeeeee;
   font: inherit;
   font-size: 0.78rem;
-  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+
 }
 
 .filter-trigger {
@@ -509,7 +501,7 @@
 .filter-trigger[aria-expanded="true"] {
   border-color: rgba(171, 186, 234, 0.62);
   background: rgba(171, 186, 234, 0.12);
-  transform: translateY(-1px);
+
 }
 
 .filter-trigger:focus-visible,
@@ -527,7 +519,7 @@
   border-right: 1.5px solid #abbaea;
   border-bottom: 1.5px solid #abbaea;
   transform: rotate(45deg) translateY(-2px);
-  transition: transform 0.2s ease;
+
 }
 
 .filter-trigger[aria-expanded="true"] .filter-chevron {
@@ -545,7 +537,7 @@
   border-radius: 11px;
   background: #111934;
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.34);
-  animation: documentMenuEnter 0.18s ease-out both;
+
 }
 
 .filter-menu button {
@@ -561,7 +553,7 @@
   text-align: left;
   white-space: nowrap;
   cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease;
+
 }
 
 .filter-menu button:hover,
@@ -610,7 +602,7 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  transition: background 0.2s ease;
+
 }
 
 .documents-list-search button:hover {
@@ -622,11 +614,6 @@
   height: 17px;
   filter: brightness(0) invert(1);
   opacity: 0.85;
-}
-
-@keyframes documentMenuEnter {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 .documents-view-switch {
@@ -649,7 +636,7 @@
   background: transparent;
   color: rgba(238, 238, 238, 0.48);
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+
 }
 
 .view-toggle:hover {
@@ -694,7 +681,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+
 }
 
 .documents-pagination .page-arrow img,
@@ -717,7 +704,6 @@
 #nextDocs svg {
   transform: rotate(90deg);
 }
-
 
 .documents-pagination .page-arrow:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.15);
@@ -763,14 +749,3 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .filter-trigger,
-  .filter-chevron,
-  .filter-menu,
-  .filter-menu button,
-  .documents-list-search,
-  .documents-list-search button {
-    animation: none;
-    transition: none;
-  }
-}
