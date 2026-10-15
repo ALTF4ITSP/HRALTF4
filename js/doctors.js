@@ -2,21 +2,6 @@
   "use strict";
 
   // Fictional records for this browser-only mockup. No API or database is used.
-  const sampleDoctors = [
-    { id: "d-001", title: "Dr.", name: "Carlos Méndez", document: "3.456.781-2", license: "MSP-10482", specialty: "Clínica Médica", service: "Medicina Interna", office: "Sala 2 · Piso 2", phone: "099 123 456", email: "c.mendez@hospital.example", status: "Disponible", shift: "Mañana", days: "Lunes a viernes", startTime: "08:00", endTime: "14:00", notes: "Referente del equipo de Medicina Interna." },
-    { id: "d-002", title: "Dra.", name: "Ana Torres", document: "4.128.562-3", license: "MSP-11206", specialty: "Cardiología", service: "Consultorios Externos", office: "Consultorio 12", phone: "098 542 166", email: "a.torres@hospital.example", status: "En consulta", shift: "Mañana", days: "Lunes, miércoles y viernes", startTime: "08:00", endTime: "13:00", notes: "Consultas de control y seguimiento cardiológico." },
-    { id: "d-003", title: "Dr.", name: "Miguel Silva", document: "3.987.124-5", license: "MSP-09871", specialty: "Traumatología", service: "Traumatología", office: "Sala 3 · Piso 3", phone: "097 321 550", email: "m.silva@hospital.example", status: "De guardia", shift: "Rotativo", days: "Rotativo", startTime: "08:00", endTime: "20:00", notes: "Guardia de traumatología y valoración de pacientes internados." },
-    { id: "d-004", title: "Dra.", name: "Laura Martínez", document: "4.765.219-6", license: "MSP-12540", specialty: "Emergencias", service: "Urgencias", office: "Área de observación", phone: "091 348 760", email: "l.martinez@hospital.example", status: "De guardia", shift: "Tarde", days: "Rotativo", startTime: "14:00", endTime: "22:00", notes: "Atención y coordinación del área de urgencias." },
-    { id: "d-005", title: "Dr.", name: "Fernando Ruiz", document: "2.875.643-7", license: "MSP-08734", specialty: "Endocrinología", service: "Consultorios Externos", office: "Consultorio 8", phone: "099 418 300", email: "f.ruiz@hospital.example", status: "Inactivo", shift: "Tarde", days: "Martes y jueves", startTime: "14:00", endTime: "18:00", notes: "Licencia programada. Consultas sujetas a reasignación." },
-    { id: "d-006", title: "Dra.", name: "Valentina Costa", document: "4.365.824-8", license: "MSP-13402", specialty: "Cirugía General", service: "Cirugía General", office: "Bloque quirúrgico", phone: "095 230 160", email: "v.costa@hospital.example", status: "En consulta", shift: "Mañana", days: "Lunes a viernes", startTime: "07:00", endTime: "13:00", notes: "Valoración preoperatoria y seguimiento posoperatorio." },
-    { id: "d-007", title: "Dra.", name: "Emilia Núñez", document: "4.921.635-9", license: "MSP-14218", specialty: "Dermatología", service: "Consultorios Externos", office: "Consultorio 5", phone: "092 508 144", email: "e.nunez@hospital.example", status: "Disponible", shift: "Tarde", days: "Martes y jueves", startTime: "13:00", endTime: "19:00", notes: "" },
-    { id: "d-008", title: "Dr.", name: "Andrés Pereira", document: "3.562.471-0", license: "MSP-10635", specialty: "Emergencias", service: "Urgencias", office: "Box 4", phone: "098 120 341", email: "a.pereira@hospital.example", status: "De guardia", shift: "Noche", days: "Rotativo", startTime: "22:00", endTime: "06:00", notes: "Guardia nocturna de emergencias." },
-    { id: "d-009", title: "Dr.", name: "Javier Soto", document: "3.841.962-1", license: "MSP-11783", specialty: "Neurología", service: "Neurología", office: "Consultorio 16", phone: "096 230 711", email: "j.soto@hospital.example", status: "En consulta", shift: "Mañana", days: "Lunes, miércoles y viernes", startTime: "09:00", endTime: "14:00", notes: "" },
-    { id: "d-010", title: "Dra.", name: "Inés Cabrera", document: "4.258.716-2", license: "MSP-12892", specialty: "Medicina General", service: "Consultorios Externos", office: "Consultorio 2", phone: "097 752 630", email: "i.cabrera@hospital.example", status: "Disponible", shift: "Tarde", days: "Lunes a viernes", startTime: "14:00", endTime: "20:00", notes: "Consultas de medicina general y controles preventivos." },
-    { id: "d-011", title: "Dr.", name: "Pablo Acosta", document: "3.724.159-3", license: "MSP-10954", specialty: "Cardiología", service: "Cardiología", office: "Sala 1 · Piso 2", phone: "099 640 218", email: "p.acosta@hospital.example", status: "Disponible", shift: "Mañana", days: "Lunes a viernes", startTime: "08:00", endTime: "14:00", notes: "" },
-    { id: "d-012", title: "Dra.", name: "Sofía Rodríguez", document: "4.638.925-4", license: "MSP-14573", specialty: "Clínica Médica", service: "Medicina Interna", office: "Sala 4 · Piso 2", phone: "098 325 741", email: "s.rodriguez@hospital.example", status: "Inactivo", shift: "Tarde", days: "Lunes a viernes", startTime: "14:00", endTime: "20:00", notes: "" }
-  ];
-  const storageKey = "hospital.doctorDirectory.v1";
   const pageSize = 5;
   const statusStyles = { Disponible: "available", "En consulta": "consulting", "De guardia": "on-call", Inactivo: "inactive" };
   const fields = ["title", "name", "document", "license", "specialty", "service", "office", "phone", "email", "status", "shift", "days", "startTime", "endTime", "notes"];
@@ -42,7 +27,7 @@
   const icon = file => `<img src="../imagenes/${file}" alt="" aria-hidden="true">`;
   const pill = doctor => `<span class="status-pill status-pill--${statusStyles[doctor.status]}">${escapeHtml(doctor.status)}</span>`;
   const hours = doctor => doctor.startTime && doctor.endTime ? `${doctor.startTime} – ${doctor.endTime}` : "Horario no indicado";
-  let doctors = loadDoctors();
+  let doctors = [];  // se cargan desde la base al final del archivo
   let activeStatus = "Todos";
   let currentPage = 1;
   let selectedId = null;
@@ -53,31 +38,10 @@
   let deleteReturnFocus = null;
   let toastTimer;
 
-  function loadDoctors() {
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved !== null) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          // Preserve existing browser records when renaming the inactive state.
-          const migrated = parsed.map(doctor => doctor?.status === "Ausente" ? { ...doctor, status: "Inactivo" } : doctor);
-          if (migrated.every(doctor => doctor && typeof doctor.id === "string" && fields.every(key => typeof doctor[key] === "string") && Object.hasOwn(statusStyles, doctor.status))) return migrated;
-        }
-      }
-    } catch (_) {
-      // Keep the demo usable when storage is blocked or its contents are invalid.
-    }
-    return sampleDoctors.map(doctor => ({ ...doctor }));
-  }
-
   function saveDoctors(nextDoctors) {
     doctors = nextDoctors;
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(doctors));
-      return true;
-    } catch (_) {
-      return false;
-    }
+    gestionApi.guardar("medicos", doctors);
+    return true;
   }
 
   function toast(message, persisted = true) {
@@ -318,4 +282,5 @@
 
   updateCatalogs();
   renderList();
+  gestionApi.cargar("medicos").then(lista => { doctors = lista; updateCatalogs(); renderList(); });
 })();

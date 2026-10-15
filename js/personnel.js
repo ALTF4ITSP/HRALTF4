@@ -1,15 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const storageKey = 'hospital-personnel-v1';
   const pageSize = 6;
   const iconBase = '../imagenes/';
-  const initialPeople = [
-    { id: 'seed-1', name: 'Carlos Fernández', role: 'Chofer', phone: '099 123 456', document: '', license: 'A1234567', status: 'Activo' },
-    { id: 'seed-2', name: 'Miguel Torres', role: 'Chofer', phone: '098 765 432', document: '', license: 'B7654321', status: 'Activo' },
-    { id: 'seed-3', name: 'José Ramírez', role: 'Chofer', phone: '099 234 567', document: '', license: 'C9876543', status: 'Activo' },
-    { id: 'seed-4', name: 'Fernando López', role: 'Chofer', phone: '098 345 678', document: '', license: 'D4567890', status: 'Inactivo' },
-    { id: 'seed-5', name: 'Ricardo Sosa', role: 'Chofer', phone: '099 876 543', document: '', license: 'E3210987', status: 'Activo' },
-    { id: 'seed-6', name: 'Daniel Giménez', role: 'Chofer', phone: '098 111 222', document: '', license: 'F6543210', status: 'Activo' }
-  ];
 
   const rows = document.getElementById('personnel-rows');
   const search = document.getElementById('personnel-search');
@@ -26,36 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const dialog = document.getElementById('person-dialog');
   if (!rows || !search || !form || !dialog) return;
 
-  let people = loadPeople();
+  let people = [];  // se cargan desde la base al final del archivo
   let activeRole = 'Chofer';
   let currentPage = 1;
   let editingId = null;
 
-  function loadPeople() {
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved === null) return initialPeople.map(person => ({ ...person }));
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.every(person =>
-        person && typeof person.id === 'string' && typeof person.name === 'string' &&
-        (person.role === 'Chofer' || person.role === 'Copiloto') &&
-        typeof person.phone === 'string' && typeof person.document === 'string' &&
-        typeof person.license === 'string' &&
-        (person.status === 'Activo' || person.status === 'Inactivo')
-      )) return parsed;
-    } catch (_) {
-      // The page still works when storage is unavailable.
-    }
-    return initialPeople.map(person => ({ ...person }));
-  }
-
   function savePeople() {
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(people));
-      return true;
-    } catch (_) {
-      return false;
-    }
+    gestionApi.guardar('personal', people);
+    return true;
   }
 
   function normalize(value) {
@@ -325,4 +294,5 @@ document.addEventListener('DOMContentLoaded', () => {
   updateRoleIcon();
   updateStatusDot();
   render();
+  gestionApi.cargar('personal').then(lista => { people = lista; render(); });
 });

@@ -1,22 +1,6 @@
 (() => {
   "use strict";
 
-  // Illustrative records until the patient API is connected to the clinical database.
-  const samplePatients = [
-    { id: "p-001", name: "María González López", age: 34, dni: "32.456.789", phone: "099 123 456", status: "Internado", room: "Habitación 204", department: "Medicina Interna", doctor: "Dr. Carlos Méndez", doctorSpecialty: "Clínica Médica", admissionDate: "15 de mar. 2024", bloodType: "O+", allergies: "Penicilina", diagnosis: "Neumonía leve", clinicalState: "Estable", emergencyContact: { name: "José González", phone: "098 765 432", relationship: "Padre" } },
-    { id: "p-002", name: "Juan Pérez Ramírez", age: 58, dni: "14.987.321", phone: "098 542 166", status: "Ambulatorio", room: "Ambulatorio", department: "Consultorios Externos", doctor: "Dra. Ana Torres", doctorSpecialty: "Cardiología", admissionDate: "18 de mar. 2024", bloodType: "A+", allergies: "Ninguna conocida", diagnosis: "Control cardiológico", clinicalState: "Estable", emergencyContact: { name: "Sofía Pérez", phone: "099 812 400", relationship: "Hija" } },
-    { id: "p-003", name: "Lucía Fernández Díaz", age: 29, dni: "42.123.456", phone: "097 321 550", status: "Internado", room: "Habitación 318", department: "Traumatología", doctor: "Dr. Miguel Silva", doctorSpecialty: "Traumatología", admissionDate: "16 de mar. 2024", bloodType: "B+", allergies: "Látex", diagnosis: "Fractura de tibia", clinicalState: "Estable", emergencyContact: { name: "Martín Fernández", phone: "098 500 914", relationship: "Hermano" } },
-    { id: "p-004", name: "Roberto Sánchez Torres", age: 67, dni: "10.456.987", phone: "091 348 760", status: "Urgencias", room: "Urgencias", department: "Observación", doctor: "Dra. Laura Martínez", doctorSpecialty: "Emergencias", admissionDate: "18 de mar. 2024", bloodType: "AB+", allergies: "Ninguna conocida", diagnosis: "Dolor torácico", clinicalState: "En observación", emergencyContact: { name: "Elena Torres", phone: "098 765 100", relationship: "Esposa" } },
-    { id: "p-005", name: "Ana Belén Rojas", age: 41, dni: "28.765.432", phone: "099 418 300", status: "Ambulatorio", room: "Ambulatorio", department: "Consultorios Externos", doctor: "Dr. Fernando Ruiz", doctorSpecialty: "Endocrinología", admissionDate: "18 de mar. 2024", bloodType: "O-", allergies: "Ninguna conocida", diagnosis: "Control endocrinológico", clinicalState: "Estable", emergencyContact: { name: "Pablo Rojas", phone: "091 348 901", relationship: "Esposo" } },
-    { id: "p-006", name: "Diego Martín Suárez", age: 52, dni: "21.638.475", phone: "095 230 160", status: "Internado", room: "Habitación 112", department: "Cirugía General", doctor: "Dra. Valentina Costa", doctorSpecialty: "Cirugía", admissionDate: "17 de mar. 2024", bloodType: "A-", allergies: "Ibuprofeno", diagnosis: "Recuperación posoperatoria", clinicalState: "Estable", emergencyContact: { name: "Laura Suárez", phone: "098 240 660", relationship: "Hermana" } },
-    { id: "p-007", name: "Camila Rodríguez Vega", age: 24, dni: "45.789.120", phone: "092 508 144", status: "Ambulatorio", room: "Ambulatorio", department: "Consultorios Externos", doctor: "Dra. Emilia Núñez", doctorSpecialty: "Dermatología", admissionDate: "18 de mar. 2024", bloodType: "B-", allergies: "Ninguna conocida", diagnosis: "Consulta dermatológica", clinicalState: "Estable", emergencyContact: { name: "Teresa Vega", phone: "095 434 170", relationship: "Madre" } },
-    { id: "p-008", name: "Elena Morales Castro", age: 73, dni: "8.502.341", phone: "098 120 341", status: "Urgencias", room: "Urgencias", department: "Observación", doctor: "Dr. Andrés Pereira", doctorSpecialty: "Emergencias", admissionDate: "18 de mar. 2024", bloodType: "O+", allergies: "Sulfas", diagnosis: "Deshidratación", clinicalState: "En observación", emergencyContact: { name: "Daniel Castro", phone: "099 120 800", relationship: "Hijo" } },
-    { id: "p-009", name: "Federico Álvarez Medina", age: 39, dni: "33.184.760", phone: "096 230 711", status: "Internado", room: "Habitación 225", department: "Neurología", doctor: "Dr. Javier Soto", doctorSpecialty: "Neurología", admissionDate: "14 de mar. 2024", bloodType: "A+", allergies: "Ninguna conocida", diagnosis: "Evaluación neurológica", clinicalState: "Estable", emergencyContact: { name: "Florencia Medina", phone: "096 330 721", relationship: "Esposa" } },
-    { id: "p-010", name: "Valeria Acosta Benítez", age: 46, dni: "26.552.943", phone: "097 752 630", status: "Ambulatorio", room: "Ambulatorio", department: "Consultorios Externos", doctor: "Dra. Inés Cabrera", doctorSpecialty: "Medicina General", admissionDate: "18 de mar. 2024", bloodType: "AB-", allergies: "Penicilina", diagnosis: "Control general", clinicalState: "Estable", emergencyContact: { name: "Luis Acosta", phone: "098 660 122", relationship: "Hermano" } }
-  ];
-
-  const storageKey = "hospital.patientDirectory.v2";
-  const legacyStorageKey = "hospital.patientDirectory.v1";
   const pageSize = 5;
   const workspace = document.getElementById("patient-workspace");
   const list = document.getElementById("patient-list");
@@ -56,7 +40,7 @@
   const icon = (name) => `<img src="${iconFiles[name] ? `../imagenes/${iconFiles[name]}` : "#"}" alt="" aria-hidden="true"${name === "chevron" ? ' class="chevron-icon"' : ""}>`;
   const statusStyle = { Internado: "internado", Ambulatorio: "ambulatorio", Urgencias: "urgencias" };
   const allPatients = () => patients;
-  let patients = [...samplePatients];
+  let patients = [];  // se cargan desde la base al final del archivo
   let activeFilter = "Todos";
   let currentPage = 1;
   let selectedPatientId = null;
@@ -65,28 +49,9 @@
   let deletingPatientId = null;
   let toastTimer;
 
-  try {
-    const isPatient = patient => patient && typeof patient.id === "string" && typeof patient.name === "string" && statusStyle[patient.status];
-    const stored = JSON.parse(localStorage.getItem(storageKey) || "null");
-    if (Array.isArray(stored)) {
-      patients = stored.filter(isPatient);
-    } else {
-      const legacyPatients = JSON.parse(localStorage.getItem(legacyStorageKey) || "[]");
-      if (Array.isArray(legacyPatients)) patients = [...legacyPatients.filter(isPatient), ...samplePatients];
-    }
-  } catch (_) {
-    patients = [...samplePatients];
-  }
-
-  function savePatients(nextPatients, errorElement) {
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(nextPatients));
-    } catch (_) {
-      errorElement.textContent = "No se pudieron guardar los cambios en este navegador. Comprueba el almacenamiento disponible.";
-      errorElement.hidden = false;
-      return false;
-    }
+  function savePatients(nextPatients) {
     patients = nextPatients;
+    gestionApi.guardar("pacientes", patients);
     return true;
   }
 
@@ -336,4 +301,5 @@
   });
 
   renderList();
+  gestionApi.cargar("pacientes").then(lista => { patients = lista; renderList(); });
 })();

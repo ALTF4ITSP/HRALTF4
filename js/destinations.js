@@ -1,20 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Local mock data only. This collection can later be used by the transfer form.
-  const storageKey = 'hospital-destinations-v1';
   const pageSize = 6;
   const iconBase = '../imagenes/';
   const destinationTypes = ['Hospital', 'Sanatorio', 'Centro de salud', 'Otro'];
   const statuses = ['Activo', 'Inactivo'];
-  const initialDestinations = [
-    { id: 'seed-1', name: 'Hospital de Clínicas', address: 'Av. Italia 2870', locality: 'Montevideo', type: 'Hospital', phone: '', notes: 'Ingreso de ambulancias por emergencia.', status: 'Activo' },
-    { id: 'seed-2', name: 'Hospital Maciel', address: '25 de Mayo 174', locality: 'Montevideo', type: 'Hospital', phone: '', notes: 'Coordinar el acceso con el personal de recepción.', status: 'Activo' },
-    { id: 'seed-3', name: 'Hospital Pasteur', address: 'Larravide 2458', locality: 'Montevideo', type: 'Hospital', phone: '', notes: '', status: 'Activo' },
-    { id: 'seed-4', name: 'Sanatorio Central', address: 'Av. 18 de Julio 1820', locality: 'Montevideo', type: 'Sanatorio', phone: '', notes: 'Acceso lateral para traslados programados.', status: 'Activo' },
-    { id: 'seed-5', name: 'Centro de Rehabilitación', address: 'Camino Maldonado 5680', locality: 'Montevideo', type: 'Centro de salud', phone: '', notes: 'Destino temporalmente fuera de servicio.', status: 'Inactivo' },
-    { id: 'seed-6', name: 'Policlínica Las Piedras', address: 'Av. Artigas 560', locality: 'Las Piedras', type: 'Centro de salud', phone: '', notes: '', status: 'Activo' },
-    { id: 'seed-7', name: 'Centro de Diagnóstico', address: 'Bv. Artigas 1450', locality: 'Montevideo', type: 'Centro de salud', phone: '', notes: 'Confirmar el horario del estudio antes del traslado.', status: 'Activo' },
-    { id: 'seed-8', name: 'Laboratorio Central', address: 'Av. Italia 2890', locality: 'Montevideo', type: 'Otro', phone: '', notes: 'Recepción de muestras por la entrada principal.', status: 'Inactivo' }
-  ];
 
   const rows = document.getElementById('destinations-rows');
   const search = document.getElementById('destinations-search');
@@ -32,41 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const filterButtons = [...document.querySelectorAll('[data-filter]')];
   if (!rows || !search || !form || !detailDialog || !deleteDialog) return;
 
-  let destinations = loadDestinations();
+  let destinations = [];  // se cargan desde la base al final del archivo
   let activeFilter = 'Activo';
   let currentPage = 1;
   let editingId = null;
   let detailId = null;
   let deletingId = null;
 
-  function loadDestinations() {
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved !== null) {
-        const parsed = JSON.parse(saved);
-        const ids = new Set();
-        if (Array.isArray(parsed) && parsed.every(destination => {
-          if (!destination || typeof destination.id !== 'string' || !destination.id || ids.has(destination.id)) return false;
-          ids.add(destination.id);
-          return ['name', 'address', 'locality'].every(key =>
-            typeof destination[key] === 'string' && destination[key].trim().length > 0
-          ) && typeof destination.phone === 'string' && typeof destination.notes === 'string' &&
-            destinationTypes.includes(destination.type) && statuses.includes(destination.status);
-        })) return parsed;
-      }
-    } catch (_) {
-      // CRUD remains available in memory if browser storage is unavailable.
-    }
-    return initialDestinations.map(destination => ({ ...destination }));
-  }
-
   function saveDestinations() {
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(destinations));
-      return true;
-    } catch (_) {
-      return false;
-    }
+    gestionApi.guardar('destinos', destinations);
+    return true;
   }
 
   function normalize(value) {
@@ -375,4 +339,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateStatus();
   render();
+  gestionApi.cargar('destinos').then(lista => { destinations = lista; render(); });
 });

@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     OPERATIVA: "#4cc878",
     EN_TRASLADO: "#7d95ec",
     MANTENIMIENTO: "#f0a040",
-    FUERA_DE_SERVICIO: "#ff6b6b"
+    FUERA_SERVICIO: "#ff6b6b"
   };
   const MONTHS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"];
 
@@ -17,8 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return element.innerHTML;
   }
 
-  // "MANTENIMIENTO" -> "Mantenimiento", "FUERA_DE_SERVICIO" -> "Fuera de servicio"
+  // "MANTENIMIENTO" -> "Mantenimiento", "FUERA_SERVICIO" -> "Fuera de servicio"
   function prettyLabel(value) {
+    if (value === "FUERA_SERVICIO") return "Fuera de servicio";
     const text = String(value || "").replace(/_/g, " ").toLowerCase();
     return text.charAt(0).toUpperCase() + text.slice(1);
   }

@@ -1,18 +1,7 @@
 (() => {
   "use strict";
 
-  const storageKey = "hospital.presetRoutes.v1";
   const categories = ["Interhospitalario", "Consulta", "Tratamiento", "Alta"];
-  const initialRoutes = [
-    { id: "route-001", code: "RT-001", name: "Clínicas → Hospital Maciel", category: "Interhospitalario", direction: "Solo ida", status: "Activa", origin: { name: "Hospital de Clínicas", address: "Av. Italia 2870, Montevideo" }, destination: { name: "Hospital Maciel", address: "25 de Mayo 174, Montevideo" }, stops: [], distance: 7.8, duration: 25, notes: "Salida por el acceso de ambulancias. Coordinar la recepción con el equipo de destino." },
-    { id: "route-002", code: "RT-002", name: "Circuito de rehabilitación", category: "Tratamiento", direction: "Ida y vuelta", status: "Activa", origin: { name: "Hospital de Clínicas", address: "Av. Italia 2870, Montevideo" }, destination: { name: "Centro de rehabilitación", address: "Av. 8 de Octubre 3250, Montevideo" }, stops: [{ name: "Policlínica La Unión", address: "Larravide 2450, Montevideo" }], distance: 6.2, duration: 30, notes: "Confirmar el punto de encuentro antes de la salida. Contemplar asistencia en el ascenso y descenso." },
-    { id: "route-003", code: "RT-003", name: "Clínicas → Hospital Pasteur", category: "Interhospitalario", direction: "Solo ida", status: "Activa", origin: { name: "Hospital de Clínicas", address: "Av. Italia 2870, Montevideo" }, destination: { name: "Hospital Pasteur", address: "Larravide 2458, Montevideo" }, stops: [], distance: 4.5, duration: 18, notes: "Ingreso por el acceso de traslados. Avisar al servicio receptor al iniciar el recorrido." },
-    { id: "route-004", code: "RT-004", name: "Consulta · Ciudad Vieja", category: "Consulta", direction: "Ida y vuelta", status: "Activa", origin: { name: "Hospital de Clínicas", address: "Av. Italia 2870, Montevideo" }, destination: { name: "Policlínica Ciudad Vieja", address: "Piedras 720, Montevideo" }, stops: [], distance: 7.1, duration: 28, notes: "Coordinar el regreso al finalizar la consulta." },
-    { id: "route-005", code: "RT-005", name: "Traslado a centro de diálisis", category: "Tratamiento", direction: "Ida y vuelta", status: "Activa", origin: { name: "Hospital de Clínicas", address: "Av. Italia 2870, Montevideo" }, destination: { name: "Centro de diálisis", address: "Bv. Artigas 1850, Montevideo" }, stops: [{ name: "Policlínica Cordón", address: "Colonia 1950, Montevideo" }], distance: 5.3, duration: 32, notes: "Confirmar con el centro la hora de recepción y el horario de regreso." },
-    { id: "route-006", code: "RT-006", name: "Clínicas → Hospital Español", category: "Interhospitalario", direction: "Solo ida", status: "Inactiva", origin: { name: "Hospital de Clínicas", address: "Av. Italia 2870, Montevideo" }, destination: { name: "Hospital Español", address: "Av. Garibaldi 1729, Montevideo" }, stops: [], distance: 5.6, duration: 22, notes: "Revisar el acceso de recepción antes de reactivar la ruta." },
-    { id: "route-007", code: "RT-007", name: "Alta · Residencia Parque", category: "Alta", direction: "Solo ida", status: "Activa", origin: { name: "Hospital de Clínicas", address: "Av. Italia 2870, Montevideo" }, destination: { name: "Residencia Parque", address: "Av. Sarmiento 2450, Montevideo" }, stops: [], distance: 3.8, duration: 15, notes: "Coordinar la entrega con el personal de la residencia." },
-    { id: "route-008", code: "RT-008", name: "Circuito de consultas externas", category: "Consulta", direction: "Ida y vuelta", status: "Inactiva", origin: { name: "Hospital de Clínicas", address: "Av. Italia 2870, Montevideo" }, destination: { name: "Policlínica Norte", address: "Av. San Martín 4250, Montevideo" }, stops: [{ name: "Policlínica Goes", address: "Av. General Flores 2450, Montevideo" }, { name: "Centro de atención Reducto", address: "Av. Millán 2850, Montevideo" }], distance: 9.4, duration: 45, notes: "Verificar la disponibilidad de los centros antes de activar el circuito." }
-  ];
 
   const byId = id => document.getElementById(id);
   const list = byId("route-list");
@@ -27,9 +16,9 @@
   const filters = [...document.querySelectorAll("[data-filter]")];
   const pagination = byId("route-pagination");
   let pageSize = 3;
-  let routes = structuredClone(initialRoutes);
-  let nextNumber = 9;
-  let selectedId = routes[0].id;
+  let routes = [];  // se cargan desde la base al final del archivo
+  let nextNumber = 1;
+  let selectedId = null;
   let currentPage = 1;
   let activeFilter = "Todas";
   let editingId = null;
@@ -53,25 +42,9 @@
       typeof route.notes === "string" && route.notes.length <= 500;
   }
 
-  try {
-    const saved = JSON.parse(localStorage.getItem(storageKey));
-    if (saved?.version === 1 && Array.isArray(saved.routes) && saved.routes.every(validRoute) &&
-      new Set(saved.routes.map(route => route.id)).size === saved.routes.length &&
-      new Set(saved.routes.map(route => route.code)).size === saved.routes.length && Number.isSafeInteger(saved.nextNumber) &&
-      saved.nextNumber > Math.max(0, ...saved.routes.map(route => Number(route.code.slice(3))))) {
-      routes = saved.routes;
-      nextNumber = saved.nextNumber;
-      selectedId = routes[0]?.id ?? null;
-    }
-  } catch {}
-
   function persist() {
-    try {
-      localStorage.setItem(storageKey, JSON.stringify({ version: 1, nextNumber, routes }));
-      return true;
-    } catch {
-      return false;
-    }
+    gestionApi.guardar("rutas", routes);
+    return true;
   }
 
   function notify(message) {
@@ -396,6 +369,13 @@
 
   renderCatalog();
   fitCatalogPage();
+  gestionApi.cargar("rutas").then(lista => {
+    routes = lista;
+    // El próximo código sigue al más alto (RT-008 → RT-009)
+    nextNumber = Math.max(0, ...routes.map(route => Number(route.code.slice(3)))) + 1;
+    selectedId = routes[0]?.id ?? null;
+    renderCatalog();
+  });
   const catalogObserver = new ResizeObserver(fitCatalogPage);
   catalogObserver.observe(list);
 })();

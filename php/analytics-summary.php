@@ -11,7 +11,7 @@ try {
         "SELECT
             (SELECT COUNT(*) FROM documento WHERE estado = 'ACTIVO') AS documentos,
             (SELECT COUNT(*) FROM traslado) AS traslados,
-            (SELECT COUNT(*) FROM paciente) AS pacientes,
+            (SELECT COUNT(*) FROM gestion_paciente) AS pacientes,
             (SELECT COUNT(*) FROM envio_encuesta WHERE completada = 1) AS respuestas"
     )->fetch();
 

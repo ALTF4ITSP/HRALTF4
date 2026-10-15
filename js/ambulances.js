@@ -1,17 +1,8 @@
 (() => {
   'use strict';
 
-  // Visual mockup only. All changes stay in memory and reset when the page reloads.
-  let ambulances = [
-    { id: 1, plate: 'SAB001', model: 'Mercedes-Benz Sprinter', capacity: 4, status: 'OPERATIVA' },
-    { id: 2, plate: 'SAB002', model: 'Renault Master', capacity: 4, status: 'OPERATIVA' },
-    { id: 3, plate: 'SAB003', model: 'Fiat Ducato', capacity: 3, status: 'MANTENIMIENTO' },
-    { id: 4, plate: 'SAB004', model: 'Ford Transit', capacity: 5, status: 'OPERATIVA' },
-    { id: 5, plate: 'SAB005', model: 'Peugeot Boxer', capacity: 4, status: 'FUERA_SERVICIO' },
-    { id: 6, plate: 'SAB006', model: 'Mercedes-Benz Sprinter', capacity: 4, status: 'OPERATIVA' },
-    { id: 7, plate: 'SAB007', model: 'Renault Master', capacity: 3, status: 'MANTENIMIENTO' },
-    { id: 8, plate: 'SAB008', model: 'Fiat Ducato', capacity: 4, status: 'OPERATIVA' }
-  ];
+  // Las ambulancias se guardan en la tabla `ambulancia` (php/gestion.php).
+  let ambulances = [];
   const $ = id => document.getElementById(id);
   const list = $('ambulance-list');
   const form = $('ambulance-form');
@@ -156,6 +147,7 @@
     const wasEditing = editingId !== null;
     if (wasEditing) ambulances = ambulances.map(item => item.id === editingId ? ambulance : item);
     else { ambulances.unshift(ambulance); nextId++; }
+    gestionApi.guardar('ambulancias', ambulances);
     activeFilter = 'ALL'; $('ambulance-search').value = '';
     currentPage = Math.floor(ambulances.findIndex(item => item.id === ambulance.id) / pageSize) + 1;
     dialog.close(); render();
@@ -180,6 +172,7 @@
     const ambulance = ambulances.find(item => item.id === deletingId);
     if (!ambulance) return;
     ambulances = ambulances.filter(item => item.id !== deletingId);
+    gestionApi.guardar('ambulancias', ambulances);
     closeDetail(); deleteDialog.close(); render(); $('new-ambulance').focus();
     toast(`Ambulancia ${ambulance.plate} eliminada.`);
   });
@@ -200,4 +193,9 @@
     if (button && !button.disabled) { currentPage = Number(button.dataset.page); render(); }
   });
   render();
+  gestionApi.cargar('ambulancias').then(lista => {
+    ambulances = lista;
+    nextId = Math.max(0, ...lista.map(item => item.id)) + 1;
+    render();
+  });
 })();

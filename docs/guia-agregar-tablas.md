@@ -266,6 +266,36 @@ UPDATE `aviso` SET `visible` = 0 WHERE `id_aviso` = 1;
 
 ---
 
+## Las pantallas de Gestión: un solo PHP para todas
+
+Pacientes, Médicos, Personal, Ambulancias, Destinos y Rutas comparten **un solo PHP**: `php/gestion.php`. Cada pantalla carga y guarda su lista completa con `js/gestion-api.js`:
+
+```js
+gestionApi.cargar("pacientes").then(lista => { patients = lista; renderList(); });  // al abrir
+gestionApi.guardar("pacientes", patients);                                          // al guardar o borrar
+```
+
+Al guardar, el PHP actualiza las filas que ya existen, agrega las nuevas y borra las que ya no están, todo en una transacción.
+
+| Pantalla | Módulo | Tabla |
+|---|---|---|
+| Pacientes | `pacientes` | `gestion_paciente` |
+| Médicos | `medicos` | `gestion_medico` |
+| Personal | `personal` | `gestion_personal` |
+| Ambulancias | `ambulancias` | `ambulancia` |
+| Destinos | `destinos` | `gestion_destino` |
+| Rutas | `rutas` | `gestion_ruta` |
+
+**Para agregar un dato nuevo a una de esas pantallas** (por ejemplo, el email del paciente):
+
+1. Agregá la columna: `ALTER TABLE gestion_paciente ADD COLUMN email varchar(150) DEFAULT NULL;`
+2. En `php/gestion.php`, dentro de `MODULOS['pacientes']['campos']`, agregá la línea `'email' => 'email',` (a la izquierda el nombre del dato en el JS, a la derecha la columna).
+3. Agregá el campo al formulario en el HTML y al objeto que arma el JS al guardar.
+
+No hace falta tocar nada más: el PHP lee la lista de campos para saber qué guardar.
+
+> Como se guarda la lista completa, si dos personas editan **la misma pantalla al mismo tiempo**, queda lo que guardó la última.
+
 ## Cómo se armaron las encuestas (ejemplo real del proyecto)
 
 Las encuestas usan 4 tablas encadenadas:
