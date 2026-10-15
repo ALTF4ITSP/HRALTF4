@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const formError = document.getElementById("formError");
   const deleteButton = document.getElementById("deleteTurn");
 
+  // Buscadores de paciente y médico (js/buscador.js)
+  const patientSearch = crearBuscador(document.getElementById("turnPatient"), { texto: p => `${p.nombre} · CI ${p.documento}` });
+  const doctorSearch = crearBuscador(document.getElementById("turnDoctor"), { texto: m => `${m.nombre} · ${m.especialidad}` });
+
   let weekStart = mondayOf(new Date());
   let turns = [];
   let editingId = null;
@@ -115,8 +119,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok || data.success !== true) throw new Error(data?.error?.message);
 
       turns = data.data;
-      fillSelect("turnPatient", data.pacientes, p => `${p.nombre} (${p.documento})`, false);
-      fillSelect("turnDoctor", data.medicos, m => `${m.nombre} · ${m.especialidad}`, true);
+      patientSearch.setItems(data.pacientes);
+      doctorSearch.setItems(data.medicos);
       message.hidden = true;
     } catch (error) {
       turns = [];
@@ -126,20 +130,13 @@ document.addEventListener("DOMContentLoaded", () => {
     render();
   }
 
-  function fillSelect(id, items, label, optional) {
-    const select = document.getElementById(id);
-    const current = select.value;
-    select.innerHTML = (optional ? '<option value="">Sin asignar</option>' : '<option value="">Elegí un paciente...</option>') +
-      items.map(item => `<option value="${item.id}">${escapeHtml(label(item))}</option>`).join("");
-    select.value = current;
-  }
 
   // ---------- Formulario ----------
   function openForm(turn) {
     editingId = turn.id_turno ?? null;
     document.getElementById("dialogTitle").textContent = editingId ? "Editar turno" : "Nuevo turno";
-    form.elements.id_gestion_paciente.value = turn.id_gestion_paciente ?? "";
-    form.elements.id_gestion_medico.value = turn.id_gestion_medico ?? "";
+    patientSearch.setValue(turn.id_gestion_paciente);
+    doctorSearch.setValue(turn.id_gestion_medico);
     form.elements.fecha.value = turn.fecha;
     form.elements.hora_inicio.value = turn.hora_inicio;
     form.elements.hora_fin.value = turn.hora_fin;
@@ -166,6 +163,11 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     const turn = Object.fromEntries(new FormData(form));
     turn.id_turno = editingId;
+    if (!turn.id_gestion_paciente) {
+      formError.textContent = "Buscá y elegí un paciente de la lista.";
+      document.getElementById("turnPatient").focus();
+      return;
+    }
     try {
       await send({ accion: "guardar", turno: turn });
       dialog.close();

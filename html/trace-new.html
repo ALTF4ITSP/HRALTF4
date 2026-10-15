@@ -14,8 +14,10 @@
     <link rel="icon" type="image/x-icon" href="../imagenes/hospital-dark.ico">
     <link rel="stylesheet" href="../css/main-menu.css?v=20260927-brand-fix">
     <link rel="stylesheet" href="../css/trace-new.css?v=20261005-general-field-sizing">
+    <link rel="stylesheet" href="../css/buscador.css">
     <script src="../js/main-menu.js?v=20260927-global" defer></script>
     <script src="../js/universal-search.js?v=20260927-global" defer></script>
+    <script src="../js/buscador.js" defer></script>
     <script src="../js/trace.js" defer></script>
 </head>
 
@@ -174,9 +176,11 @@
 
                                     <div class="field full-field">
                                         <label for="patient">Paciente <span>(obligatorio si el tipo es Paciente)</span></label>
-                                        <select id="patient" name="id_gestion_paciente">
-                                            <option value="">Sin paciente</option>
-                                        </select>
+                                        <div class="buscador">
+                                            <input type="text" id="patient" placeholder="Buscar por nombre o cédula..." aria-controls="patientList">
+                                            <input type="hidden" name="id_gestion_paciente">
+                                            <ul class="buscador-lista" id="patientList" role="listbox" hidden></ul>
+                                        </div>
                                         <p class="field-hint">Los pacientes se cargan en Gestión → Pacientes.</p>
                                     </div>
                                 </section>

@@ -7,6 +7,7 @@
   <title>Calendario</title>
   <link rel="stylesheet" href="../css/main-menu.css?v=20260927-brand-fix">
   <link rel="stylesheet" href="../css/calendar.css">
+  <link rel="stylesheet" href="../css/buscador.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -15,6 +16,7 @@
   <link rel="icon" type="image/x-icon" href="../imagenes/hospital-dark.ico">
   <script src="../js/main-menu.js?v=20260927-global" defer></script>
   <script src="../js/universal-search.js?v=20260927-global" defer></script>
+  <script src="../js/buscador.js" defer></script>
   <script src="../js/calendar.js" defer></script>
 </head>
 
@@ -122,12 +124,20 @@
 
         <div class="cal-field">
           <label for="turnPatient">Paciente</label>
-          <select id="turnPatient" name="id_gestion_paciente" required></select>
+          <div class="buscador">
+            <input type="text" id="turnPatient" placeholder="Buscar por nombre o cédula..." aria-controls="turnPatientList">
+            <input type="hidden" name="id_gestion_paciente">
+            <ul class="buscador-lista" id="turnPatientList" role="listbox" hidden></ul>
+          </div>
         </div>
 
         <div class="cal-field">
           <label for="turnDoctor">Médico <span>(opcional)</span></label>
-          <select id="turnDoctor" name="id_gestion_medico"></select>
+          <div class="buscador">
+            <input type="text" id="turnDoctor" placeholder="Buscar por nombre o especialidad..." aria-controls="turnDoctorList">
+            <input type="hidden" name="id_gestion_medico">
+            <ul class="buscador-lista" id="turnDoctorList" role="listbox" hidden></ul>
+          </div>
         </div>
 
         <div class="cal-row">

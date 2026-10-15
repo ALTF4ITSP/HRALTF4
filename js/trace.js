@@ -386,8 +386,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         const saveDraftButton = document.getElementById("saveDraft");
         const cancelButton = document.getElementById("cancelTransfer");
         const formMessage = document.getElementById("formMessage");
-        const transferType = document.getElementById("transferType");
-        const patient = document.getElementById("patient");
+        // Buscador de pacientes (js/buscador.js)
+        const patientSearch = crearBuscador(document.getElementById("patient"), { texto: p => `${p.nombre} · CI ${p.documento}` });
         const editId = new URLSearchParams(window.location.search).get("id");
         const draftName = "hospitalNewTransferDraft";
         const opcionesExtra = ["specialEquipment", "withFamily", "interdepartmental", "criticalPatient"];
@@ -395,10 +395,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         function showMessage(message, isError) {
             formMessage.textContent = message;
             formMessage.classList.toggle("error", Boolean(isError));
-        }
-
-        function updatePatientRequirement() {
-            patient.required = transferType.value === "PACIENTE";
         }
 
         function fillSelect(id, items, label, firstOption) {
@@ -437,14 +433,15 @@ document.addEventListener("DOMContentLoaded", async function () {
                 if (control.type === "checkbox") control.checked = draft[control.name];
                 else control.value = draft[control.name];
             });
-            updatePatientRequirement();
+            patientSearch.setValue(newTransferForm.elements.id_gestion_paciente.value);
             showMessage("Se recuperó el borrador guardado.", false);
         }
 
         function fillForm(t) {
             const f = newTransferForm.elements;
-            ["id_ambulancia", "id_chofer", "id_acompanante", "id_origen", "id_destino", "id_gestion_paciente"]
+            ["id_ambulancia", "id_chofer", "id_acompanante", "id_origen", "id_destino"]
                 .forEach(name => { f[name].value = t[name] ?? ""; });
+            patientSearch.setValue(t.id_gestion_paciente);
             f.reason.value = t.motivo;
             f.tipo.value = t.tipo;
             f.prioridad.value = t.prioridad;
@@ -453,7 +450,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             f.etaTime.value = t.llegada_estimada ? t.llegada_estimada.split("T")[1] : "";
             const marcadas = (t.opciones || "").split(", ");
             opcionesExtra.forEach(name => { f[name].checked = marcadas.includes(optionLabel(name)); });
-            updatePatientRequirement();
         }
 
         async function init() {
@@ -465,7 +461,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 fillSelect("companion", data.personal, p => `${p.nombre} (${p.rol})`, "Sin acompañante");
                 fillSelect("origin", data.destinos, d => `${d.nombre} · ${d.localidad}`, "Elegir origen...");
                 fillSelect("destination", data.destinos, d => `${d.nombre} · ${d.localidad}`, "Elegir destino...");
-                fillSelect("patient", data.pacientes, p => `${p.nombre} (${p.documento})`, "Sin paciente");
+                patientSearch.setItems(data.pacientes);
 
                 if (editId) {
                     document.getElementById("formTitle").textContent = `Editar Traslado ${editId}`;
@@ -484,7 +480,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
 
-        transferType.addEventListener("change", updatePatientRequirement);
         saveDraftButton.addEventListener("click", saveDraft);
 
         cancelButton.addEventListener("click", function () {
@@ -496,7 +491,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         newTransferForm.addEventListener("submit", async function (event) {
             event.preventDefault();
-            updatePatientRequirement();
             if (!newTransferForm.checkValidity()) {
                 showMessage("Completa los campos obligatorios.", true);
                 newTransferForm.reportValidity();
@@ -504,6 +498,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
 
             const f = newTransferForm.elements;
+            if (f.tipo.value === "PACIENTE" && !f.id_gestion_paciente.value) {
+                showMessage("Buscá y elegí el paciente de la lista.", true);
+                document.getElementById("patient").focus();
+                return;
+            }
             const traslado = {
                 id: editId,
                 id_ambulancia: f.id_ambulancia.value,
