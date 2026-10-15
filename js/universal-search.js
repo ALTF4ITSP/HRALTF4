@@ -146,9 +146,10 @@
             {
                 title: 'Calendario',
                 section: 'Agenda',
-                detail: 'Sección en desarrollo',
+                detail: 'Turnos de los pacientes por semana',
+                href: 'calendar.html',
                 icon: '../imagenes/calendar-icon.svg',
-                terms: 'eventos citas agenda fechas'
+                terms: 'eventos citas agenda fechas turnos turno consulta nuevo turno agendar'
             },
             {
                 title: 'Inicio',

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario</title>
+  <link rel="stylesheet" href="../css/main-menu.css?v=20260927-brand-fix">
+  <link rel="stylesheet" href="../css/calendar.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;1,400;1,500&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../imagenes/hospital-dark.ico">
+  <script src="../js/main-menu.js?v=20260927-global" defer></script>
+  <script src="../js/universal-search.js?v=20260927-global" defer></script>
+  <script src="../js/calendar.js" defer></script>
+</head>
+
+<body>
+  <div class="page-background"></div>
+  <div class="page-glow"></div>
+
+  <main class="app-shell">
+    <aside class="sidebar">
+      <button type="button" class="sidebar-action" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="sidebar-nav">
+        <div class="nav-indicator"></div>
+
+        <a href="main-menu.html" class="nav-item">
+          <img src="../imagenes/house-icon.svg" alt="Inicio">
+          <span>Inicio</span>
+        </a>
+        <a href="documents.html" class="nav-item">
+          <img src="../imagenes/folder-icon.svg" alt="Documentos">
+          <span>Documentos</span>
+        </a>
+        <a href="trace.html" class="nav-item">
+          <img src="../imagenes/location-icon.svg" alt="Ambulancias">
+          <span>Ambulancias</span>
+        </a>
+        <a href="analytics.html" class="nav-item">
+          <img src="../imagenes/analytics-icon.svg" alt="Reportes">
+          <span>Reportes</span>
+        </a>
+        <a href="#" class="nav-item active">
+          <img src="../imagenes/calendar-icon.svg" alt="Calendario">
+          <span>Calendario</span>
+        </a>
+        <a href="surveys.html" class="nav-item">
+          <img src="../imagenes/survey-icon.svg" alt="Encuestas">
+          <span>Encuestas</span>
+        </a>
+        <a href="management.html" class="nav-item">
+          <img src="../imagenes/database-cog.svg" alt="Gestion">
+          <span>Gestion</span>
+        </a>
+
+        <div class="nav-spacer"></div>
+
+        <a href="settings.html" class="nav-item">
+          <img src="../imagenes/settings-icon.svg" alt="Configuración">
+          <span>Configuración</span>
+        </a>
+      </nav>
+    </aside>
+
+    <header class="topbar">
+      <div class="brand">
+        <img src="../imagenes/hospital-logo.png" alt="Hospital de Clínicas">
+        <span>HOSPITAL DE CLINICAS</span>
+      </div>
+
+      <div class="search-wrapper">
+        <input type="text" class="search-input" placeholder="Buscar...">
+        <button type="button" class="topbar-action search-action" aria-label="Buscar">
+          <img src="../imagenes/search-icon.svg" alt="" aria-hidden="true">
+        </button>
+      </div>
+    </header>
+
+    <section class="hero-panel calendar-panel">
+      <div class="calendar-heading">
+        <div class="hero-copy">
+          <h1>Calendario</h1>
+          <p>Turnos de los pacientes. Hacé clic en un horario libre para agendar uno nuevo.</p>
+        </div>
+        <button type="button" class="cal-button" id="newTurn">+ Nuevo turno</button>
+      </div>
+
+      <div class="cal-surface cal-toolbar">
+        <div class="cal-nav">
+          <button type="button" class="cal-icon-button" id="prevWeek" aria-label="Semana anterior">&#8249;</button>
+          <button type="button" class="cal-icon-button" id="nextWeek" aria-label="Semana siguiente">&#8250;</button>
+          <button type="button" class="cal-button secondary" id="todayButton">Hoy</button>
+        </div>
+        <h2 id="weekTitle" aria-live="polite"></h2>
+        <ul class="cal-legend" aria-label="Estados de los turnos">
+          <li><span class="dot state-programado"></span>Programado</li>
+          <li><span class="dot state-atendido"></span>Atendido</li>
+          <li><span class="dot state-cancelado"></span>Cancelado</li>
+        </ul>
+      </div>
+
+      <p class="cal-message" id="calMessage" role="status" hidden></p>
+
+      <div class="cal-surface cal-scroll">
+        <div class="cal-grid" id="calendarGrid"></div>
+      </div>
+    </section>
+
+    <!-- Formulario de turno -->
+    <dialog class="cal-dialog" id="turnDialog" aria-labelledby="dialogTitle">
+      <form id="turnForm" method="dialog">
+        <h2 id="dialogTitle">Nuevo turno</h2>
+
+        <div class="cal-field">
+          <label for="turnPatient">Paciente</label>
+          <select id="turnPatient" name="id_gestion_paciente" required></select>
+        </div>
+
+        <div class="cal-field">
+          <label for="turnDoctor">Médico <span>(opcional)</span></label>
+          <select id="turnDoctor" name="id_gestion_medico"></select>
+        </div>
+
+        <div class="cal-row">
+          <div class="cal-field">
+            <label for="turnDate">Fecha</label>
+            <input type="date" id="turnDate" name="fecha" required>
+          </div>
+          <div class="cal-field">
+            <label for="turnStart">Desde</label>
+            <input type="time" id="turnStart" name="hora_inicio" step="900" required>
+          </div>
+          <div class="cal-field">
+            <label for="turnEnd">Hasta</label>
+            <input type="time" id="turnEnd" name="hora_fin" step="900" required>
+          </div>
+        </div>
+
+        <div class="cal-field">
+          <label for="turnReason">Motivo</label>
+          <input type="text" id="turnReason" name="motivo" maxlength="200" placeholder="Ej. Control cardiológico" required>
+        </div>
+
+        <div class="cal-field">
+          <label for="turnState">Estado</label>
+          <select id="turnState" name="estado">
+            <option value="PROGRAMADO">Programado</option>
+            <option value="ATENDIDO">Atendido</option>
+            <option value="CANCELADO">Cancelado</option>
+          </select>
+        </div>
+
+        <div class="cal-field">
+          <label for="turnNotes">Notas <span>(opcional)</span></label>
+          <textarea id="turnNotes" name="notas" maxlength="500" placeholder="Ej. Venir en ayunas"></textarea>
+        </div>
+
+        <p class="cal-form-error" id="formError" role="alert"></p>
+
+        <div class="cal-dialog-actions">
+          <button type="button" class="cal-button danger" id="deleteTurn" hidden>Eliminar</button>
+          <button type="button" class="cal-button secondary" id="cancelTurn">Cancelar</button>
+          <button type="submit" class="cal-button">Guardar</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+</body>
+
+</html>
