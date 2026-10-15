@@ -376,6 +376,7 @@ CREATE TABLE `pregunta` (
   `tipo` varchar(50) NOT NULL,
   `orden` int(11) NOT NULL,
   `obligatoria` tinyint(1) NOT NULL DEFAULT 1,
+  `opciones` varchar(1000) DEFAULT NULL COMMENT 'Opciones de las preguntas tipo OPCION, una por línea',
   PRIMARY KEY (`id_pregunta`),
   KEY `idx_pregunta_encuesta` (`id_encuesta`),
   UNIQUE KEY `uq_pregunta_orden` (`id_encuesta`, `orden`),
