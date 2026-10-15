@@ -6,30 +6,45 @@ Esta guía explica qué pasa desde que alguien completa un formulario hasta que 
 
 ## 1. Las piezas del sistema
 
-Cada vez que una página guarda o lee datos, la información pasa por 5 piezas, siempre en el mismo orden:
+Cada vez que una página guarda o lee datos, la información pasa por 4 piezas, siempre en el mismo orden:
 
 ```
- Navegador                     Servidor (XAMPP)                                Base de datos
-┌──────────────┐   fetch   ┌─────────────────────────┐  require  ┌──────────────────────┐   SQL   ┌──────────┐
-│ HTML + JS    │ ────────► │ public/src/api-connection│ ───────► │ backend/php          │ ──────► │ altf4    │
-│ (formulario) │ ◄──────── │ (archivo "puente")       │          │ (la lógica real)     │ ◄────── │ (MariaDB)│
-└──────────────┘   JSON    └─────────────────────────┘           └──────────────────────┘         └──────────┘
+ Navegador                    Servidor (XAMPP)                        Base de datos
+┌──────────────┐   fetch   ┌──────────────────────┐  require  ┌────────────────┐   SQL   ┌──────────┐
+│ HTML + JS    │ ────────► │ php/                 │ ───────► │ connection.php │ ──────► │ altf4    │
+│ (formulario) │ ◄──────── │ (la lógica)          │          │ (la conexión)  │ ◄────── │ (MariaDB)│
+└──────────────┘   JSON    └──────────────────────┘           └────────────────┘         └──────────┘
 ```
+
+Las carpetas del proyecto están ordenadas por tipo de archivo:
+
+| Carpeta | Qué tiene |
+|---|---|
+| `index.html` | La pantalla de inicio de sesión |
+| `html/` | Todas las páginas |
+| `css/` | Todos los estilos |
+| `js/` | Todos los scripts |
+| `php/` | Todos los PHP, incluido `connection.php` |
+| `imagenes/` | Íconos, logos y fondos |
+| `archivos/` | Lo que sube la gente: `documentos/` y `perfiles/` (fotos) |
+| `base-de-datos/` | `database.sql` y `language.json` |
+| `docs/` | Estas guías |
+
+Como todas las páginas están en `html/`, siempre se usan las mismas rutas: `../css/`, `../js/`, `../php/` y `../imagenes/`.
 
 | Pieza | Dónde está | Qué hace |
 |---|---|---|
-| **HTML** | `public/src/views/...` | El formulario. Cada `<input>` tiene un `name` (ej. `name="nombre"`). |
-| **JS** | `public/src/js/...` | Toma los datos del formulario y los manda con `fetch` al PHP. Después muestra el mensaje de éxito o error. |
-| **Puente** | `public/src/api-connection/...` | Un PHP de 1 línea que carga el PHP real. Existe porque la carpeta `backend/` no está dentro de `public/`. |
-| **PHP real** | `backend/php/...` | Valida los datos y ejecuta las consultas SQL. |
-| **Conexión** | `backend/php/connection.php` | Abre la conexión a la base. Todos los PHP la usan. |
+| **HTML** | `html/` | El formulario. Cada `<input>` tiene un `name` (ej. `name="nombre"`). |
+| **JS** | `js/` | Toma los datos del formulario y los manda con `fetch` al PHP. Después muestra el mensaje de éxito o error. |
+| **PHP** | `php/` | Valida los datos y ejecuta las consultas SQL. |
+| **Conexión** | `php/connection.php` | Abre la conexión a la base. Todos los PHP la usan. |
 
 ### Importante: siempre abrir desde XAMPP
 
 El PHP solo se ejecuta si la página se abre desde **XAMPP**:
 
 ```
-http://localhost:880/cARPETA/HRALTF4/public/...
+http://localhost:880/cARPETA/HRALTF4/...
 ```
 
 Si la abrís con **Go Live** de VS Code (`127.0.0.1:5500`), el PHP **no se ejecuta**. El navegador recibe el texto del archivo en vez de los datos y aparece un error como `JSON.parse: unexpected character`. Live Server solo sirve para ver el diseño.
@@ -41,7 +56,7 @@ Si la abrís con **Go Live** de VS Code (`127.0.0.1:5500`), el PHP **no se ejecu
 Todos los PHP empiezan con:
 
 ```php
-require_once dirname(__DIR__) . '/connection.php';
+require_once __DIR__ . '/connection.php';
 ```
 
 Ese archivo tiene dos funciones que hacen lo mismo de dos formas distintas:
@@ -99,10 +114,9 @@ Archivos involucrados:
 
 | Paso | Archivo |
 |---|---|
-| Formulario | `public/src/views/register-restore/register.html` |
-| JS | `public/src/js/login-register/register.js` |
-| Puente | `public/src/api-connection/users/register.php` |
-| PHP real | `backend/php/users/register.php` |
+| Formulario | `html/register.html` |
+| JS | `js/register.js` |
+| PHP | `php/register.php` |
 
 ### Paso 1 — El formulario
 
@@ -198,7 +212,7 @@ Ese texto no se puede "deshacer". Al iniciar sesión, `login.php` usa `password_
 
 ## 6. El inicio de sesión y la sesión
 
-`backend/php/users/login.php`:
+`php/login.php`:
 
 1. Busca la fila de `usuario` por `nombre_usuario`.
 2. Verifica la contraseña con `password_verify()`.
@@ -236,7 +250,7 @@ ORDER BY u.fecha_creacion DESC;
 
 ## 8. ⚠️ Cuidado con `database.sql`
 
-`db/sql/database.sql` empieza con `USE altf4;` y después **`DROP TABLE` de todas las tablas**. Si lo importás, **se borra todo lo que tengas cargado** y queda solo lo que trae el archivo.
+`base-de-datos/database.sql` empieza con `USE altf4;` y después **`DROP TABLE` de todas las tablas**. Si lo importás, **se borra todo lo que tengas cargado** y queda solo lo que trae el archivo.
 
 Antes de importarlo, o antes de cualquier cambio grande, hacé una copia de seguridad desde la terminal:
 

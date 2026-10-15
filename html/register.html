@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="../css/log-reg.css">
+    <link rel="icon" type="image/x-icon" href="../imagenes/hospital-gradient.ico">
+</head>
+
+<body>
+    <div class="tarjeta">
+        <h1>Registro</h1>
+       <form
+    id="registerForm"
+    method="POST"
+    action="../php/register.php">
+
+    <div class="field-row">
+        <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre"
+            maxlength="100"
+            autocomplete="given-name"
+            required>
+
+        <input
+            type="text"
+            name="apellido"
+            placeholder="Apellido"
+            maxlength="100"
+            autocomplete="family-name"
+            required>
+    </div>
+
+    <label class="field-label" for="fechaNacimiento">Fecha de nacimiento</label>
+    <input
+        type="date"
+        id="fechaNacimiento"
+        name="fecha_nacimiento"
+        required>
+
+    <input
+        type="text"
+        name="usuario"
+        placeholder="Usuario"
+        minlength="6"
+        maxlength="50"
+        autocomplete="username"
+        required>
+
+    <div class="password-wrapper">
+        <input
+            type="password"
+            id="contraseña"
+            name="contrasena"
+            placeholder="Contraseña"
+            minlength="8"
+            maxlength="16"
+            required>
+
+        <button
+            type="button"
+            id="togglePasswordBtn"
+            class="btn-toggle-eye">
+
+            <img
+                src="../imagenes/eye.svg"
+                id="eyeIcon"
+                alt="Mostrar contraseña">
+        </button>
+    </div>
+
+    <div class="strength-meter">
+        <div id="strengthBar" class="strength-bar"></div>
+    </div>
+
+    <span
+        id="strengthText"
+        class="strength-text">
+    </span>
+
+    <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required>
+
+    <input
+        type="text"
+        name="CI"
+        placeholder="CI (sin puntos ni guion)"
+        inputmode="numeric"
+        pattern="[0-9]{7,8}"
+        title="Ingresá la cédula sin puntos ni guion (7 u 8 números)"
+        required>
+
+    <button type="submit">
+        Registrarse
+    </button>
+
+    <p id="registerMessage"></p>
+
+</form>
+        <p>
+            ¿Ya tienes cuenta?
+            <a href="../index.html">Iniciar Sesion</a>
+        </p>
+    </div>
+    
+    <script src="../js/register.js"></script>
+</body>
+
+</html>

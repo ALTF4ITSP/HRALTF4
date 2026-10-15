@@ -4,18 +4,17 @@ Esta guía sirve para cuando una página nueva (como Encuestas) necesita guardar
 
 ---
 
-## Resumen: los 7 pasos
+## Resumen: los 6 pasos
 
 | # | Qué hacés | Dónde |
 |---|---|---|
 | 0 | Copia de seguridad | Terminal |
 | 1 | Diseñar la tabla (en papel) | — |
 | 2 | Crear la tabla **sin borrar nada** | phpMyAdmin → pestaña SQL |
-| 3 | Agregarla a `database.sql` y al archivo de cambios | `db/sql/` |
-| 4 | Escribir el PHP | `backend/php/<modulo>/` |
-| 5 | Escribir el puente | `public/src/api-connection/<modulo>/` |
-| 6 | Llamarlo desde el JS | `public/src/js/<modulo>/` |
-| 7 | Probar desde XAMPP | `http://localhost:880/cARPETA/HRALTF4/...` |
+| 3 | Agregarla a `database.sql` y al archivo de cambios | `base-de-datos/` |
+| 4 | Escribir el PHP | `php/` |
+| 5 | Llamarlo desde el JS | `js/` (y la página en `html/`) |
+| 6 | Probar desde XAMPP | `http://localhost:880/cARPETA/HRALTF4/...` |
 
 ---
 
@@ -112,27 +111,27 @@ No hace falta poner `id_aviso`, `fecha_publicacion` ni `visible`, porque se comp
 
 Tus compañeros tienen **su propia base** en su computadora. Para que también tengan la tabla, hay que dejarla escrita en dos lugares:
 
-**a) En `db/sql/database.sql`**, para que la tenga quien cree la base desde cero:
+**a) En `base-de-datos/database.sql`**, para que la tenga quien cree la base desde cero:
 
 1. Agregá `DROP TABLE IF EXISTS \`aviso\`;` **arriba de todo**, en la lista de `DROP`, **antes** de la línea de `funcionario`. Las tablas que apuntan a otras se borran primero.
 2. Pegá el `CREATE TABLE` y el `INSERT` **después** del `CREATE TABLE \`funcionario\``. Una tabla solo puede apuntar a otra que ya exista.
 3. Si cargaste datos de ejemplo, agregá al final, junto a las otras líneas iguales:
    `ALTER TABLE \`aviso\` AUTO_INCREMENT = 3;` (el próximo id libre).
 
-**b) En un archivo de cambios**, para quien ya tiene la base y **no quiere borrarla**: creá `db/sql/cambios/2026-10-15-tabla-aviso.sql` con solo el `CREATE TABLE` y el `INSERT`. Tus compañeros lo ejecutan en su pestaña SQL y no pierden nada.
+**b) En un archivo de cambios**, para quien ya tiene la base y **no quiere borrarla**: creá `base-de-datos/cambios/2026-10-15-tabla-aviso.sql` con solo el `CREATE TABLE` y el `INSERT`. Tus compañeros lo ejecutan en su pestaña SQL y no pierden nada.
 
 > Nunca le pidas a nadie que reimporte `database.sql` completo: borra todo lo que tenga cargado.
 
 ### Paso 4 — El PHP
 
-Creá la carpeta `backend/php/avisos/` con un archivo por acción.
+Creá un archivo por acción en `php/`. El nombre empieza con el módulo (`avisos-...`), así quedan juntos en la carpeta.
 
-**`backend/php/avisos/avisos-list.php`** — devuelve los avisos visibles:
+**`php/avisos-list.php`** — devuelve los avisos visibles:
 
 ```php
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/connection.php';
+require_once __DIR__ . '/connection.php';
 header('Content-Type: application/json; charset=utf-8');
 
 try {
@@ -153,12 +152,12 @@ try {
 }
 ```
 
-**`backend/php/avisos/avisos-create.php`** — guarda un aviso nuevo:
+**`php/avisos-create.php`** — guarda un aviso nuevo:
 
 ```php
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/connection.php';
+require_once __DIR__ . '/connection.php';
 header('Content-Type: application/json; charset=utf-8');
 
 function aviso_error(int $status, string $message): never
@@ -197,29 +196,12 @@ try {
 
 > **Siempre usá `prepare` con `?`.** Nunca pegues un dato del usuario directamente dentro del SQL, como en `"... WHERE titulo = '$titulo'"`, porque eso permite inyección SQL.
 
-### Paso 5 — El puente
+### Paso 5 — El JS
 
-Por cada PHP, creá un archivo en `public/src/api-connection/avisos/`.
-
-**`public/src/api-connection/avisos/list.php`**
-
-```php
-<?php
-declare(strict_types=1);
-
-require_once dirname(__DIR__, 4) . '/backend/php/avisos/avisos-list.php';
-```
-
-**`public/src/api-connection/avisos/create.php`** es igual, pero apuntando a `avisos-create.php`.
-
-> El número tiene que ser **4**: desde `api-connection/avisos/` hay que subir 4 carpetas para llegar a `HRALTF4/`. Si ponés otro número, aparece el error `Failed opening required`.
-
-### Paso 6 — El JS
-
-Para **mostrar** los avisos (desde una página en `public/src/views/<carpeta>/`):
+Para **mostrar** los avisos (desde una página en `html/`):
 
 ```js
-fetch("../../api-connection/avisos/list.php", { headers: { Accept: "application/json" } })
+fetch("../php/avisos-list.php", { headers: { Accept: "application/json" } })
   .then((response) => response.json())
   .then((data) => {
     if (data.success !== true) throw new Error(data.error.message);
@@ -239,7 +221,7 @@ Para **guardar** uno nuevo, desde un formulario con `<input name="titulo">` y `<
 ```js
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const response = await fetch("../../api-connection/avisos/create.php", {
+  const response = await fetch("../php/avisos-create.php", {
     method: "POST",
     body: new FormData(form),     // manda todos los campos con su "name"
     credentials: "same-origin"    // manda la sesión (para saber quién escribe)
@@ -249,7 +231,7 @@ form.addEventListener("submit", async (event) => {
 });
 ```
 
-### Paso 7 — Probar
+### Paso 6 — Probar
 
 1. Abrí la página desde **XAMPP** (`localhost:880`), no desde Go Live.
 2. Si algo falla, apretá **F12 → Red (Network)**, hacé clic en el pedido al PHP y mirá la **Respuesta**.
@@ -267,7 +249,7 @@ ALTER TABLE `pregunta`
 ```
 
 - Si la columna nueva es obligatoria (`NOT NULL`), dale un `DEFAULT`. Si no, las filas que ya existen no tienen ningún valor y la base da error.
-- Después agregá la columna también en el `CREATE TABLE` de `database.sql` y en un archivo de `db/sql/cambios/`.
+- Después agregá la columna también en el `CREATE TABLE` de `database.sql` y en un archivo de `base-de-datos/cambios/`.
 
 Otros cambios útiles:
 
@@ -305,7 +287,7 @@ envio_encuesta 1 ── N respuesta       (cada vez que alguien responde = 1 env
 | `envio_encuesta` | una vez que alguien completó la encuesta | `id_encuesta`, `fecha_hora`, `completada` |
 | `respuesta` | la respuesta a una pregunta | `id_envio`, `id_pregunta`, `respuesta_texto` |
 
-El PHP de cada acción está en `backend/php/surveys/`:
+El PHP de cada acción está en `php/`:
 
 | Acción | PHP | Qué hace en la base |
 |---|---|---|
@@ -324,10 +306,10 @@ El PHP de cada acción está en `backend/php/surveys/`:
 | Error | Causa | Solución |
 |---|---|---|
 | `JSON.parse: unexpected character` | La página está abierta con Go Live (`:5500`) | Abrila desde `localhost:880` |
-| `Failed opening required ...` | El número de `dirname(__DIR__, N)` del puente está mal | Tiene que ser `4` |
+| `404` al llamar al PHP | La ruta del `fetch` está mal escrita | Desde una página de `html/` siempre es `../php/<archivo>.php` |
 | `Cannot add or update a child row: a foreign key constraint fails` | El id que mandás no existe en la otra tabla | Revisá que exista, por ejemplo el `id_funcionario` |
 | `Cannot delete or update a parent row` | Hay filas en otra tabla que apuntan a la que querés borrar | Borrá primero las de la otra tabla |
-| `Unknown column 'x' in 'field list'` | Tu base no tiene esa columna (está desactualizada) | Ejecutá el archivo de `db/sql/cambios/` que la agrega |
+| `Unknown column 'x' in 'field list'` | Tu base no tiene esa columna (está desactualizada) | Ejecutá el archivo de `base-de-datos/cambios/` que la agrega |
 | `Field 'x' doesn't have a default value` | Una columna `NOT NULL` sin `DEFAULT` no se completó en el `INSERT` | Agregala al `INSERT` o dale un `DEFAULT` |
 | Aparecen `Ã³` en vez de `ó` | La tabla no es `utf8mb4` | Creala con `CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci` |
 
@@ -338,8 +320,7 @@ El PHP de cada acción está en `backend/php/surveys/`:
 - [ ] Hice la copia de seguridad.
 - [ ] Creé la tabla con `CREATE TABLE` (sin `DROP`) en mi base.
 - [ ] La agregué a `database.sql`: `DROP` arriba, `CREATE` en orden y `AUTO_INCREMENT` al final.
-- [ ] Creé el archivo en `db/sql/cambios/` para mis compañeros.
-- [ ] PHP en `backend/php/<modulo>/` con `prepare` y `?`.
-- [ ] Puente en `public/src/api-connection/<modulo>/` con `dirname(__DIR__, 4)`.
+- [ ] Creé el archivo en `base-de-datos/cambios/` para mis compañeros.
+- [ ] PHP en `php/<modulo>-<accion>.php` con `prepare` y `?`.
 - [ ] El JS usa `fetch` y muestra `data.error.message` si algo falla.
 - [ ] Lo probé desde `localhost:880` y vi la fila en phpMyAdmin.
