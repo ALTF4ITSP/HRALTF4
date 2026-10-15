@@ -1,0 +1,214 @@
+.back-link {
+  width: fit-content;
+  color: rgba(171, 186, 234, 0.76);
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: #abbaea;
+}
+
+.survey-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-card {
+  padding: 26px 28px;
+  border-radius: 20px;
+}
+
+.form-card h2 {
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Krub", "Inclusive Sans", sans-serif;
+  font-size: 1.02rem;
+  font-weight: 600;
+}
+
+.form-card h2::before {
+  content: "";
+  width: 5px;
+  height: 22px;
+  border-radius: 4px;
+  background: #abbaea;
+}
+
+/* Campos (mismo estilo que documents-upload) */
+.survey-field + .survey-field {
+  margin-top: 16px;
+}
+
+.survey-field label {
+  display: block;
+  margin: 0 0 7px 3px;
+  color: rgba(238, 238, 238, 0.58);
+  font-size: 0.88rem;
+}
+
+.survey-field input,
+.survey-field select,
+.survey-field textarea,
+.question-card input,
+.question-card select,
+.question-card textarea {
+  width: 100%;
+  padding: 0 14px;
+  border: 1px solid rgba(150, 163, 209, 0.24);
+  border-radius: 10px;
+  outline: 0;
+  background: rgba(8, 12, 28, 0.5);
+  color: rgba(238, 238, 238, 0.9);
+  font: inherit;
+  font-size: 0.92rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.survey-field input,
+.survey-field select,
+.question-card input,
+.question-card select {
+  height: 44px;
+}
+
+.survey-field textarea,
+.question-card textarea {
+  min-height: 90px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+.survey-form :is(input, select, textarea):focus {
+  border-color: rgba(171, 186, 234, 0.52);
+  box-shadow: 0 0 0 3px rgba(171, 186, 234, 0.16);
+}
+
+.survey-form ::placeholder {
+  color: rgba(238, 238, 238, 0.42);
+}
+
+.survey-form select option {
+  background: #101732;
+}
+
+/* Preguntas */
+.question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.question-card {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid rgba(238, 238, 238, 0.12);
+  border-radius: 16px;
+  background: rgba(8, 12, 28, 0.34);
+}
+
+.question-top,
+.question-bottom {
+  display: flex;
+  gap: 12px;
+}
+
+.question-bottom select {
+  width: 230px;
+  flex-shrink: 0;
+}
+
+.question-number {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: rgba(171, 186, 234, 0.18);
+  color: #abbaea;
+  font-weight: 700;
+}
+
+.remove-question {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(238, 238, 238, 0.13);
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.remove-question:hover {
+  background: rgba(255, 107, 107, 0.15);
+}
+
+.remove-question img {
+  width: 18px;
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+}
+
+.add-question {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 14px;
+  border: 2px dashed rgba(150, 163, 209, 0.24);
+  border-radius: 14px;
+  background: transparent;
+  color: #abbaea;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.add-question:hover {
+  border-color: rgba(171, 186, 234, 0.52);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Acciones */
+.form-message {
+  min-height: 1em;
+  margin: 0;
+  color: #ff6b6b;
+  font-size: 0.88rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .form-card {
+    padding: 20px;
+  }
+
+  .question-bottom {
+    flex-direction: column;
+  }
+
+  .question-bottom select {
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+}

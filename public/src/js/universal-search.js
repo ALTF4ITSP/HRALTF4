@@ -91,7 +91,8 @@
             {
                 title: 'Cargar encuesta',
                 section: 'Encuestas',
-                detail: 'Sección en desarrollo',
+                detail: 'Crear una nueva encuesta para pacientes',
+                href: 'surveys/survey-new.html',
                 icon: '../../assets/Icons/survey-icon.svg',
                 terms: 'crear encuesta nueva encuesta subir encuesta'
             },

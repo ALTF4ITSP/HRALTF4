@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const script = document.querySelector('script[src*="js/main-menu.js"]');
 
         if (script) {
-            const endpoint = new URL('../../api/settings_get.php', script.src);
+            const endpoint = new URL('../api-connection/settings/settings_get.php', script.src);
 
             fetch(endpoint, { credentials: 'same-origin' })
                 .then(response => response.json().then(data => ({ response, data })))

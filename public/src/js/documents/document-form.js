@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!documentIdField || !documentIdField.value) return;
 
     try {
-      const response = await fetch(`../../../api/documents/get.php?id=${encodeURIComponent(documentIdField.value)}`);
+      const response = await fetch(`../../api-connection/documents/get.php?id=${encodeURIComponent(documentIdField.value)}`);
       const payload = await response.json();
       if (!response.ok || payload.success !== true) throw new Error(payload?.error?.message || "No se pudo cargar el documento.");
 
