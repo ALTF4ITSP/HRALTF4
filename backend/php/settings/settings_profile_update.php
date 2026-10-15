@@ -15,6 +15,9 @@ try {
             p.nombre,
             p.apellido,
             p.email,
+            f.cargo,
+            f.sector,
+            u.nombre_usuario,
             c.centro,
             c.foto_publica
          FROM usuario u
@@ -34,7 +37,10 @@ try {
             'SELECT
                 p.nombre,
                 p.apellido,
-                p.email
+                p.email,
+                f.cargo,
+                f.sector,
+                u.nombre_usuario
              FROM usuario u
              INNER JOIN funcionario f ON f.id_persona = u.id_funcionario
              INNER JOIN persona p ON p.id_persona = f.id_persona
@@ -52,6 +58,9 @@ try {
             'nombre' => $personaActual['nombre'],
             'apellido' => $personaActual['apellido'],
             'email' => $personaActual['email'],
+            'cargo' => $personaActual['cargo'],
+            'sector' => $personaActual['sector'],
+            'nombre_usuario' => $personaActual['nombre_usuario'],
             'centro' => 'Hospital de Clínicas',
             'foto_publica' => 1
         ];
@@ -69,6 +78,18 @@ try {
         ? trim((string) $datos['email'])
         : (string) ($actual['email'] ?? '');
 
+    $cargo = array_key_exists('cargo', $datos)
+        ? settings_clean_text($datos['cargo'], 100)
+        : (string) ($actual['cargo'] ?? '');
+
+    $sector = array_key_exists('sector', $datos)
+        ? settings_clean_text($datos['sector'], 100)
+        : (string) ($actual['sector'] ?? '');
+
+    $nombreUsuario = array_key_exists('nombre_usuario', $datos)
+        ? trim((string) $datos['nombre_usuario'])
+        : $actual['nombre_usuario'];
+
     $centro = array_key_exists('centro', $datos)
         ? settings_clean_text($datos['centro'], 150)
         : $actual['centro'];
@@ -79,6 +100,40 @@ try {
 
     if ($apellido === '') {
         settings_json_response(422, false, [], 'El apellido es obligatorio.');
+    }
+
+    if ($cargo === '') {
+        settings_json_response(422, false, [], 'El cargo es obligatorio.');
+    }
+
+    if ($sector === '') {
+        settings_json_response(422, false, [], 'El sector es obligatorio.');
+    }
+
+    // Mismas reglas que en el registro
+    if (!preg_match('/^[a-zA-Z0-9._-]{6,50}$/', $nombreUsuario)) {
+        settings_json_response(
+            422,
+            false,
+            [],
+            'El usuario debe tener entre 6 y 50 caracteres y solo puede contener letras, números, punto, guion o guion bajo.'
+        );
+    }
+
+    $consultaNombreUsuario = $conexion->prepare(
+        'SELECT id_usuario
+         FROM usuario
+         WHERE nombre_usuario = :nombre_usuario
+           AND id_usuario <> :id_usuario
+         LIMIT 1'
+    );
+    $consultaNombreUsuario->execute([
+        'nombre_usuario' => $nombreUsuario,
+        'id_usuario' => $idUsuario
+    ]);
+
+    if ($consultaNombreUsuario->fetch()) {
+        settings_json_response(422, false, [], 'Ese nombre de usuario ya está registrado.');
     }
 
     if ($centro === '') {
@@ -110,6 +165,32 @@ try {
         'id_usuario' => $idUsuario
     ]);
 
+    $actualizarFuncionario = $conexion->prepare(
+        'UPDATE funcionario
+         SET cargo = :cargo,
+             sector = :sector
+         WHERE id_persona = (
+             SELECT id_funcionario
+             FROM usuario
+             WHERE id_usuario = :id_usuario
+         )'
+    );
+    $actualizarFuncionario->execute([
+        'cargo' => $cargo,
+        'sector' => $sector,
+        'id_usuario' => $idUsuario
+    ]);
+
+    $actualizarUsuario = $conexion->prepare(
+        'UPDATE usuario
+         SET nombre_usuario = :nombre_usuario
+         WHERE id_usuario = :id_usuario'
+    );
+    $actualizarUsuario->execute([
+        'nombre_usuario' => $nombreUsuario,
+        'id_usuario' => $idUsuario
+    ]);
+
     settings_get_or_create_config($conexion, $idUsuario);
 
     $fotoPublica = array_key_exists('foto_publica', $datos)
@@ -135,11 +216,15 @@ try {
         'apellido' => $apellido,
         'email' => $email !== '' ? $email : null
     ]);
+    $_SESSION['nombre_usuario'] = $nombreUsuario;
 
     settings_json_response(200, true, [
         'nombre' => $nombre,
         'apellido' => $apellido,
         'email' => $email !== '' ? $email : null,
+        'cargo' => $cargo,
+        'sector' => $sector,
+        'nombre_usuario' => $nombreUsuario,
         'centro' => $centro,
         'foto_publica' => (bool) $fotoPublica
     ]);

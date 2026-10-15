@@ -113,26 +113,70 @@
                         aria-labelledby="general-tab">
 
                         <div class="general-details">
-                            <div class="settings-field">
-                                <label for="settings-name">Nombre</label>
-                                <input id="settings-name" type="text" placeholder="Usuario...">
+                            <div class="settings-row">
+                                <div class="settings-field">
+                                    <label for="settings-name">Nombre</label>
+                                    <input id="settings-name" type="text" maxlength="100" placeholder="Nombre...">
+                                </div>
+
+                                <div class="settings-field">
+                                    <label for="settings-lastname">Apellido</label>
+                                    <input id="settings-lastname" type="text" maxlength="100" placeholder="Apellido...">
+                                </div>
                             </div>
 
                             <div class="settings-field">
                                 <label for="settings-email">Email</label>
-                                <input id="settings-email" type="email" placeholder="Email...">
+                                <input id="settings-email" type="email" maxlength="150" placeholder="Email...">
+                            </div>
+
+                            <div class="settings-row">
+                                <div class="settings-field">
+                                    <label for="settings-role">Cargo (rol)</label>
+                                    <input id="settings-role" type="text" maxlength="100" placeholder="Ej. Enfermero..."
+                                        list="role-options">
+                                </div>
+
+                                <div class="settings-field">
+                                    <label for="settings-sector">Sector</label>
+                                    <input id="settings-sector" type="text" maxlength="100" placeholder="Ej. Emergencia..."
+                                        list="sector-options">
+                                </div>
+                            </div>
+
+
+                            <div class="settings-field">
+                                <label for="settings-username">Nombre de usuario</label>
+                                <input id="settings-username" type="text" minlength="6" maxlength="50"
+                                    autocomplete="username" placeholder="Usuario...">
                             </div>
 
                             <div class="settings-field">
                                 <label for="settings-center">Centro</label>
-                                <input id="settings-center" type="text" placeholder="Hospital de Clínicas...">
+                                <input id="settings-center" type="text" maxlength="150" placeholder="Hospital de Clínicas...">
                             </div>
+
+                            <!-- Sugerencias: se puede elegir una o escribir otra -->
+                            <datalist id="role-options">
+                                <option value="Administrativo"></option>
+                                <option value="Chofer"></option>
+                                <option value="Enfermero"></option>
+                                <option value="Médico"></option>
+                                <option value="Gestor"></option>
+                            </datalist>
+                            <datalist id="sector-options">
+                                <option value="Documentación"></option>
+                                <option value="Emergencia"></option>
+                                <option value="Traslados"></option>
+                                <option value="Clínica"></option>
+                                <option value="Laboratorio"></option>
+                            </datalist>
+
+                            <p class="settings-status" id="profileStatus" role="status" aria-live="polite"></p>
 
                             <div class="specialties-group">
                                 <p>Especializaciones</p>
                                 <div class="specialty-list">
-                                    <button type="button" class="specialty-chip">Gooner</button>
-                                    <button type="button" class="specialty-chip">Goonette</button>
                                     <button type="button" class="specialty-add"
                                         aria-label="Agregar especialización">+</button>
                                 </div>
@@ -145,10 +189,11 @@
                             <p class="section-label">Foto de Perfil</p>
 
                             <button type="button" class="upload-box">
+                                <img class="photo-preview" id="photoPreview" alt="Tu foto de perfil" hidden>
                                 <span class="upload-icon" aria-hidden="true">
                                     <img src="../../assets/Icons/camera-icon.svg" alt="Subir Imagen">
                                 </span>
-                                <span>SUBIR IMAGEN</span>
+                                <span class="upload-text">SUBIR IMAGEN</span>
                             </button>
 
                             <div class="visibility-setting">
@@ -216,12 +261,32 @@
                             </div>
                         </div>
 
-                        <div class="password-setting">
-                            <p>¿Olvidaste tu Contraseña?</p>
-                            <button type="button"
-                                onclick="window.location.href='register-restore/restore-password.html'"
-                                class="reset-password">Restablecer Contraseña</button>
-                        </div>
+                        <form class="password-setting" id="passwordForm">
+                            <p>Cambiar Contraseña</p>
+
+                            <div class="settings-field">
+                                <label for="password-current">Contraseña actual</label>
+                                <input id="password-current" name="contrasena_actual" type="password"
+                                    autocomplete="current-password" required>
+                            </div>
+
+                            <div class="settings-field">
+                                <label for="password-new">Contraseña nueva</label>
+                                <input id="password-new" name="contrasena_nueva" type="password" minlength="8"
+                                    autocomplete="new-password" required>
+                            </div>
+
+                            <div class="settings-field">
+                                <label for="password-repeat">Repetir contraseña nueva</label>
+                                <input id="password-repeat" name="contrasena_repetida" type="password" minlength="8"
+                                    autocomplete="new-password" required>
+                            </div>
+
+                            <p class="settings-hint">Mínimo 8 caracteres, con mayúscula, minúscula, número y símbolo.</p>
+                            <p class="settings-status" id="passwordStatus" role="status" aria-live="polite"></p>
+
+                            <button type="submit" class="reset-password">Cambiar Contraseña</button>
+                        </form>
                     </section>
                 </div>
             </section>

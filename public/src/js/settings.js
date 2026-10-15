@@ -3,7 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const panels = document.querySelectorAll(".settings-panel");
 
     const nameInput = document.getElementById("settings-name");
+    const lastNameInput = document.getElementById("settings-lastname");
     const emailInput = document.getElementById("settings-email");
+    const roleInput = document.getElementById("settings-role");
+    const sectorInput = document.getElementById("settings-sector");
+    const usernameInput = document.getElementById("settings-username");
+    const profileStatus = document.getElementById("profileStatus");
+    const photoPreview = document.getElementById("photoPreview");
+    const passwordForm = document.getElementById("passwordForm");
+    const passwordStatus = document.getElementById("passwordStatus");
     const centerInput = document.getElementById("settings-center");
     const languageSelect = document.getElementById("settings-language");
 
@@ -30,10 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const userAvatar = document.querySelector(".user-avatar img");
 
     /*
-     * settings.html está dentro de public/src/views y las APIs están
-     * dentro de public/api.
+     * settings.html está dentro de public/src/views y los PHP puente
+     * están en public/src/api-connection/settings.
      */
-    const API = "../../api";
+    const API = "../api-connection/settings";
 
     /*
      * ------------------------------------------------------------
@@ -79,6 +87,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function getToggleValue(toggle) {
         return Boolean(toggle && toggle.classList.contains("is-on"));
+    }
+
+    // Muestra un mensaje debajo de un formulario (verde si salió bien, rojo si no)
+    function setStatus(element, message, type) {
+        if (!element) {
+            return;
+        }
+
+        element.textContent = message;
+        element.classList.toggle("is-ok", type === "ok");
+        element.classList.toggle("is-error", type === "error");
+    }
+
+    function showPhoto() {
+        const url = `${API}/settings_photo.php?time=${Date.now()}`;
+
+        if (photoPreview) {
+            photoPreview.src = url;
+            photoPreview.hidden = false;
+            uploadButton?.classList.add("has-photo");
+            uploadButton?.querySelector(".upload-text")?.replaceChildren("CAMBIAR IMAGEN");
+        }
+
+        if (userAvatar) {
+            userAvatar.src = url;
+            userAvatar.classList.add("is-photo");
+        }
     }
 
     function showError(error) {
@@ -147,13 +182,20 @@ document.addEventListener("DOMContentLoaded", () => {
             const usuario = data.usuario || {};
             const configuracion = data.configuracion || {};
 
-            if (nameInput) {
-                nameInput.value = usuario.nombre || "";
-            }
+            const fields = [
+                [nameInput, usuario.nombre],
+                [lastNameInput, usuario.apellido],
+                [emailInput, usuario.email],
+                [roleInput, usuario.cargo],
+                [sectorInput, usuario.sector],
+                [usernameInput, usuario.nombre_usuario]
+            ];
 
-            if (emailInput) {
-                emailInput.value = usuario.email || "";
-            }
+            fields.forEach(([input, value]) => {
+                if (input) {
+                    input.value = value || "";
+                }
+            });
 
             if (centerInput) {
                 centerInput.value = configuracion.centro || "";
@@ -177,9 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             loadSpecialties(data.especializaciones || []);
 
-            if (configuracion.foto_perfil && userAvatar) {
-                userAvatar.src =
-                    `${API}/settings_photo.php?time=${Date.now()}`;
+            if (configuracion.foto_perfil) {
+                showPhoto();
             }
         } catch (error) {
             showError(error);
@@ -195,7 +236,11 @@ document.addEventListener("DOMContentLoaded", () => {
     async function updateProfile() {
         const datos = {
             nombre: nameInput ? nameInput.value : "",
+            apellido: lastNameInput ? lastNameInput.value : "",
             email: emailInput ? emailInput.value : "",
+            cargo: roleInput ? roleInput.value : "",
+            sector: sectorInput ? sectorInput.value : "",
+            nombre_usuario: usernameInput ? usernameInput.value : "",
             centro: centerInput ? centerInput.value : "",
             foto_publica: getToggleValue(photoVisibilityToggle)
         };
@@ -220,18 +265,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function saveProfile() {
+        setStatus(profileStatus, "Guardando...", "");
+
         try {
             await updateProfile();
+            setStatus(profileStatus, "Cambios guardados.", "ok");
         } catch (error) {
-            showError(error);
+            // Se muestra el error y se vuelven a cargar los datos guardados
             await loadSettings();
+            setStatus(profileStatus, error.message, "error");
         }
     }
 
     /*
      * Los campos se guardan cuando el usuario termina de modificarlos.
      */
-    [nameInput, emailInput, centerInput].forEach((input) => {
+    [
+        nameInput,
+        lastNameInput,
+        emailInput,
+        roleInput,
+        sectorInput,
+        usernameInput,
+        centerInput
+    ].forEach((input) => {
         input?.addEventListener("change", saveProfile);
     });
 
@@ -288,12 +345,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: formData
             });
 
-            if (userAvatar) {
-                userAvatar.src =
-                    `${API}/settings_photo.php?time=${Date.now()}`;
-            }
-
-            alert("La foto de perfil se actualizó correctamente.");
+            showPhoto();
+            setStatus(profileStatus, "La foto de perfil se actualizó.", "ok");
         } catch (error) {
             showError(error);
         }
@@ -317,6 +370,40 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             setToggle(photoVisibilityToggle, previousValue);
             showError(error);
+        }
+    });
+
+    /*
+     * ------------------------------------------------------------
+     * CAMBIAR CONTRASEÑA
+     * ------------------------------------------------------------
+     */
+
+    passwordForm?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const datos = Object.fromEntries(new FormData(passwordForm));
+
+        if (datos.contrasena_nueva !== datos.contrasena_repetida) {
+            setStatus(passwordStatus, "La contraseña nueva y la repetida no coinciden.", "error");
+            return;
+        }
+
+        setStatus(passwordStatus, "Guardando...", "");
+
+        try {
+            await request(`${API}/settings_password_update.php`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(datos)
+            });
+
+            passwordForm.reset();
+            setStatus(passwordStatus, "La contraseña se cambió correctamente.", "ok");
+        } catch (error) {
+            setStatus(passwordStatus, error.message, "error");
         }
     });
 
