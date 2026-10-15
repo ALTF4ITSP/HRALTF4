@@ -46,6 +46,10 @@ if ((int) $archivo['size'] <= 0 || (int) $archivo['size'] > 10 * 1024 * 1024) {
     create_response(422, false, [], 'El archivo debe pesar como máximo 10 MB.');
 }
 
+// Quién sube el documento (si hay sesión iniciada)
+session_start();
+$idFuncionario = (int) ($_SESSION['id_funcionario'] ?? 0) ?: null;
+
 $conexion = null;
 $rutaFisica = null;
 try {
@@ -68,8 +72,8 @@ try {
         throw new RuntimeException('No se pudo guardar el archivo en el servidor.');
     }
 
-    $insertar = $conexion->prepare("INSERT INTO documento (id_tipo_documento, titulo, descripcion, ruta_archivo, fecha_carga, version, estado) VALUES (?, ?, ?, ?, ?, 1, 'ACTIVO')");
-    $insertar->execute([$idTipo, $nombre, $descripcion, 'archivos/documentos/' . $nombreArchivo, $fecha . ' 00:00:00']);
+    $insertar = $conexion->prepare("INSERT INTO documento (id_tipo_documento, titulo, descripcion, paciente, ruta_archivo, fecha_carga, version, estado, id_funcionario_carga) VALUES (?, ?, ?, ?, ?, ?, 1, 'ACTIVO', ?)");
+    $insertar->execute([$idTipo, $nombre, $descripcion, mb_substr($paciente, 0, 100), 'archivos/documentos/' . $nombreArchivo, $fecha . ' 00:00:00', $idFuncionario]);
     $idDocumento = (int) $conexion->lastInsertId();
     $conexion->commit();
     create_response(201, true, ['id_documento' => $idDocumento]);

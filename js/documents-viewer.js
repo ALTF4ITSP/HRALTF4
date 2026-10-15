@@ -3,52 +3,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(window.location.search);
-  const formats = new Set(["pdf", "docx", "pptx", "png", "jpg", "jpeg"]);
-  const sampleDocuments = {
-    1: { title: "DOCUMENTO 1", type: "pdf", size: "2.4 MB" },
-    2: { title: "DOCUMENTO 2", type: "docx", size: "1.8 MB" },
-    3: { title: "DOCUMENTO 3", type: "pptx", size: "860 KB" },
-    4: { title: "DOCUMENTO 4", type: "png", size: "1.2 MB" },
-    5: { title: "DOCUMENTO 5", type: "jpg", size: "—" }
-  };
-  const queryValue = (...names) => {
-    for (const name of names) {
-      const value = params.get(name)?.trim();
-      if (value) return value;
-    }
-    return null;
-  };
-  const normalizeFormat = (value) => {
-    const format = String(value || "").replace(/^\./, "").toLowerCase();
-    return formats.has(format) ? (format === "jpeg" ? "jpg" : format) : "pdf";
-  };
-  const safeSource = (value) => {
-    if (!value) return null;
-    try {
-      const url = new URL(value, window.location.href);
-      if (["http:", "https:", "file:"].includes(url.protocol)) return url.href;
-    } catch (_) { /* Invalid optional preview URL. */ }
-    return null;
-  };
-
-  const rawId = queryValue("id");
-  const sample = rawId && sampleDocuments[rawId] && !queryValue("title", "name") ? sampleDocuments[rawId] : null;
-  const type = normalizeFormat(queryValue("type", "format") || sample?.type);
-  const pageCountValue = Number.parseInt(queryValue("pages"), 10);
+  const rawId = params.get("id");
+  // Se completan con los datos del documento (php/documents-get.php)
   const data = {
-    id: rawId || "DOC-2026-00045",
-    title: queryValue("title", "name") || sample?.title || "DOCUMENTO MEDICO: Prostatectomía radical",
-    patient: queryValue("patient") || (sample ? "Paciente no indicado" : "Juan Benitez"),
-    type,
-    kind: queryValue("kind", "documentType") || "Informe Médico",
-    size: queryValue("size") || sample?.size || "2.4 MB",
-    author: queryValue("author") || "Usuario",
-    uploaded: queryValue("uploaded", "date") || (sample ? "31/07/2026" : "24/07/2026"),
-    updated: queryValue("updated") || "28/07/2026 · 5:46 PM",
-    source: safeSource(queryValue("source", "file")),
-    pages: Number.isInteger(pageCountValue) && pageCountValue > 0 ? Math.min(pageCountValue, 30) : (["png", "jpg"].includes(type) ? 1 : 5)
+    id: rawId || "—",
+    title: "Cargando documento...",
+    patient: "—",
+    type: "pdf",
+    kind: "—",
+    size: "—",
+    author: "—",
+    uploaded: "—",
+    updated: "—",
+    source: null,
+    pages: 1
   };
-  const state = { page: 1, zoom: 100, rotation: 0, thumbnails: true };
+  const state = { page: 1, zoom: 100, rotation: 0, thumbnails: false };
   let toastTimer;
 
   function renderData() {
@@ -91,19 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function updateMockPage() {
-    const content = $("mock-page-content");
-    content.replaceChildren();
-    if (state.page === 1 || data.source) return;
-    const title = document.createElement("h3");
-    title.textContent = `PÁGINA ${state.page}`;
-    content.append(title);
-    for (let i = 0; i < 11; i += 1) {
-      const line = document.createElement("span");
-      line.className = `line${i % 5 === 4 ? " short" : i % 3 === 2 ? " medium" : ""}`;
-      content.append(line);
-    }
-  }
 
   function setPage(value) {
     const parsed = Number.parseInt(value, 10);
@@ -113,9 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
     $("viewer-status").textContent = `Página ${state.page} de ${data.pages}.`;
     updateActiveThumbnail();
     $("thumbnail-list").querySelector('[aria-current="page"]')?.scrollIntoView({ block: "nearest" });
-    updateMockPage();
     if (data.source && data.type === "pdf") {
-      $("document-pdf").src = `${data.source.split("#")[0]}#page=${state.page}&toolbar=0&navpanes=0`;
+      $("document-pdf").src = `${data.source}#navpanes=0&view=FitH`;
     }
     $("document-viewport").scrollTop = 0;
   }
@@ -154,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         unavailable.hidden = false;
       };
     } else if (data.type === "pdf") {
-      pdf.src = `${data.source.split("#")[0]}#page=${state.page}&toolbar=0&navpanes=0`;
+      pdf.src = `${data.source}#navpanes=0&view=FitH`;  // sin la barra lateral del visor de PDF
       pdf.hidden = false;
     } else {
       unavailable.hidden = false;
@@ -199,53 +155,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
   }
 
-  function mockPdf() {
-    const pdfText = (value) => String(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^\x20-\x7e]/g, "?").replace(/[\\()]/g, "\\$&").slice(0, 80);
-    const lines = ["Documento de demostracion", data.title, `Paciente: ${data.patient}`, `ID: ${data.id}`];
-    const stream = `BT\n/F1 16 Tf\n72 730 Td\n${lines.map((line, index) => `${index ? "0 -32 Td\n" : ""}(${pdfText(line)}) Tj\n`).join("")}ET\n`;
-    const objects = [
-      "<< /Type /Catalog /Pages 2 0 R >>",
-      "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
-      "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>",
-      "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
-      `<< /Length ${stream.length} >>\nstream\n${stream}endstream`
-    ];
-    let pdf = "%PDF-1.4\n";
-    const offsets = [0];
-    objects.forEach((object, index) => {
-      offsets.push(pdf.length);
-      pdf += `${index + 1} 0 obj\n${object}\nendobj\n`;
-    });
-    const xref = pdf.length;
-    pdf += `xref\n0 ${offsets.length}\n0000000000 65535 f \n`;
-    offsets.slice(1).forEach((offset) => { pdf += `${String(offset).padStart(10, "0")} 00000 n \n`; });
-    pdf += `trailer\n<< /Size ${offsets.length} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;
-    return new Blob([pdf], { type: "application/pdf" });
-  }
 
   function download() {
-    if (data.source) {
-      const link = document.createElement("a");
-      link.href = data.source;
-      link.download = `${data.id}.${data.type}`;
-      link.rel = "noopener";
-      document.body.append(link);
-      link.click();
-      link.remove();
-      return;
-    }
-    const markup = `<!doctype html><html lang="es"><meta charset="utf-8"><title>${escapeHtml(data.title)}</title><style>body{font:16px Arial,sans-serif;max-width:720px;margin:70px auto;color:#243047}h1{font-size:24px}dl{display:grid;grid-template-columns:150px 1fr;gap:12px}dt{font-weight:bold}</style><h1>${escapeHtml(data.title)}</h1><p>Ficha de demostración del visor de documentos.</p><dl><dt>Paciente</dt><dd>${escapeHtml(data.patient)}</dd><dt>ID</dt><dd>${escapeHtml(data.id)}</dd><dt>Formato indicado</dt><dd>${escapeHtml(data.type.toUpperCase())}</dd><dt>Subido por</dt><dd>${escapeHtml(data.author)}</dd></dl></html>`;
-    const pdf = data.type === "pdf";
-    const url = URL.createObjectURL(pdf ? mockPdf() : new Blob([markup], { type: "text/html;charset=utf-8" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${data.id.replace(/[^\w-]/g, "-")}-demo.${pdf ? "pdf" : "html"}`;
-    document.body.append(link);
-    link.click();
-    link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    showToast(pdf ? "Se descargó un PDF de demostración." : "Se descargó una ficha de demostración.");
+    if (!data.source) return;
+    window.location.href = `../php/documents-file.php?id=${encodeURIComponent(data.id)}&descargar=1`;
   }
 
   function drawMockQr() {
@@ -321,13 +234,28 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(); });
   $("print-button").addEventListener("click", () => window.print());
   $("qr-button").addEventListener("click", () => { drawMockQr(); $("qr-dialog").showModal(); });
-  $("delete-button").addEventListener("click", () => {
-    if (window.confirm(`¿Eliminar «${data.title}»? Esta demostración volverá a la lista sin borrar archivos.`)) window.location.href = "documents.html";
+  $("delete-button").addEventListener("click", async () => {
+    if (!window.confirm(`¿Eliminar «${data.title}»? Se borra el documento y su archivo. No se puede deshacer.`)) return;
+    try {
+      const body = new FormData();
+      body.append("id_documento", data.id);
+      const response = await fetch("../php/documents-delete.php", { method: "POST", body });
+      const payload = await response.json();
+      if (!response.ok || payload.success !== true) throw new Error(payload?.error?.message);
+      window.location.href = "documents.html";
+    } catch (error) {
+      showToast(error.message || "No se pudo eliminar el documento.");
+    }
   });
   $("copy-share-link").addEventListener("click", copyLink);
   $("copy-qr-link").addEventListener("click", copyLink);
   document.querySelectorAll("[data-close-dialog]").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
   document.querySelectorAll("dialog").forEach((dialog) => dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); }));
+
+  // Las miniaturas empiezan ocultas: un PDF trae su propia barra para pasar de página
+  $("thumbnail-rail").hidden = true;
+  $("viewer-body").classList.add("thumbnails-hidden");
+  $("toggle-thumbnails").setAttribute("aria-pressed", "false");
 
   renderData();
   renderThumbnails();
@@ -337,19 +265,34 @@ document.addEventListener("DOMContentLoaded", () => {
   if ("ResizeObserver" in window) new ResizeObserver(updateTransform).observe($("document-viewport"));
   else window.addEventListener("resize", updateTransform);
 
-  if (rawId && /^\d+$/.test(rawId) && !queryValue("title", "name")) {
-    fetch(`../php/documents-get.php?id=${encodeURIComponent(rawId)}`, { headers: { Accept: "application/json" } })
-      .then((response) => response.ok ? response.json() : null)
-      .then((payload) => {
-        if (!payload?.success || !payload.data) return;
-        const item = payload.data;
-        data.title = item.titulo || data.title;
-        data.kind = item.tipo || data.kind;
-        data.uploaded = item.fecha || data.uploaded;
-        data.type = normalizeFormat(item.ruta_archivo?.split(".").pop() || data.type);
-        if (!queryValue("pages")) data.pages = ["png", "jpg"].includes(data.type) ? 1 : 5;
-        renderData(); renderThumbnails(); renderSource(); setPage(1);
-      })
-      .catch(() => { /* The static mockup remains usable without the PHP API. */ });
+  // Tamaño legible: 91112 → "89 KB"
+  const sizeText = (bytes) => bytes === null ? "—"
+    : bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1).replace(".", ",")} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+
+  async function loadDocument() {
+    try {
+      const response = await fetch(`../php/documents-get.php?id=${encodeURIComponent(rawId || "")}`, { headers: { Accept: "application/json" } });
+      const payload = await response.json();
+      if (!response.ok || payload.success !== true) throw new Error(payload?.error?.message);
+      const item = payload.data;
+      data.title = item.titulo;
+      data.patient = item.paciente || "Paciente no indicado";
+      data.kind = item.tipo;
+      data.type = item.extension === "jpeg" ? "jpg" : item.extension;
+      data.size = sizeText(item.tamano);
+      data.author = item.autor || "—";
+      data.uploaded = item.fecha_texto;
+      data.updated = `Versión ${item.version}`;
+      data.source = item.tamano === null ? null : `../php/documents-file.php?id=${encodeURIComponent(item.id_documento)}`;
+      renderData(); renderThumbnails(); renderSource(); setPage(1);
+      if (!data.source) showToast("El archivo de este documento no está en el servidor.");
+    } catch (error) {
+      data.title = "Documento no encontrado";
+      renderData();
+      $("unavailable-preview").hidden = false;
+      showToast(error.message || "No se pudo cargar el documento.");
+    }
   }
+
+  loadDocument();
 });

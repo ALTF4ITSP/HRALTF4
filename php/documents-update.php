@@ -161,16 +161,19 @@ try {
          SET id_tipo_documento = ?,
              titulo = ?,
              descripcion = ?,
+             paciente = ?,
              ruta_archivo = ?,
              fecha_carga = ?,
              version = version + 1
          WHERE id_documento = ?'
     );
+    $pacienteCorto = mb_substr($paciente, 0, 100);
     $actualizar->bind_param(
-        'issssi',
+        'isssssi',
         $idTipoDocumento,
         $nombre,
         $descripcion,
+        $pacienteCorto,
         $rutaArchivo,
         $fecha,
         $idDocumento

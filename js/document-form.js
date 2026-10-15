@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const documentData = payload.data;
       form.elements.nombre.value = documentData.titulo;
       form.elements.descripcion.value = documentData.descripcion || "";
+      form.elements.paciente.value = documentData.paciente || "";
       form.elements.fecha.value = documentData.fecha;
       const categoryByName = {
         "Informe médico": "informe",
