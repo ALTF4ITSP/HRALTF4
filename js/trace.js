@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
   const formulario = document.getElementById("formulario");
-  const listaHtml = document.getElementById("lista");
+  const listas = document.getElementById("listas");
   let datos = {};   // lo que devuelve traslados.php: traslados, ambulancias, personal, destinos, pacientes, rutas
 
   // Nombre de cada estado y texto del botón para pasar al siguiente
@@ -49,7 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const respuesta = await fetch("../php/traslados.php", { headers: { Accept: "application/json" } });
     datos = await respuesta.json();
     if (!datos.success) {
-      listaHtml.innerHTML = `<li class="traslados-vacio">${escapeHtml(datos.error?.message || "Error al cargar.")}</li>`;
+      document.getElementById("listaEnCurso").innerHTML =
+        `<li class="traslados-vacio">${escapeHtml(datos.error?.message || "Error al cargar.")}</li>`;
       return;
     }
     llenarFormulario();
@@ -70,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const lugar = d => `${d.nombre} (${d.localidad})`;
     opciones(f.id_origen, datos.destinos, lugar, "Elegí el origen");
     opciones(f.id_destino, datos.destinos, lugar, "Elegí el destino");
+    f.id_destino.insertAdjacentHTML("beforeend", '<option value="otra">Otra dirección (una casa)…</option>');
     opciones(f.id_ambulancia, datos.ambulancias, a => `${a.matricula} · ${a.modelo}`, "Elegí la ambulancia");
     opciones(f.id_chofer, datos.personal.filter(p => p.rol === "Chofer"), p => p.nombre, "Elegí el conductor");
     opciones(f.id_acompanante, datos.personal.filter(p => p.rol === "Acompañante"), p => p.nombre, "Sin acompañante");
@@ -93,14 +95,69 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------- Formulario ----------
   const destinoPorId = id => datos.destinos.find(d => String(d.id) === String(id));
 
+  // ¿En Destino se eligió "Otra dirección"?
+  const esDireccion = () => formulario.elements.id_destino.value === "otra";
+
+  // Destino elegido: uno de la lista o la dirección escrita (con la ubicación marcada)
+  function destinoElegido() {
+    const f = formulario.elements;
+    if (!esDireccion()) return destinoPorId(f.id_destino.value);
+    return f.destino_lat.value ? { nombre: f.destino_direccion.value || "Dirección marcada", lat: f.destino_lat.value, lng: f.destino_lng.value } : null;
+  }
+
   // Al elegir origen o destino se marcan en el mapa
   function previsualizar() {
     const origen = destinoPorId(formulario.elements.id_origen.value);
-    const destino = destinoPorId(formulario.elements.id_destino.value);
+    const destino = destinoElegido();
     if (origen && destino) dibujar(origen, destino, `Nuevo traslado: ${origen.nombre} → ${destino.nombre}`);
+    else dibujo.clearLayers();
   }
   formulario.elements.id_origen.addEventListener("change", previsualizar);
-  formulario.elements.id_destino.addEventListener("change", previsualizar);
+
+  // Mostrar u ocultar el campo de la dirección
+  function mostrarDireccion() {
+    document.getElementById("cajaDireccion").hidden = !esDireccion();
+    formulario.elements.destino_direccion.required = esDireccion();
+    previsualizar();
+  }
+  formulario.elements.id_destino.addEventListener("change", mostrarDireccion);
+
+  // Guarda la ubicación de la dirección y la muestra en el mapa
+  function marcarDireccion(lat, lng, texto) {
+    formulario.elements.destino_lat.value = lat;
+    formulario.elements.destino_lng.value = lng;
+    document.getElementById("ayudaDireccion").textContent = texto;
+    previsualizar();
+    if (!formulario.elements.id_origen.value) {   // sin origen todavía: solo el punto
+      dibujo.clearLayers();
+      L.circleMarker([lat, lng], { radius: 8, color: "#ff6b6b" }).addTo(dibujo);
+      mapa.setView([lat, lng], 15);
+    }
+  }
+
+  // Buscar la dirección con Nominatim (el buscador gratuito de OpenStreetMap, solo en Uruguay)
+  document.getElementById("buscarDireccion").addEventListener("click", async () => {
+    const direccion = formulario.elements.destino_direccion.value.trim();
+    if (!direccion) return;
+    const ayuda = document.getElementById("ayudaDireccion");
+    ayuda.textContent = "Buscando...";
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=uy&limit=1&q=${encodeURIComponent(direccion)}`;
+      const [lugar] = await (await fetch(url)).json();
+      if (!lugar) {
+        ayuda.textContent = "No se encontró. Probá agregando la ciudad, o hacé clic en el mapa.";
+        return;
+      }
+      marcarDireccion(Number(lugar.lat), Number(lugar.lon), "Encontrada. Si no es el lugar exacto, hacé clic en el mapa.");
+    } catch {
+      ayuda.textContent = "No se pudo buscar (¿hay internet?). Hacé clic en el mapa para marcarla.";
+    }
+  });
+
+  // Con "Otra dirección" elegida, un clic en el mapa marca la casa
+  mapa.on("click", evento => {
+    if (esDireccion()) marcarDireccion(evento.latlng.lat, evento.latlng.lng, "Ubicación marcada en el mapa.");
+  });
 
   // Una ruta habitual completa origen, destino y la llegada estimada (salida + duración)
   document.getElementById("ruta").addEventListener("change", evento => {
@@ -109,6 +166,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const porCodigo = codigo => datos.destinos.find(d => d.codigo === codigo)?.id ?? "";
     formulario.elements.id_origen.value = porCodigo(ruta.origen);
     formulario.elements.id_destino.value = porCodigo(ruta.destino);
+    document.getElementById("cajaDireccion").hidden = true;
+    formulario.elements.destino_direccion.required = false;
     const salida = formulario.elements.salida_programada.value;
     if (salida) {
       const minutos = (new Date(salida) - Date.now()) / 60000 + Number(ruta.duracion_min);
@@ -126,6 +185,10 @@ document.addEventListener("DOMContentLoaded", () => {
       error.textContent = "Elegí un paciente o escribí qué se traslada.";
       return;
     }
+    if (esDireccion() && !traslado.destino_lat) {
+      error.textContent = "Buscá la dirección o hacé clic en el mapa para marcarla.";
+      return;
+    }
 
     const respuesta = await enviar({ accion: "nuevo", traslado });
     if (!respuesta.success) {
@@ -133,6 +196,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     formulario.reset();
+    formulario.elements.destino_lat.value = formulario.elements.destino_lng.value = "";
+    document.getElementById("ayudaDireccion").textContent = "Buscala o hacé clic en el mapa para marcar la casa.";
+    mostrarDireccion();
     buscadorPaciente.setValue(null);
     await cargar();
     verEnMapa(respuesta.id);
@@ -148,14 +214,26 @@ document.addEventListener("DOMContentLoaded", () => {
     return respuesta.json();
   }
 
-  // ---------- Lista ----------
+  // ---------- Listas: en curso y terminados ----------
+  const TERMINADOS = ["FINALIZADO", "CANCELADO"];
+
   function mostrarLista() {
     const busqueda = document.getElementById("buscar").value.trim().toLowerCase();
     const visibles = datos.traslados.filter(t =>
       [t.id, t.matricula, t.chofer, t.acompanante, t.paciente, t.elemento, t.origen, t.destino, ESTADOS[t.estado].nombre]
         .join(" ").toLowerCase().includes(busqueda));
 
-    listaHtml.innerHTML = visibles.length ? visibles.map(t => `
+    const enCurso = visibles.filter(t => !TERMINADOS.includes(t.estado));
+    const terminados = visibles.filter(t => TERMINADOS.includes(t.estado));
+    document.getElementById("listaEnCurso").innerHTML = armarLista(enCurso);
+    document.getElementById("listaTerminados").innerHTML = armarLista(terminados);
+    document.getElementById("cantidadEnCurso").textContent = `(${enCurso.length})`;
+    document.getElementById("cantidadTerminados").textContent = `(${terminados.length})`;
+  }
+
+  function armarLista(traslados) {
+    if (!traslados.length) return '<li class="traslados-vacio">No hay traslados para mostrar.</li>';
+    return traslados.map(t => `
       <li class="traslado" data-id="${t.id}">
         <div class="traslado-arriba">
           <strong>#${t.id} · ${escapeHtml(t.matricula)}</strong>
@@ -174,14 +252,13 @@ document.addEventListener("DOMContentLoaded", () => {
             <button type="button" class="traslados-boton" data-avanzar="${t.id}">${ESTADOS[t.estado].boton}</button>
             <button type="button" class="traslados-boton secundario" data-cancelar="${t.id}">Cancelar</button>
           </div>` : ""}
-      </li>`).join("")
-      : '<li class="traslados-vacio">No hay traslados para mostrar.</li>';
+      </li>`).join("");
   }
 
   function verEnMapa(id) {
     const t = datos.traslados.find(t => String(t.id) === String(id));
     if (!t) return;
-    listaHtml.querySelectorAll(".traslado").forEach(li => li.classList.toggle("elegido", li.dataset.id === String(id)));
+    listas.querySelectorAll(".traslado").forEach(li => li.classList.toggle("elegido", li.dataset.id === String(id)));
     dibujar({ nombre: t.origen, lat: t.origen_lat, lng: t.origen_lng },
       { nombre: t.destino, lat: t.destino_lat, lng: t.destino_lng },
       `Traslado #${t.id}: ${t.origen} → ${t.destino} (${ESTADOS[t.estado].nombre})`);
@@ -189,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("buscar").addEventListener("input", mostrarLista);
 
-  listaHtml.addEventListener("click", async evento => {
+  listas.addEventListener("click", async evento => {
     const { avanzar, cancelar } = evento.target.dataset;
     if (avanzar || cancelar) {
       if (cancelar && !confirm(`¿Cancelar el traslado #${cancelar}?`)) return;

@@ -6,6 +6,8 @@ declare(strict_types=1);
  *
  *   GET  traslados.php                                   → traslados + listas para el formulario
  *   POST traslados.php {"accion": "nuevo", "traslado": {...}}
+ *        El destino es id_destino (uno de Gestión → Destinos) o una dirección escrita a mano
+ *        (destino_direccion + destino_lat + destino_lng), por ejemplo la casa de un paciente.
  *   POST traslados.php {"accion": "avanzar", "id": 3}    → pasa al siguiente estado y guarda la hora
  *   POST traslados.php {"accion": "cancelar", "id": 3}
  */
@@ -52,14 +54,16 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
                     DATE_FORMAT(t.retorno_real, '%Y-%m-%d %H:%i') AS retorno_real,
                     a.matricula, ch.nombre AS chofer, ac.nombre AS acompanante, p.nombre AS paciente,
                     o.nombre AS origen, o.latitud AS origen_lat, o.longitud AS origen_lng,
-                    d.nombre AS destino, d.latitud AS destino_lat, d.longitud AS destino_lng
+                    COALESCE(d.nombre, t.destino_direccion) AS destino,
+                    COALESCE(d.latitud, t.destino_lat) AS destino_lat,
+                    COALESCE(d.longitud, t.destino_lng) AS destino_lng
              FROM gestion_traslado t
              INNER JOIN ambulancia a ON a.id_ambulancia = t.id_ambulancia
              INNER JOIN gestion_personal ch ON ch.id_gestion_personal = t.id_chofer
              LEFT JOIN gestion_personal ac ON ac.id_gestion_personal = t.id_acompanante
              LEFT JOIN gestion_paciente p ON p.id_gestion_paciente = t.id_gestion_paciente
              INNER JOIN gestion_destino o ON o.id_gestion_destino = t.id_origen
-             INNER JOIN gestion_destino d ON d.id_gestion_destino = t.id_destino
+             LEFT JOIN gestion_destino d ON d.id_gestion_destino = t.id_destino   -- vacío si es una dirección
              ORDER BY t.salida_programada DESC"
         )->fetchAll();
 
@@ -137,6 +141,9 @@ try {
     $elemento = $texto('elemento');
     $origen = $numero('id_origen');
     $destino = $numero('id_destino');
+    $direccion = $destino ? null : $texto('destino_direccion');
+    $latitud = $destino ? null : (float) ($t['destino_lat'] ?? 0);
+    $longitud = $destino ? null : (float) ($t['destino_lng'] ?? 0);
     $salida = str_replace('T', ' ', (string) $texto('salida_programada'));
     $llegada = $texto('llegada_estimada') ? str_replace('T', ' ', $texto('llegada_estimada')) : null;
     $notas = $texto('notas');
@@ -145,11 +152,16 @@ try {
     if (!$chofer) traslados_error(422, 'Elegí el conductor.');
     if ($acompanante === $chofer) traslados_error(422, 'El acompañante no puede ser el mismo conductor.');
     if (!$paciente && !$elemento) traslados_error(422, 'Elegí un paciente o escribí qué se traslada.');
-    if (!$origen || !$destino) traslados_error(422, 'Elegí el origen y el destino.');
+    if (!$origen) traslados_error(422, 'Elegí el origen.');
+    if (!$destino && !$direccion) traslados_error(422, 'Elegí el destino o escribí la dirección.');
+    // La dirección tiene que estar marcada en el mapa, dentro de Uruguay (aproximadamente)
+    if ($direccion && ($latitud < -35.1 || $latitud > -30 || $longitud < -58.6 || $longitud > -53)) {
+        traslados_error(422, 'Buscá la dirección o marcala en el mapa (tiene que estar en Uruguay).');
+    }
     if ($origen === $destino) traslados_error(422, 'El origen y el destino no pueden ser el mismo.');
     if (!DateTime::createFromFormat('!Y-m-d H:i', $salida)) traslados_error(422, 'La hora de salida no es válida.');
     if ($llegada !== null && $llegada <= $salida) traslados_error(422, 'La llegada estimada tiene que ser después de la salida.');
-    if (mb_strlen((string) $elemento) > 150 || mb_strlen((string) $notas) > 300) traslados_error(422, 'El texto es demasiado largo.');
+    if (mb_strlen((string) $direccion) > 200 || mb_strlen((string) $elemento) > 150 || mb_strlen((string) $notas) > 300) traslados_error(422, 'El texto es demasiado largo.');
 
     // La ambulancia no puede estar en otro traslado sin terminar
     $ocupada = $conexion->prepare(
@@ -161,9 +173,11 @@ try {
 
     $conexion->prepare(
         'INSERT INTO gestion_traslado (id_ambulancia, id_chofer, id_acompanante, id_gestion_paciente, elemento,
-                                       id_origen, id_destino, salida_programada, llegada_estimada, notas)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-    )->execute([$ambulancia, $chofer, $acompanante, $paciente, $elemento, $origen, $destino, $salida, $llegada, $notas]);
+                                       id_origen, id_destino, destino_direccion, destino_lat, destino_lng,
+                                       salida_programada, llegada_estimada, notas)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    )->execute([$ambulancia, $chofer, $acompanante, $paciente, $elemento, $origen, $destino, $direccion, $latitud, $longitud,
+                $salida, $llegada, $notas]);
 
     traslados_responder(200, ['success' => true, 'id' => (int) $conexion->lastInsertId()]);
 } catch (Throwable $error) {

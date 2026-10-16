@@ -105,7 +105,19 @@
             </label>
             <div class="traslados-fila">
               <label>Origen <select name="id_origen" required></select></label>
-              <label>Destino <select name="id_destino" required></select></label>
+              <label>Destino <select name="id_destino" id="destino" required></select></label>
+            </div>
+
+            <!-- Solo si en Destino se elige "Otra dirección" -->
+            <div class="traslados-campo" id="cajaDireccion" hidden>
+              <label for="direccion">Dirección <small>(calle, número y ciudad)</small></label>
+              <div class="traslados-buscar-direccion">
+                <input id="direccion" name="destino_direccion" maxlength="200" placeholder="Ej. Av. Rivera 3456, Montevideo">
+                <button type="button" class="traslados-boton" id="buscarDireccion">Buscar</button>
+              </div>
+              <input type="hidden" name="destino_lat">
+              <input type="hidden" name="destino_lng">
+              <p class="traslados-ayuda" id="ayudaDireccion">Buscala o hacé clic en el mapa para marcar la casa.</p>
             </div>
 
             <div class="traslados-fila">
@@ -140,10 +152,15 @@
             <button type="submit" class="traslados-boton">Guardar traslado</button>
           </form>
 
-          <div class="traslados-caja">
-            <h2>Lista de traslados</h2>
+          <div class="traslados-caja" id="listas">
+            <h2>Traslados</h2>
             <input type="search" id="buscar" placeholder="Buscar por ambulancia, paciente, destino..." aria-label="Buscar traslado">
-            <ul class="traslados-lista" id="lista"></ul>
+
+            <h3>En curso <span id="cantidadEnCurso"></span></h3>
+            <ul class="traslados-lista" id="listaEnCurso"></ul>
+
+            <h3>Finalizados y cancelados <span id="cantidadTerminados"></span></h3>
+            <ul class="traslados-lista" id="listaTerminados"></ul>
           </div>
         </div>
 
