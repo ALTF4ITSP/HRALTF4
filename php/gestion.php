@@ -99,16 +99,13 @@ const MODULOS = [
             'category' => 'categoria',
             'direction' => 'sentido',
             'status' => 'estado',
-            'origin.name' => 'origen_nombre',
-            'origin.address' => 'origen_direccion',
-            'destination.name' => 'destino_nombre',
-            'destination.address' => 'destino_direccion',
-            'stops' => 'paradas',
-            'distance' => 'distancia_km',
+            'origin' => 'origen',          // código del destino de salida
+            'destination' => 'destino',    // código del destino de llegada
+            'stops' => 'paradas',          // lista de códigos de destinos
             'duration' => 'duracion_min',
             'notes' => 'notas'
         ],
-        'numeros' => ['distance', 'duration'],
+        'numeros' => ['duration'],
         'listas' => ['stops']
     ],
     'ambulancias' => [

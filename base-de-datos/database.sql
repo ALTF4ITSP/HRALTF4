@@ -592,23 +592,24 @@ CREATE TABLE `gestion_destino` (
 
 CREATE TABLE `gestion_ruta` (
   `id_gestion_ruta` int(11) NOT NULL AUTO_INCREMENT,
-  `codigo` varchar(40) NOT NULL,
+  `codigo` varchar(40) NOT NULL COMMENT 'id que usa el JS',
   `numero` varchar(10) NOT NULL COMMENT 'Ej. RT-001',
   `nombre` varchar(150) NOT NULL,
-  `categoria` varchar(40) NOT NULL,
+  `categoria` varchar(40) NOT NULL COMMENT 'Interhospitalario, Consulta, Tratamiento o Alta',
   `sentido` varchar(20) NOT NULL COMMENT 'Solo ida o Ida y vuelta',
   `estado` varchar(20) NOT NULL COMMENT 'Activa o Inactiva',
-  `origen_nombre` varchar(150) NOT NULL,
-  `origen_direccion` varchar(200) NOT NULL,
-  `destino_nombre` varchar(150) NOT NULL,
-  `destino_direccion` varchar(200) NOT NULL,
-  `paradas` text DEFAULT NULL COMMENT 'Lista en JSON: [{"name": "...", "address": "..."}]',
-  `distancia_km` decimal(7,1) NOT NULL,
+  `origen` varchar(40) NOT NULL COMMENT 'codigo de gestion_destino',
+  `destino` varchar(40) NOT NULL COMMENT 'codigo de gestion_destino',
+  `paradas` varchar(400) DEFAULT NULL COMMENT 'codigos de gestion_destino en orden, en JSON: ["seed-7", "seed-4"]',
   `duracion_min` int(11) NOT NULL,
   `notas` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id_gestion_ruta`),
   UNIQUE KEY `uq_gestion_ruta_codigo` (`codigo`),
-  UNIQUE KEY `uq_gestion_ruta_numero` (`numero`)
+  UNIQUE KEY `uq_gestion_ruta_numero` (`numero`),
+  KEY `idx_ruta_origen` (`origen`),
+  KEY `idx_ruta_destino` (`destino`),
+  CONSTRAINT `fk_ruta_origen` FOREIGN KEY (`origen`) REFERENCES `gestion_destino` (`codigo`) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT `fk_ruta_destino` FOREIGN KEY (`destino`) REFERENCES `gestion_destino` (`codigo`) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
 INSERT INTO `gestion_paciente` VALUES (1,'p-001','María González López',34,'32.456.789','099 123 456','Internado','Habitación 204','Medicina Interna','Dr. Carlos Méndez','Clínica Médica','15 de mar. 2024','O+','Penicilina','Neumonía leve','Estable','José González','098 765 432','Padre');
@@ -647,14 +648,19 @@ INSERT INTO `gestion_destino` VALUES (5,'seed-5','Centro de Rehabilitación','Ca
 INSERT INTO `gestion_destino` VALUES (6,'seed-6','Policlínica Las Piedras','Av. Artigas 560','Las Piedras','Centro de salud','','','Activo',-34.727000,-56.219000);
 INSERT INTO `gestion_destino` VALUES (7,'seed-7','Centro de Diagnóstico','Bv. Artigas 1450','Montevideo','Centro de salud','','Confirmar el horario del estudio antes del traslado.','Activo',-34.893500,-56.164000);
 INSERT INTO `gestion_destino` VALUES (8,'seed-8','Laboratorio Central','Av. Italia 2890','Montevideo','Otro','','Recepción de muestras por la entrada principal.','Inactivo',-34.892800,-56.152000);
-INSERT INTO `gestion_ruta` VALUES (1,'route-001','RT-001','Clínicas → Hospital Maciel','Interhospitalario','Solo ida','Activa','Hospital de Clínicas','Av. Italia 2870, Montevideo','Hospital Maciel','25 de Mayo 174, Montevideo','[]',7.8,25,'Salida por el acceso de ambulancias. Coordinar la recepción con el equipo de destino.');
-INSERT INTO `gestion_ruta` VALUES (2,'route-002','RT-002','Circuito de rehabilitación','Tratamiento','Ida y vuelta','Activa','Hospital de Clínicas','Av. Italia 2870, Montevideo','Centro de rehabilitación','Av. 8 de Octubre 3250, Montevideo','[{\"name\":\"Policlínica La Unión\",\"address\":\"Larravide 2450, Montevideo\"}]',6.2,30,'Confirmar el punto de encuentro antes de la salida. Contemplar asistencia en el ascenso y descenso.');
-INSERT INTO `gestion_ruta` VALUES (3,'route-003','RT-003','Clínicas → Hospital Pasteur','Interhospitalario','Solo ida','Activa','Hospital de Clínicas','Av. Italia 2870, Montevideo','Hospital Pasteur','Larravide 2458, Montevideo','[]',4.5,18,'Ingreso por el acceso de traslados. Avisar al servicio receptor al iniciar el recorrido.');
-INSERT INTO `gestion_ruta` VALUES (4,'route-004','RT-004','Consulta · Ciudad Vieja','Consulta','Ida y vuelta','Activa','Hospital de Clínicas','Av. Italia 2870, Montevideo','Policlínica Ciudad Vieja','Piedras 720, Montevideo','[]',7.1,28,'Coordinar el regreso al finalizar la consulta.');
-INSERT INTO `gestion_ruta` VALUES (5,'route-005','RT-005','Traslado a centro de diálisis','Tratamiento','Ida y vuelta','Activa','Hospital de Clínicas','Av. Italia 2870, Montevideo','Centro de diálisis','Bv. Artigas 1850, Montevideo','[{\"name\":\"Policlínica Cordón\",\"address\":\"Colonia 1950, Montevideo\"}]',5.3,32,'Confirmar con el centro la hora de recepción y el horario de regreso.');
-INSERT INTO `gestion_ruta` VALUES (6,'route-006','RT-006','Clínicas → Hospital Español','Interhospitalario','Solo ida','Inactiva','Hospital de Clínicas','Av. Italia 2870, Montevideo','Hospital Español','Av. Garibaldi 1729, Montevideo','[]',5.6,22,'Revisar el acceso de recepción antes de reactivar la ruta.');
-INSERT INTO `gestion_ruta` VALUES (7,'route-007','RT-007','Alta · Residencia Parque','Alta','Solo ida','Activa','Hospital de Clínicas','Av. Italia 2870, Montevideo','Residencia Parque','Av. Sarmiento 2450, Montevideo','[]',3.8,15,'Coordinar la entrega con el personal de la residencia.');
-INSERT INTO `gestion_ruta` VALUES (8,'route-008','RT-008','Circuito de consultas externas','Consulta','Ida y vuelta','Inactiva','Hospital de Clínicas','Av. Italia 2870, Montevideo','Policlínica Norte','Av. San Martín 4250, Montevideo','[{\"name\":\"Policlínica Goes\",\"address\":\"Av. General Flores 2450, Montevideo\"},{\"name\":\"Centro de atención Reducto\",\"address\":\"Av. Millán 2850, Montevideo\"}]',9.4,45,'Verificar la disponibilidad de los centros antes de activar el circuito.');
+-- Rutas de ejemplo entre los destinos de ejemplo
+-- (seed-1 Clínicas, seed-2 Maciel, seed-3 Pasteur, seed-4 Sanatorio Central, seed-5 Centro de Rehabilitación,
+--  seed-6 Policlínica Las Piedras, seed-7 Centro de Diagnóstico, seed-8 Laboratorio Central)
+INSERT INTO `gestion_ruta`
+  (`id_gestion_ruta`, `codigo`, `numero`, `nombre`, `categoria`, `sentido`, `estado`, `origen`, `destino`, `paradas`, `duracion_min`, `notas`)
+VALUES
+  (1, 'ruta-1', 'RT-001', 'Clínicas → Hospital Maciel', 'Interhospitalario', 'Solo ida', 'Activa', 'seed-1', 'seed-2', '[]', 25, 'Salida por el acceso de ambulancias.'),
+  (2, 'ruta-2', 'RT-002', 'Circuito de rehabilitación', 'Tratamiento', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-5', '["seed-7"]', 35, 'Confirmar el punto de encuentro antes de salir.'),
+  (3, 'ruta-3', 'RT-003', 'Clínicas → Hospital Pasteur', 'Interhospitalario', 'Solo ida', 'Activa', 'seed-1', 'seed-3', '[]', 18, NULL),
+  (4, 'ruta-4', 'RT-004', 'Consulta · Sanatorio Central', 'Consulta', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-4', '[]', 15, 'Coordinar el regreso al terminar la consulta.'),
+  (5, 'ruta-5', 'RT-005', 'Alta · Policlínica Las Piedras', 'Alta', 'Solo ida', 'Activa', 'seed-1', 'seed-6', '[]', 40, NULL),
+  (6, 'ruta-6', 'RT-006', 'Circuito de estudios', 'Consulta', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-3', '["seed-7", "seed-4"]', 45, 'Pasa por el Centro de Diagnóstico y el Sanatorio Central.'),
+  (7, 'ruta-7', 'RT-007', 'Muestras al Laboratorio Central', 'Tratamiento', 'Solo ida', 'Inactiva', 'seed-1', 'seed-8', '[]', 5, 'Laboratorio temporalmente cerrado.');
 
 -- =========================================================
 -- CALENDARIO: TURNOS DE PACIENTES
@@ -761,7 +767,7 @@ ALTER TABLE `gestion_paciente` AUTO_INCREMENT = 11;
 ALTER TABLE `gestion_medico` AUTO_INCREMENT = 13;
 ALTER TABLE `gestion_personal` AUTO_INCREMENT = 8;
 ALTER TABLE `gestion_destino` AUTO_INCREMENT = 9;
-ALTER TABLE `gestion_ruta` AUTO_INCREMENT = 9;
+ALTER TABLE `gestion_ruta` AUTO_INCREMENT = 8;
 ALTER TABLE `turno` AUTO_INCREMENT = 13;
 ALTER TABLE `gestion_traslado` AUTO_INCREMENT = 8;
 ALTER TABLE `ruta` AUTO_INCREMENT = 4;
