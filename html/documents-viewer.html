@@ -14,7 +14,11 @@
   <link rel="stylesheet" href="../css/documents-viewer.css?v=20260929-icons">
   <script src="../js/main-menu.js?v=20260927-global" defer></script>
   <script src="../js/universal-search.js?v=20260927-global" defer></script>
-  <script src="../js/documents-viewer.js?v=20260928-shell" defer></script>
+  <!-- QRCode.js: dibuja el código QR (https://github.com/davidshimjs/qrcodejs) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+    integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+  <script src="../js/documents-viewer.js" defer></script>
 </head>
 <body>
   <div class="page-background"></div>
@@ -103,7 +107,7 @@
           <div class="header-main">
             <div class="document-heading">
               <h1 id="document-title">Cargando documento...</h1>
-              <p><span id="patient-name">—</span><span aria-hidden="true"> · </span><span>ID: <span id="document-id">—</span></span></p>
+              <p>Documento N.º <span id="document-id">—</span></p>
             </div>
             <div class="header-actions">
               <button class="action-button download-button" id="download-button" type="button"><img class="icon" src="../imagenes/download-icon.svg" alt="" aria-hidden="true"><span>Descargar</span></button>
@@ -176,7 +180,7 @@
               <h2 id="quick-heading">Acciones rápidas</h2>
               <div class="quick-actions">
                 <button type="button" id="print-button"><img class="icon" src="../imagenes/print-icon.svg" alt="" aria-hidden="true"><span>Imprimir documento</span></button>
-                <button type="button" id="qr-button"><img class="icon" src="../imagenes/qr-icon.svg" alt="" aria-hidden="true"><span>Generar código QR</span></button>
+                <button type="button" id="qr-button"><img class="icon" src="../imagenes/qr-icon.svg" alt="" aria-hidden="true"><span>Ver código QR</span></button>
                 <button type="button" class="danger-button" id="delete-button"><img class="icon" src="../imagenes/trash-icon.svg" alt="" aria-hidden="true"><span>Eliminar documento</span></button>
               </div>
             </section>
@@ -196,9 +200,10 @@
 
   <dialog class="viewer-dialog qr-dialog" id="qr-dialog" aria-labelledby="qr-title">
     <div class="dialog-heading"><h2 id="qr-title">Código QR del documento</h2><button type="button" class="dialog-close" data-close-dialog aria-label="Cerrar"><span aria-hidden="true">×</span></button></div>
-    <div class="qr-preview"><canvas id="qr-canvas" width="264" height="264" role="img" aria-label="Representación de un código QR para este documento"></canvas></div>
-    <p>Vista de demostración para <strong id="qr-document-id">DOC-2026-00045</strong>.</p>
+    <div class="qr-preview" id="qr-code" role="img" aria-label="Código QR del documento"></div>
+    <p>Al escanearlo se abre <strong id="qr-document-id">—</strong>.</p>
     <button type="button" class="dialog-primary" id="copy-qr-link"><img class="icon" src="../imagenes/select-multiple-icon.svg" alt="" aria-hidden="true"><span>Copiar enlace</span></button>
+    <button type="button" class="dialog-primary" id="print-qr"><img class="icon" src="../imagenes/print-icon.svg" alt="" aria-hidden="true"><span>Imprimir código QR</span></button>
   </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>

@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = {
     id: rawId || "—",
     title: "Cargando documento...",
-    patient: "—",
     type: "pdf",
     kind: "—",
     size: "—",
@@ -23,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderData() {
     $("document-title").textContent = data.title;
-    $("patient-name").textContent = data.patient;
     $("document-id").textContent = data.id;
     $("document-kind").textContent = data.kind;
     $("document-format").textContent = data.type.toUpperCase();
@@ -31,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     $("document-author").textContent = data.author;
     $("document-uploaded").textContent = data.uploaded;
     $("document-updated").textContent = data.updated;
-    $("qr-document-id").textContent = data.id;
+    $("qr-document-id").textContent = data.title;
     $("total-pages").textContent = String(data.pages);
     $("page-input").max = String(data.pages);
     document.title = `${data.title} · Visor de documentos`;
@@ -161,37 +159,35 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = `../php/documents-file.php?id=${encodeURIComponent(data.id)}&descargar=1`;
   }
 
-  function drawMockQr() {
-    const canvas = $("qr-canvas");
-    const context = canvas.getContext("2d");
-    const cells = 33;
-    const size = canvas.width / cells;
-    let seed = 2166136261;
-    for (const character of shareUrl()) seed = Math.imul(seed ^ character.charCodeAt(0), 16777619) >>> 0;
-    const random = () => {
-      seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5;
-      return (seed >>> 0) / 4294967296;
-    };
-    const reserved = (x, y) => (x < 9 && y < 9) || (x >= cells - 9 && y < 9) || (x < 9 && y >= cells - 9);
-    context.fillStyle = "#fff";
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = "#111827";
-    for (let y = 0; y < cells; y += 1) {
-      for (let x = 0; x < cells; x += 1) {
-        if (!reserved(x, y) && (random() > .54 || ((x === 8 || y === 8) && (x + y) % 2 === 0))) context.fillRect(x * size, y * size, size, size);
-      }
-    }
-    const finder = (x, y) => {
-      context.fillStyle = "#111827";
-      context.fillRect(x * size, y * size, size * 7, size * 7);
-      context.fillStyle = "#fff";
-      context.fillRect((x + 1) * size, (y + 1) * size, size * 5, size * 5);
-      context.fillStyle = "#111827";
-      context.fillRect((x + 2) * size, (y + 2) * size, size * 3, size * 3);
-    };
-    finder(1, 1);
-    finder(cells - 8, 1);
-    finder(1, cells - 8);
+  // ---------- Código QR (QRCode.js) ----------
+  // El QR lleva un enlace que abre el archivo directamente: php/documents-file.php?qr=<token>
+  const qrUrl = () => new URL(`../php/documents-file.php?qr=${data.qr}`, window.location.href).href;
+
+  function showQr() {
+    if (!data.qr) return;
+    const box = $("qr-code");
+    box.innerHTML = "";   // QRCode agrega el dibujo adentro: se limpia para no repetirlo
+    new QRCode(box, { text: qrUrl(), width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M });
+    $("qr-dialog").showModal();
+  }
+
+  // Imprime solo el QR y el título, usando un marco oculto (así no se abre otra ventana)
+  function printQr() {
+    const image = $("qr-code").querySelector("canvas")?.toDataURL() || $("qr-code").querySelector("img")?.src;
+    const marco = document.createElement("iframe");
+    marco.id = "qr-print-frame";
+    marco.style.cssText = "position: fixed; width: 0; height: 0; border: 0";
+    document.body.append(marco);
+    marco.contentDocument.write(`<title>QR · ${escapeHtml(data.title)}</title>
+      <body style="font-family: sans-serif; text-align: center; padding: 30px">
+        <h2>${escapeHtml(data.title)}</h2><p>Documento N.º ${escapeHtml(data.id)}</p>
+        <img src="${image}" width="260" height="260" alt="Código QR">
+        <p>Escaneá el código para abrir el documento.</p>
+      </body>`);
+    marco.contentDocument.close();
+    marco.contentWindow.focus();
+    marco.contentWindow.print();
+    setTimeout(() => marco.remove(), 1000);
   }
 
   $("toggle-thumbnails").addEventListener("click", () => {
@@ -233,7 +229,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("click", (event) => { if (!event.target.closest(".more-wrap")) closeMenu(); });
   document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(); });
   $("print-button").addEventListener("click", () => window.print());
-  $("qr-button").addEventListener("click", () => { drawMockQr(); $("qr-dialog").showModal(); });
+  $("qr-button").addEventListener("click", showQr);
+  $("print-qr").addEventListener("click", printQr);
   $("delete-button").addEventListener("click", async () => {
     if (!window.confirm(`¿Eliminar «${data.title}»? Se borra el documento y su archivo. No se puede deshacer.`)) return;
     try {
@@ -248,7 +245,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   $("copy-share-link").addEventListener("click", copyLink);
-  $("copy-qr-link").addEventListener("click", copyLink);
+  $("copy-qr-link").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(qrUrl());
+      showToast("Enlace del QR copiado.");
+    } catch (_) {
+      showToast(qrUrl());
+    }
+  });
   document.querySelectorAll("[data-close-dialog]").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
   document.querySelectorAll("dialog").forEach((dialog) => dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); }));
 
@@ -276,16 +280,17 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok || payload.success !== true) throw new Error(payload?.error?.message);
       const item = payload.data;
       data.title = item.titulo;
-      data.patient = item.paciente || "Paciente no indicado";
       data.kind = item.tipo;
       data.type = item.extension === "jpeg" ? "jpg" : item.extension;
       data.size = sizeText(item.tamano);
       data.author = item.autor || "—";
       data.uploaded = item.fecha_texto;
       data.updated = `Versión ${item.version}`;
+      data.qr = item.qr;
       data.source = item.tamano === null ? null : `../php/documents-file.php?id=${encodeURIComponent(item.id_documento)}`;
       renderData(); renderThumbnails(); renderSource(); setPage(1);
       if (!data.source) showToast("El archivo de este documento no está en el servidor.");
+      if (params.get("qr") === "1") showQr();   // viene de "Cargar documento"
     } catch (error) {
       data.title = "Documento no encontrado";
       renderData();

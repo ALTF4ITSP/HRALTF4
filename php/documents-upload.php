@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/connection.php';
 require_once __DIR__ . '/documents-storage.php';
+require_once __DIR__ . '/documents-qr.php';
 header('Content-Type: application/json; charset=utf-8');
 
 function create_response(int $status, bool $success, array $data = [], string $message = ''): never
@@ -19,7 +20,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
 }
 
 $nombre = trim((string) ($_POST['nombre'] ?? ''));
-$paciente = trim((string) ($_POST['paciente'] ?? ''));
 $fecha = trim((string) ($_POST['fecha'] ?? ''));
 $categoria = trim((string) ($_POST['categoria'] ?? ''));
 $descripcion = trim((string) ($_POST['descripcion'] ?? ''));
@@ -30,7 +30,7 @@ $tipos = [
     'administrativo' => 'Documento Administrativo'
 ];
 
-if ($nombre === '' || $paciente === '' || $fecha === '' || $categoria === '') {
+if ($nombre === '' || $fecha === '' || $categoria === '') {
     create_response(422, false, [], 'Completá los campos obligatorios.');
 }
 if (!isset($tipos[$categoria])) create_response(422, false, [], 'Categoría de documento no válida.');
@@ -72,11 +72,12 @@ try {
         throw new RuntimeException('No se pudo guardar el archivo en el servidor.');
     }
 
-    $insertar = $conexion->prepare("INSERT INTO documento (id_tipo_documento, titulo, descripcion, paciente, ruta_archivo, fecha_carga, version, estado, id_funcionario_carga) VALUES (?, ?, ?, ?, ?, ?, 1, 'ACTIVO', ?)");
-    $insertar->execute([$idTipo, $nombre, $descripcion, mb_substr($paciente, 0, 100), 'archivos/documentos/' . $nombreArchivo, $fecha . ' 00:00:00', $idFuncionario]);
+    $insertar = $conexion->prepare("INSERT INTO documento (id_tipo_documento, titulo, descripcion, ruta_archivo, fecha_carga, version, estado, id_funcionario_carga) VALUES (?, ?, ?, ?, ?, 1, 'ACTIVO', ?)");
+    $insertar->execute([$idTipo, $nombre, $descripcion, 'archivos/documentos/' . $nombreArchivo, $fecha . ' 00:00:00', $idFuncionario]);
     $idDocumento = (int) $conexion->lastInsertId();
+    $tokenQr = documento_qr($conexion, $idDocumento);   // cada documento nuevo tiene su QR
     $conexion->commit();
-    create_response(201, true, ['id_documento' => $idDocumento]);
+    create_response(201, true, ['id_documento' => $idDocumento, 'qr' => $tokenQr]);
 } catch (Throwable $error) {
     if ($conexion instanceof PDO && $conexion->inTransaction()) $conexion->rollBack();
     if (is_string($rutaFisica) && is_file($rutaFisica)) unlink($rutaFisica);

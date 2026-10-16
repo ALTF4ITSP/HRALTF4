@@ -283,7 +283,6 @@ CREATE TABLE `documento` (
   `id_tipo_documento` int(11) NOT NULL,
   `titulo` varchar(200) NOT NULL,
   `descripcion` varchar(500) DEFAULT NULL,
-  `paciente` varchar(100) DEFAULT NULL COMMENT 'Nombre o cédula del paciente',
   `ruta_archivo` varchar(500) NOT NULL,
   `fecha_carga` datetime NOT NULL,
   `version` int(11) NOT NULL DEFAULT 1,

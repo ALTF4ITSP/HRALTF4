@@ -38,7 +38,6 @@ $idDocumento = filter_var(
     ['options' => ['min_range' => 1]]
 );
 $nombre = trim((string) ($_POST['nombre'] ?? ''));
-$paciente = trim((string) ($_POST['paciente'] ?? ''));
 $fecha = trim((string) ($_POST['fecha'] ?? ''));
 $categoria = trim((string) ($_POST['categoria'] ?? ''));
 $descripcion = trim((string) ($_POST['descripcion'] ?? ''));
@@ -47,7 +46,7 @@ if ($idDocumento === false) {
     document_update_response(422, false, [], 'El documento indicado no es válido.');
 }
 
-if ($nombre === '' || $paciente === '' || $fecha === '' || $categoria === '') {
+if ($nombre === '' || $fecha === '' || $categoria === '') {
     document_update_response(422, false, [], 'Completá los campos obligatorios.');
 }
 
@@ -161,19 +160,16 @@ try {
          SET id_tipo_documento = ?,
              titulo = ?,
              descripcion = ?,
-             paciente = ?,
              ruta_archivo = ?,
              fecha_carga = ?,
              version = version + 1
          WHERE id_documento = ?'
     );
-    $pacienteCorto = mb_substr($paciente, 0, 100);
     $actualizar->bind_param(
-        'isssssi',
+        'issssi',
         $idTipoDocumento,
         $nombre,
         $descripcion,
-        $pacienteCorto,
         $rutaArchivo,
         $fecha,
         $idDocumento

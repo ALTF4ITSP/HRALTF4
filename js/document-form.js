@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const documentData = payload.data;
       form.elements.nombre.value = documentData.titulo;
       form.elements.descripcion.value = documentData.descripcion || "";
-      form.elements.paciente.value = documentData.paciente || "";
       form.elements.fecha.value = documentData.fecha;
       const categoryByName = {
         "Informe médico": "informe",
@@ -157,14 +156,17 @@ document.addEventListener("DOMContentLoaded", () => {
     showMessage("Guardando documento...");
 
     try {
-      await window.DocumentApi.submit(form);
+      const result = await window.DocumentApi.submit(form);
       const successMessage = form.dataset.mode === "update"
         ? "Cambios guardados correctamente."
         : "Documento cargado correctamente.";
 
       showMessage(successMessage);
       window.setTimeout(() => {
-        window.location.href = "documents.html";
+        // Al cargar uno nuevo se muestra su código QR; al editar se vuelve a la lista
+        window.location.href = form.dataset.mode === "update"
+          ? "documents.html"
+          : `documents-viewer.html?id=${result.id_documento}&qr=1`;
       }, 700);
     } catch (error) {
       showMessage(error.message || "No se pudo conectar con el servidor.", true);

@@ -139,7 +139,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .dialog-primary:hover { background: #4872db; }
 .dialog-primary .icon { width: 18px; height: 18px; }
 .qr-preview { display: grid; place-items: center; width: 284px; height: 284px; max-width: 100%; margin: 22px auto 0; border-radius: 12px; background: #fff; }
-.qr-preview canvas { display: block; width: 264px; height: 264px; max-width: calc(100% - 20px); image-rendering: pixelated; }
+.qr-preview img, .qr-preview canvas { display: block; width: 240px; height: 240px; }
 .qr-dialog p { text-align: center; }
 .toast { position: fixed; right: 23px; bottom: 23px; z-index: 10; max-width: min(350px, calc(100vw - 46px)); padding: 12px 17px; border: 1px solid #58719c; border-radius: 10px; background: #223251; box-shadow: 0 12px 35px rgba(0, 0, 0, .3); color: #eef3ff; font-size: 14px; }
 

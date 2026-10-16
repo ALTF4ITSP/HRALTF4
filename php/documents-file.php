@@ -6,6 +6,7 @@ require_once __DIR__ . '/documents-storage.php';
 /*
  * Entrega el archivo de un documento.
  *   documents-file.php?id=3              → se muestra en el navegador (PDF o imagen)
+ *   documents-file.php?qr=<token>        → lo mismo, desde el código QR
  *   documents-file.php?id=3&descargar=1  → se descarga con el título del documento como nombre
  */
 
@@ -19,13 +20,22 @@ const TIPOS_MIME = [
 ];
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-if (!$id) {
+$token = (string) ($_GET['qr'] ?? '');
+
+if ($token !== '' && preg_match('/^[a-f0-9]{32}$/', $token)) {
+    $consulta = db()->prepare(
+        "SELECT d.titulo, d.ruta_archivo FROM documento d
+         JOIN qr ON qr.id_documento = d.id_documento AND qr.estado = 'ACTIVO'
+         WHERE qr.token = ? AND d.estado = 'ACTIVO'"
+    );
+    $consulta->execute([$token]);
+} elseif ($id) {
+    $consulta = db()->prepare("SELECT titulo, ruta_archivo FROM documento WHERE id_documento = ? AND estado = 'ACTIVO'");
+    $consulta->execute([$id]);
+} else {
     http_response_code(422);
     exit('Documento no válido.');
 }
-
-$consulta = db()->prepare("SELECT titulo, ruta_archivo FROM documento WHERE id_documento = ? AND estado = 'ACTIVO'");
-$consulta->execute([$id]);
 $documento = $consulta->fetch();
 if (!$documento) {
     http_response_code(404);

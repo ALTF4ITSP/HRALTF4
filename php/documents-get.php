@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/connection.php';
 require_once __DIR__ . '/documents-storage.php';
+require_once __DIR__ . '/documents-qr.php';
 header('Content-Type: application/json; charset=utf-8');
 
 // Datos de un documento para el visor y el formulario de edición: documents-get.php?id=3
@@ -13,7 +14,7 @@ try {
         exit;
     }
     $consulta = db()->prepare(
-        "SELECT d.id_documento, d.titulo, d.descripcion, d.paciente, d.ruta_archivo,
+        "SELECT d.id_documento, d.titulo, d.descripcion, d.ruta_archivo,
                 DATE(d.fecha_carga) AS fecha, DATE_FORMAT(d.fecha_carga, '%d/%m/%Y') AS fecha_texto, d.version,
                 t.nombre AS tipo, TRIM(CONCAT(COALESCE(p.nombre, ''), ' ', COALESCE(p.apellido, ''))) AS autor
          FROM documento d
@@ -28,6 +29,8 @@ try {
         echo json_encode(['success' => false, 'error' => ['message' => 'No se encontró el documento.']], JSON_UNESCAPED_UNICODE);
         exit;
     }
+
+    $documento['qr'] = documento_qr(db(), (int) $documento['id_documento']);
 
     // Extensión y tamaño del archivo guardado
     $documento['extension'] = strtolower(pathinfo((string) $documento['ruta_archivo'], PATHINFO_EXTENSION));
