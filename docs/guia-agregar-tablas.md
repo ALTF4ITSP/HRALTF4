@@ -268,37 +268,52 @@ UPDATE `aviso` SET `visible` = 0 WHERE `id_aviso` = 1;
 
 ## Las pantallas de Gestión: un solo PHP para todas
 
-Pacientes, Médicos, Personal, Ambulancias, Destinos y Rutas comparten **un solo PHP**: `php/gestion.php`. Cada pantalla carga y guarda su lista completa con `js/gestion-api.js`:
-
-```js
-gestionApi.cargar("pacientes").then(lista => { patients = lista; renderList(); });  // al abrir
-gestionApi.guardar("pacientes", patients);                                          // al guardar o borrar
-```
+Pacientes, Médicos, Personal, Ambulancias, Destinos y Rutas comparten **un solo PHP**: `php/gestion.php`. Cada pantalla carga y guarda su lista completa con `js/gestion-api.js`.
 
 Al guardar, el PHP actualiza las filas que ya existen, agrega las nuevas y borra las que ya no están, todo en una transacción.
 
-| Pantalla | Módulo | Tabla |
-|---|---|---|
-| Pacientes | `pacientes` | `gestion_paciente` |
-| Médicos | `medicos` | `gestion_medico` |
-| Personal | `personal` | `gestion_personal` |
-| Ambulancias | `ambulancias` | `ambulancia` |
-| Destinos | `destinos` | `gestion_destino` |
-| Rutas | `rutas` | `gestion_ruta` |
+| Pantalla | Módulo | Tabla | JS |
+|---|---|---|---|
+| Pacientes | `pacientes` | `gestion_paciente` | `js/patients.js` |
+| Médicos | `medicos` | `gestion_medico` | `js/doctors.js` |
+| Personal | `personal` | `gestion_personal` | `js/personnel.js` |
+| Ambulancias | `ambulancias` | `ambulancia` | `js/ambulances.js` |
+| Destinos | `destinos` | `gestion_destino` | `js/destinations.js` |
+| Rutas | `rutas` | `gestion_ruta` | `js/routes.js` (tiene su propio mapa) |
+
+Las cinco primeras son **la misma página** (buscador + tabla + botón "Nuevo" + formulario para crear, editar y borrar), armada por `js/gestion-tabla.js` con los estilos de `css/gestion.css`. El JS de cada una es solo una lista de campos:
+
+```js
+// js/patients.js
+crearPaginaGestion({
+  modulo: "pacientes", titulo: "Pacientes", singular: "paciente",
+  nuevoId: () => `p-${Date.now()}`,
+  campos: [
+    { campo: "name", etiqueta: "Nombre completo", requerido: true, enTabla: true },
+    { campo: "dni", etiqueta: "Cédula", requerido: true, largo: 20, enTabla: true },
+    { campo: "age", etiqueta: "Edad", tipo: "number", min: 0, max: 120, enTabla: true },
+    { campo: "phone", etiqueta: "Teléfono", largo: 30, enTabla: true }
+  ]
+});
+```
+
+- `tipo` puede ser `"text"` (si no se pone), `"number"` o `"select"` (con `opciones: ["Activo", "Inactivo"]`).
+- `enTabla: true` hace que el campo también sea una columna de la tabla.
+- Destinos usa además `mapa: true`: el formulario muestra un mapa y se hace clic para marcar la ubicación.
 
 **Para agregar un dato nuevo a una de esas pantallas** (por ejemplo, el email del paciente):
 
 1. Agregá la columna: `ALTER TABLE gestion_paciente ADD COLUMN email varchar(150) DEFAULT NULL;`
 2. En `php/gestion.php`, dentro de `MODULOS['pacientes']['campos']`, agregá la línea `'email' => 'email',` (a la izquierda el nombre del dato en el JS, a la derecha la columna).
-3. Agregá el campo al formulario en el HTML y al objeto que arma el JS al guardar.
+3. En `js/patients.js`, agregá `{ campo: "email", etiqueta: "Email", enTabla: true }` a la lista de campos.
 
-No hace falta tocar nada más: el PHP lee la lista de campos para saber qué guardar.
+No hace falta tocar nada más: el PHP y la página leen esas listas para saber qué guardar y qué mostrar.
 
 > Como se guarda la lista completa, si dos personas editan **la misma pantalla al mismo tiempo**, queda lo que guardó la última.
 
 **Traslados y Calendario tienen su propio PHP** (`php/traslados.php` y `php/turnos.php`), porque cada traslado o turno se guarda por separado y combina datos de varias tablas:
 
-- `gestion_traslado` usa la ambulancia (`ambulancia`), el chofer y el acompañante (`gestion_personal`), el origen y el destino (`gestion_destino`) y el paciente (`gestion_paciente`).
+- `gestion_traslado` usa la ambulancia (`ambulancia`), el chofer y el acompañante (`gestion_personal`), el origen y el destino (`gestion_destino`) y el paciente (`gestion_paciente`, opcional: si no hay paciente se escribe el `elemento` que se lleva). El `estado` avanza PROGRAMADO → EN_CAMINO → EN_DESTINO → RETORNANDO → FINALIZADO, y en cada paso se guarda la hora (`salida_real`, `llegada_real`, `retorno_real`).
 - `turno` usa el paciente (`gestion_paciente`) y el médico (`gestion_medico`).
 
 Por eso no se puede borrar en Gestión algo que un traslado o un turno está usando: la base lo impide y aparece un aviso.

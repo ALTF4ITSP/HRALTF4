@@ -2,27 +2,28 @@
 declare(strict_types=1);
 
 /*
- * Traslados de ambulancias (lista, nuevo traslado, detalle y mapa).
+ * Traslados de ambulancias (página trace.html).
  *
- *   GET  traslados.php               → todos los traslados
- *   GET  traslados.php?id=3          → un traslado con los datos del paciente
- *   GET  traslados.php?opciones=1    → ambulancias, personal, destinos y pacientes para el formulario
- *   POST traslados.php {"accion": "guardar", "traslado": {...}}   (sin id = nuevo)
- *   POST traslados.php {"accion": "estado", "id": 3, "estado": "EN_CURSO"}
+ *   GET  traslados.php                                   → traslados + listas para el formulario
+ *   POST traslados.php {"accion": "nuevo", "traslado": {...}}
+ *   POST traslados.php {"accion": "avanzar", "id": 3}    → pasa al siguiente estado y guarda la hora
+ *   POST traslados.php {"accion": "cancelar", "id": 3}
  */
 
 require_once __DIR__ . '/connection.php';
 header('Content-Type: application/json; charset=utf-8');
 
-const TIPOS = ['PACIENTE', 'EQUIPO', 'BIOLOGICO'];
-const PRIORIDADES = ['BAJA', 'NORMAL', 'ALTA', 'CRITICA'];
-// A qué estados se puede pasar desde cada estado
-const PASOS = [
-    'ASIGNADO' => ['EN_CURSO', 'CANCELADO'],
-    'EN_CURSO' => ['EN_DESTINO', 'FINALIZADO', 'CANCELADO'],
-    'EN_DESTINO' => ['FINALIZADO', 'CANCELADO'],
-    'FINALIZADO' => [],
-    'CANCELADO' => []
+// Orden de los estados y qué hora se guarda al llegar a cada uno
+const SIGUIENTE = [
+    'PROGRAMADO' => 'EN_CAMINO',
+    'EN_CAMINO' => 'EN_DESTINO',
+    'EN_DESTINO' => 'RETORNANDO',
+    'RETORNANDO' => 'FINALIZADO'
+];
+const HORA_DEL_ESTADO = [
+    'EN_CAMINO' => 'salida_real',
+    'EN_DESTINO' => 'llegada_real',
+    'FINALIZADO' => 'retorno_real'
 ];
 
 function traslados_responder(int $status, array $cuerpo): never
@@ -37,61 +38,54 @@ function traslados_error(int $status, string $mensaje): never
     traslados_responder($status, ['success' => false, 'error' => ['message' => $mensaje]]);
 }
 
-// Consulta con los nombres de todo lo relacionado (se usa en la lista y en el detalle)
-const CONSULTA_TRASLADOS = "
-    SELECT t.id_gestion_traslado AS id, t.tipo, t.motivo, t.prioridad, t.estado,
-           DATE_FORMAT(t.fecha_salida, '%Y-%m-%dT%H:%i') AS fecha_salida,
-           DATE_FORMAT(t.llegada_estimada, '%Y-%m-%dT%H:%i') AS llegada_estimada,
-           DATE_FORMAT(t.fecha_fin, '%Y-%m-%dT%H:%i') AS fecha_fin,
-           DATE_FORMAT(t.fecha_creacion, '%Y-%m-%dT%H:%i') AS fecha_creacion,
-           t.opciones, t.notas,
-           t.id_ambulancia, a.matricula, a.modelo,
-           t.id_chofer, ch.nombre AS chofer,
-           t.id_acompanante, ac.nombre AS acompanante,
-           t.id_origen, o.nombre AS origen, o.latitud AS origen_lat, o.longitud AS origen_lng,
-           t.id_destino, d.nombre AS destino, d.latitud AS destino_lat, d.longitud AS destino_lng,
-           t.id_gestion_paciente, p.nombre AS paciente, p.edad AS paciente_edad, p.documento AS paciente_documento,
-           p.diagnostico AS paciente_diagnostico, p.medico AS paciente_medico
-    FROM gestion_traslado t
-    INNER JOIN ambulancia a ON a.id_ambulancia = t.id_ambulancia
-    INNER JOIN gestion_personal ch ON ch.id_gestion_personal = t.id_chofer
-    LEFT JOIN gestion_personal ac ON ac.id_gestion_personal = t.id_acompanante
-    INNER JOIN gestion_destino o ON o.id_gestion_destino = t.id_origen
-    INNER JOIN gestion_destino d ON d.id_gestion_destino = t.id_destino
-    LEFT JOIN gestion_paciente p ON p.id_gestion_paciente = t.id_gestion_paciente";
-
 $conexion = db();
 
 // ---------- Leer ----------
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
     try {
-        if (isset($_GET['opciones'])) {
-            traslados_responder(200, ['success' => true, 'data' => [
-                'ambulancias' => $conexion->query(
-                    'SELECT id_ambulancia AS id, matricula, modelo, estado_operativo FROM ambulancia ORDER BY matricula'
-                )->fetchAll(),
-                'personal' => $conexion->query(
-                    "SELECT id_gestion_personal AS id, nombre, rol FROM gestion_personal WHERE estado = 'Activo' ORDER BY nombre"
-                )->fetchAll(),
-                'destinos' => $conexion->query(
-                    "SELECT id_gestion_destino AS id, nombre, localidad FROM gestion_destino WHERE estado = 'Activo' ORDER BY nombre"
-                )->fetchAll(),
-                'pacientes' => $conexion->query(
-                    'SELECT id_gestion_paciente AS id, nombre, documento FROM gestion_paciente ORDER BY nombre'
-                )->fetchAll()
-            ]]);
-        }
+        $traslados = $conexion->query(
+            "SELECT t.id_gestion_traslado AS id, t.estado, t.elemento, t.notas,
+                    DATE_FORMAT(t.salida_programada, '%Y-%m-%d %H:%i') AS salida_programada,
+                    DATE_FORMAT(t.llegada_estimada, '%Y-%m-%d %H:%i') AS llegada_estimada,
+                    DATE_FORMAT(t.salida_real, '%Y-%m-%d %H:%i') AS salida_real,
+                    DATE_FORMAT(t.llegada_real, '%Y-%m-%d %H:%i') AS llegada_real,
+                    DATE_FORMAT(t.retorno_real, '%Y-%m-%d %H:%i') AS retorno_real,
+                    a.matricula, ch.nombre AS chofer, ac.nombre AS acompanante, p.nombre AS paciente,
+                    o.nombre AS origen, o.latitud AS origen_lat, o.longitud AS origen_lng,
+                    d.nombre AS destino, d.latitud AS destino_lat, d.longitud AS destino_lng
+             FROM gestion_traslado t
+             INNER JOIN ambulancia a ON a.id_ambulancia = t.id_ambulancia
+             INNER JOIN gestion_personal ch ON ch.id_gestion_personal = t.id_chofer
+             LEFT JOIN gestion_personal ac ON ac.id_gestion_personal = t.id_acompanante
+             LEFT JOIN gestion_paciente p ON p.id_gestion_paciente = t.id_gestion_paciente
+             INNER JOIN gestion_destino o ON o.id_gestion_destino = t.id_origen
+             INNER JOIN gestion_destino d ON d.id_gestion_destino = t.id_destino
+             ORDER BY t.salida_programada DESC"
+        )->fetchAll();
 
-        if (isset($_GET['id'])) {
-            $consulta = $conexion->prepare(CONSULTA_TRASLADOS . ' WHERE t.id_gestion_traslado = ?');
-            $consulta->execute([(int) $_GET['id']]);
-            $traslado = $consulta->fetch();
-            if (!$traslado) traslados_error(404, 'No se encontró el traslado.');
-            traslados_responder(200, ['success' => true, 'data' => $traslado]);
-        }
-
-        $lista = $conexion->query(CONSULTA_TRASLADOS . ' ORDER BY t.fecha_salida DESC')->fetchAll();
-        traslados_responder(200, ['success' => true, 'data' => $lista]);
+        traslados_responder(200, [
+            'success' => true,
+            'traslados' => $traslados,
+            'ambulancias' => $conexion->query(
+                "SELECT id_ambulancia AS id, matricula, modelo FROM ambulancia
+                 WHERE estado_operativo = 'OPERATIVA' ORDER BY matricula"
+            )->fetchAll(),
+            'personal' => $conexion->query(
+                "SELECT id_gestion_personal AS id, nombre, rol FROM gestion_personal
+                 WHERE estado = 'Activo' ORDER BY nombre"
+            )->fetchAll(),
+            'destinos' => $conexion->query(
+                "SELECT id_gestion_destino AS id, codigo, nombre, localidad, latitud AS lat, longitud AS lng
+                 FROM gestion_destino WHERE estado = 'Activo' ORDER BY nombre"
+            )->fetchAll(),
+            'pacientes' => $conexion->query(
+                'SELECT id_gestion_paciente AS id, nombre, documento FROM gestion_paciente ORDER BY nombre'
+            )->fetchAll(),
+            'rutas' => $conexion->query(
+                "SELECT numero, nombre, origen, destino, duracion_min FROM gestion_ruta
+                 WHERE estado = 'Activa' ORDER BY numero"
+            )->fetchAll()
+        ]);
     } catch (Throwable $error) {
         error_log('[traslados_leer] ' . $error->getMessage());
         traslados_error(500, 'No se pudieron cargar los traslados.');
@@ -111,93 +105,67 @@ $datos = json_decode(file_get_contents('php://input') ?: '', true);
 $accion = (string) ($datos['accion'] ?? '');
 
 try {
-    // Cambiar de estado
-    if ($accion === 'estado') {
+    // Avanzar o cancelar un traslado que ya existe
+    if ($accion === 'avanzar' || $accion === 'cancelar') {
         $id = (int) ($datos['id'] ?? 0);
-        $nuevo = (string) ($datos['estado'] ?? '');
-
         $buscar = $conexion->prepare('SELECT estado FROM gestion_traslado WHERE id_gestion_traslado = ?');
         $buscar->execute([$id]);
         $actual = $buscar->fetchColumn();
         if ($actual === false) traslados_error(404, 'No se encontró el traslado.');
-        if (!in_array($nuevo, PASOS[$actual] ?? [], true)) traslados_error(422, 'Ese cambio de estado no está permitido.');
+        if (!isset(SIGUIENTE[$actual])) traslados_error(409, 'Este traslado ya terminó.');
 
-        // Al finalizar o cancelar se guarda la hora
-        $actualizar = $conexion->prepare(
-            "UPDATE gestion_traslado
-             SET estado = ?, fecha_fin = IF(? IN ('FINALIZADO', 'CANCELADO'), NOW(), NULL)
-             WHERE id_gestion_traslado = ?"
-        );
-        $actualizar->execute([$nuevo, $nuevo, $id]);
-        traslados_responder(200, ['success' => true]);
+        $nuevo = $accion === 'cancelar' ? 'CANCELADO' : SIGUIENTE[$actual];
+        $hora = HORA_DEL_ESTADO[$nuevo] ?? null;
+        $sql = $hora
+            ? "UPDATE gestion_traslado SET estado = ?, $hora = NOW() WHERE id_gestion_traslado = ?"
+            : 'UPDATE gestion_traslado SET estado = ? WHERE id_gestion_traslado = ?';
+        $conexion->prepare($sql)->execute([$nuevo, $id]);
+        traslados_responder(200, ['success' => true, 'estado' => $nuevo]);
     }
 
-    if ($accion !== 'guardar' || !is_array($datos['traslado'] ?? null)) traslados_error(422, 'Acción no válida.');
+    if ($accion !== 'nuevo' || !is_array($datos['traslado'] ?? null)) traslados_error(422, 'Acción no válida.');
 
+    // Nuevo traslado
     $t = $datos['traslado'];
-    $id = (int) ($t['id'] ?? 0);
-    $entero = fn(string $campo) => (int) ($t[$campo] ?? 0) ?: null;
-    $texto = fn(string $campo) => trim((string) ($t[$campo] ?? ''));
+    $numero = fn(string $campo) => (int) ($t[$campo] ?? 0) ?: null;   // 0 o vacío = null
+    $texto = fn(string $campo) => trim((string) ($t[$campo] ?? '')) ?: null;
 
-    $valores = [
-        'id_ambulancia' => $entero('id_ambulancia'),
-        'id_chofer' => $entero('id_chofer'),
-        'id_acompanante' => $entero('id_acompanante'),
-        'id_origen' => $entero('id_origen'),
-        'id_destino' => $entero('id_destino'),
-        'id_gestion_paciente' => $entero('id_gestion_paciente'),
-        'tipo' => $texto('tipo'),
-        'motivo' => $texto('motivo'),
-        'prioridad' => $texto('prioridad'),
-        'fecha_salida' => $texto('fecha_salida'),
-        'llegada_estimada' => $texto('llegada_estimada') ?: null,
-        'opciones' => $texto('opciones') ?: null,
-        'notas' => $texto('notas') ?: null
-    ];
+    $ambulancia = $numero('id_ambulancia');
+    $chofer = $numero('id_chofer');
+    $acompanante = $numero('id_acompanante');
+    $paciente = $numero('id_gestion_paciente');
+    $elemento = $texto('elemento');
+    $origen = $numero('id_origen');
+    $destino = $numero('id_destino');
+    $salida = str_replace('T', ' ', (string) $texto('salida_programada'));
+    $llegada = $texto('llegada_estimada') ? str_replace('T', ' ', $texto('llegada_estimada')) : null;
+    $notas = $texto('notas');
 
-    if (!$valores['id_ambulancia']) traslados_error(422, 'Elegí una ambulancia.');
-    if (!$valores['id_chofer']) traslados_error(422, 'Elegí un conductor.');
-    if ($valores['id_acompanante'] === $valores['id_chofer']) traslados_error(422, 'El acompañante no puede ser el mismo conductor.');
-    if (!$valores['id_origen'] || !$valores['id_destino']) traslados_error(422, 'Elegí el origen y el destino.');
-    if ($valores['id_origen'] === $valores['id_destino']) traslados_error(422, 'El origen y el destino no pueden ser el mismo.');
-    if (!in_array($valores['tipo'], TIPOS, true)) traslados_error(422, 'Elegí el tipo de traslado.');
-    if ($valores['tipo'] === 'PACIENTE' && !$valores['id_gestion_paciente']) traslados_error(422, 'Elegí el paciente.');
-    if ($valores['motivo'] === '' || mb_strlen($valores['motivo']) > 100) traslados_error(422, 'Elegí el motivo del traslado.');
-    if (!in_array($valores['prioridad'], PRIORIDADES, true)) traslados_error(422, 'Elegí la prioridad.');
-    if (!DateTime::createFromFormat('!Y-m-d\TH:i', $valores['fecha_salida'])) traslados_error(422, 'La fecha y hora de inicio no son válidas.');
-    if ($valores['llegada_estimada'] !== null && $valores['llegada_estimada'] <= $valores['fecha_salida']) {
-        traslados_error(422, 'La llegada estimada tiene que ser después de la salida.');
-    }
-    if (mb_strlen((string) $valores['notas']) > 500) traslados_error(422, 'Las notas pueden tener hasta 500 caracteres.');
+    if (!$ambulancia) traslados_error(422, 'Elegí una ambulancia.');
+    if (!$chofer) traslados_error(422, 'Elegí el conductor.');
+    if ($acompanante === $chofer) traslados_error(422, 'El acompañante no puede ser el mismo conductor.');
+    if (!$paciente && !$elemento) traslados_error(422, 'Elegí un paciente o escribí qué se traslada.');
+    if (!$origen || !$destino) traslados_error(422, 'Elegí el origen y el destino.');
+    if ($origen === $destino) traslados_error(422, 'El origen y el destino no pueden ser el mismo.');
+    if (!DateTime::createFromFormat('!Y-m-d H:i', $salida)) traslados_error(422, 'La hora de salida no es válida.');
+    if ($llegada !== null && $llegada <= $salida) traslados_error(422, 'La llegada estimada tiene que ser después de la salida.');
+    if (mb_strlen((string) $elemento) > 150 || mb_strlen((string) $notas) > 300) traslados_error(422, 'El texto es demasiado largo.');
 
-    // La misma ambulancia no puede tener dos traslados activos
+    // La ambulancia no puede estar en otro traslado sin terminar
     $ocupada = $conexion->prepare(
         "SELECT id_gestion_traslado FROM gestion_traslado
-         WHERE id_ambulancia = ? AND id_gestion_traslado <> ? AND estado IN ('ASIGNADO', 'EN_CURSO', 'EN_DESTINO')
-         LIMIT 1"
+         WHERE id_ambulancia = ? AND estado NOT IN ('FINALIZADO', 'CANCELADO') LIMIT 1"
     );
-    $ocupada->execute([$valores['id_ambulancia'], $id]);
-    if ($otro = $ocupada->fetchColumn()) traslados_error(409, "Esa ambulancia ya está en el traslado $otro, que sigue activo.");
+    $ocupada->execute([$ambulancia]);
+    if ($otro = $ocupada->fetchColumn()) traslados_error(409, "Esa ambulancia ya está en el traslado #$otro, que no terminó.");
 
-    $columnas = array_keys($valores);
-    if ($id > 0) {
-        $buscar = $conexion->prepare('SELECT estado FROM gestion_traslado WHERE id_gestion_traslado = ?');
-        $buscar->execute([$id]);
-        $estado = $buscar->fetchColumn();
-        if ($estado === false) traslados_error(404, 'No se encontró el traslado.');
-        if (in_array($estado, ['FINALIZADO', 'CANCELADO'], true)) traslados_error(409, 'Un traslado finalizado o cancelado no se puede editar.');
+    $conexion->prepare(
+        'INSERT INTO gestion_traslado (id_ambulancia, id_chofer, id_acompanante, id_gestion_paciente, elemento,
+                                       id_origen, id_destino, salida_programada, llegada_estimada, notas)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    )->execute([$ambulancia, $chofer, $acompanante, $paciente, $elemento, $origen, $destino, $salida, $llegada, $notas]);
 
-        $set = implode(', ', array_map(fn($c) => "$c = ?", $columnas));
-        $conexion->prepare("UPDATE gestion_traslado SET $set WHERE id_gestion_traslado = ?")
-            ->execute([...array_values($valores), $id]);
-    } else {
-        $marcas = implode(', ', array_fill(0, count($columnas), '?'));
-        $conexion->prepare('INSERT INTO gestion_traslado (' . implode(', ', $columnas) . ") VALUES ($marcas)")
-            ->execute(array_values($valores));
-        $id = (int) $conexion->lastInsertId();
-    }
-
-    traslados_responder(200, ['success' => true, 'id' => $id]);
+    traslados_responder(200, ['success' => true, 'id' => (int) $conexion->lastInsertId()]);
 } catch (Throwable $error) {
     error_log('[traslados_guardar] ' . $error->getMessage());
     $mensaje = ($error instanceof PDOException && ($error->errorInfo[1] ?? 0) === 1452)

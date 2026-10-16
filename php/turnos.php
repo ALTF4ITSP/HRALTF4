@@ -48,7 +48,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
                     TIME_FORMAT(t.hora_fin, '%H:%i') AS hora_fin,
                     t.motivo, t.estado, t.notas,
                     p.nombre AS paciente,
-                    TRIM(CONCAT(COALESCE(m.titulo, ''), ' ', COALESCE(m.nombre, ''))) AS medico
+                    m.nombre AS medico
              FROM turno t
              INNER JOIN gestion_paciente p ON p.id_gestion_paciente = t.id_gestion_paciente
              LEFT JOIN gestion_medico m ON m.id_gestion_medico = t.id_gestion_medico
@@ -61,7 +61,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
             'SELECT id_gestion_paciente AS id, nombre, documento FROM gestion_paciente ORDER BY nombre'
         )->fetchAll();
         $medicos = $conexion->query(
-            "SELECT id_gestion_medico AS id, TRIM(CONCAT(COALESCE(titulo, ''), ' ', nombre)) AS nombre, especialidad
+            "SELECT id_gestion_medico AS id, nombre, especialidad
              FROM gestion_medico WHERE estado <> 'Inactivo' ORDER BY nombre"
         )->fetchAll();
 

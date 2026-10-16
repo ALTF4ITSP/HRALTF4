@@ -10,7 +10,6 @@ declare(strict_types=1);
  *          y borra lo que ya no está.
  *
  * Para cada módulo se indica su tabla y qué columna corresponde a cada dato del JS.
- * Un dato con punto ("emergencyContact.name") es un objeto dentro de otro.
  */
 
 require_once __DIR__ . '/connection.php';
@@ -22,22 +21,9 @@ const MODULOS = [
         'campos' => [
             'id' => 'codigo',
             'name' => 'nombre',
-            'age' => 'edad',
             'dni' => 'documento',
-            'phone' => 'telefono',
-            'status' => 'estado',
-            'room' => 'habitacion',
-            'department' => 'servicio',
-            'doctor' => 'medico',
-            'doctorSpecialty' => 'especialidad_medico',
-            'admissionDate' => 'fecha_ingreso',
-            'bloodType' => 'grupo_sanguineo',
-            'allergies' => 'alergias',
-            'diagnosis' => 'diagnostico',
-            'clinicalState' => 'estado_clinico',
-            'emergencyContact.name' => 'contacto_nombre',
-            'emergencyContact.phone' => 'contacto_telefono',
-            'emergencyContact.relationship' => 'contacto_parentesco'
+            'age' => 'edad',
+            'phone' => 'telefono'
         ],
         'numeros' => ['age']
     ],
@@ -45,21 +31,10 @@ const MODULOS = [
         'tabla' => 'gestion_medico',
         'campos' => [
             'id' => 'codigo',
-            'title' => 'titulo',
             'name' => 'nombre',
-            'document' => 'documento',
-            'license' => 'registro_msp',
             'specialty' => 'especialidad',
-            'service' => 'servicio',
-            'office' => 'consultorio',
             'phone' => 'telefono',
-            'email' => 'email',
-            'status' => 'estado',
-            'shift' => 'turno',
-            'days' => 'dias',
-            'startTime' => 'hora_inicio',
-            'endTime' => 'hora_fin',
-            'notes' => 'observaciones'
+            'status' => 'estado'
         ]
     ],
     'personal' => [
@@ -68,9 +43,8 @@ const MODULOS = [
             'id' => 'codigo',
             'name' => 'nombre',
             'role' => 'rol',
-            'phone' => 'telefono',
             'document' => 'documento',
-            'license' => 'licencia',
+            'phone' => 'telefono',
             'status' => 'estado'
         ]
     ],
@@ -81,9 +55,6 @@ const MODULOS = [
             'name' => 'nombre',
             'address' => 'direccion',
             'locality' => 'localidad',
-            'type' => 'tipo',
-            'phone' => 'telefono',
-            'notes' => 'referencia',
             'status' => 'estado',
             'lat' => 'latitud',
             'lng' => 'longitud'
@@ -149,13 +120,7 @@ function gestion_a_objeto(array $fila, array $modulo): array
             $valor = '';
         }
 
-        // "emergencyContact.name" → $objeto['emergencyContact']['name']
-        $partes = explode('.', $dato);
-        if (count($partes) === 2) {
-            $objeto[$partes[0]][$partes[1]] = $valor;
-        } else {
-            $objeto[$dato] = $valor;
-        }
+        $objeto[$dato] = $valor;
     }
 
     return $objeto;
@@ -167,10 +132,7 @@ function gestion_a_fila(array $objeto, array $modulo): array
     $fila = [];
 
     foreach ($modulo['campos'] as $dato => $columna) {
-        $partes = explode('.', $dato);
-        $valor = count($partes) === 2
-            ? ($objeto[$partes[0]][$partes[1]] ?? null)
-            : ($objeto[$dato] ?? null);
+        $valor = $objeto[$dato] ?? null;
 
         if (in_array($dato, $modulo['listas'] ?? [], true)) {
             $valor = json_encode(is_array($valor) ? $valor : [], JSON_UNESCAPED_UNICODE);
@@ -194,10 +156,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
     if (!isset(MODULOS[$nombre])) gestion_error(422, 'Módulo no válido.');
 
     $modulo = MODULOS[$nombre];
-    $clave = $modulo['campos']['id'];
-
     try {
-        $filas = $conexion->query("SELECT * FROM `{$modulo['tabla']}` ORDER BY `$clave`")->fetchAll();
+        // ORDER BY 1 = por la primera columna (el número de la tabla), o sea, en el orden en que se cargaron
+        $filas = $conexion->query("SELECT * FROM `{$modulo['tabla']}` ORDER BY 1")->fetchAll();
         $lista = array_map(fn(array $fila) => gestion_a_objeto($fila, $modulo), $filas);
         gestion_responder(200, ['success' => true, 'data' => $lista]);
     } catch (Throwable $error) {

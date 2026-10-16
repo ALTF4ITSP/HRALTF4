@@ -100,7 +100,7 @@
                 title: 'Nuevo traslado',
                 section: 'Ambulancias',
                 detail: 'Abrir formulario de traslado',
-                href: 'trace-new.html',
+                href: 'trace.html',
                 icon: '../imagenes/location-icon.svg',
                 terms: 'crear traslado registrar traslado cargar traslado'
             },

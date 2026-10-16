@@ -1,0 +1,183 @@
+/* Páginas de Gestión: Pacientes, Médicos, Personal, Ambulancias y Destinos (js/gestion-tabla.js) */
+[hidden] {
+  display: none !important;
+}
+
+.gestion-panel {
+  position: relative;
+  z-index: 1;
+  width: min(calc(100% - 125px), 1100px);
+}
+
+.gestion-volver {
+  color: #abbaea;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.gestion-encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.gestion-encabezado h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+/* Botones */
+.gestion-boton {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 12px;
+  background: #4b6dde;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gestion-boton.secundario {
+  border: 1px solid rgba(238, 238, 238, 0.15);
+  background: #111934;
+}
+
+/* Buscador y campos */
+.gestion-buscar,
+.gestion-dialogo input,
+.gestion-dialogo select {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(150, 163, 209, 0.25);
+  border-radius: 10px;
+  background: rgba(8, 12, 28, 0.5);
+  color: #eeeeee;
+  font: inherit;
+}
+
+.gestion-buscar {
+  max-width: 360px;
+}
+
+/* Tabla */
+.gestion-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid rgba(238, 238, 238, 0.13);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.gestion-tabla th,
+.gestion-tabla td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(238, 238, 238, 0.08);
+  text-align: left;
+}
+
+.gestion-tabla th {
+  background: rgba(171, 186, 234, 0.12);
+  color: #abbaea;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.gestion-tabla tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.gestion-celda-botones {
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.gestion-celda-botones button {
+  padding: 6px 12px;
+  border: 1px solid rgba(238, 238, 238, 0.15);
+  border-radius: 8px;
+  background: #111934;
+  color: #abbaea;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.gestion-celda-botones .borrar {
+  color: #ff6b6b;
+}
+
+.gestion-vacio {
+  color: rgba(238, 238, 238, 0.55);
+  text-align: center !important;
+}
+
+/* Formulario (ventana) */
+.gestion-dialogo {
+  width: min(480px, calc(100% - 32px));
+  padding: 24px;
+  border: 1px solid rgba(238, 238, 238, 0.13);
+  border-radius: 20px;
+  background: #121a3a;
+  color: #eeeeee;
+}
+
+.gestion-dialogo::backdrop {
+  background: rgba(5, 8, 20, 0.6);
+}
+
+.gestion-dialogo h2 {
+  margin: 0 0 16px;
+}
+
+.gestion-dialogo label {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: rgba(238, 238, 238, 0.65);
+  font-size: 0.85rem;
+}
+
+.gestion-dialogo select option {
+  background: #101732;
+}
+
+.gestion-ayuda {
+  margin: 4px 0 8px;
+  color: rgba(238, 238, 238, 0.6);
+  font-size: 0.82rem;
+}
+
+#mapaFormulario {
+  height: 240px;
+  border-radius: 12px;
+}
+
+.gestion-acciones {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .gestion-panel {
+    width: calc(100% - 96px);
+  }
+}
+
+@media (max-width: 770px) {
+  .gestion-panel {
+    width: 100%;
+  }
+
+  /* En el celular la tabla se puede deslizar de costado */
+  .gestion-tabla {
+    display: block;
+    overflow-x: auto;
+  }
+}

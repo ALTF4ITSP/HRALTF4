@@ -2,207 +2,159 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traslados de Ambulancias</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="../imagenes/hospital-dark.ico">
-    <link rel="stylesheet" href="../css/main-menu.css?v=20260927-brand-fix">
-    <link rel="stylesheet" href="../css/trace.css">
-    <script src="../js/main-menu.js?v=20260927-global" defer></script>
-    <script src="../js/universal-search.js?v=20260928-trace-search" defer></script>
-    <script src="../js/trace.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traslados | Hospital de Clínicas</title>
+  <link rel="stylesheet" href="../css/main-menu.css?v=20260927-brand-fix">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/buscador.css">
+  <link rel="stylesheet" href="../css/trace.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;1,400;1,500&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../imagenes/hospital-dark.ico">
+  <script src="../js/main-menu.js?v=20260927-global" defer></script>
+  <script src="../js/universal-search.js?v=20260927-global" defer></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous" defer></script>
+  <script src="../js/buscador.js" defer></script>
+  <script src="../js/trace.js" defer></script>
 </head>
 
 <body>
-    <div class="page-background"></div>
-    <div class="page-glow"></div>
+  <div class="page-background"></div>
+  <div class="page-glow"></div>
 
-    <main class="app-shell">
+  <main class="app-shell">
+    <aside class="sidebar">
+      <button type="button" class="sidebar-action" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
-        <aside class="sidebar">
-            <button type="button" class="sidebar-action" aria-label="Abrir menú">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+      <nav class="sidebar-nav">
+        <div class="nav-indicator"></div>
 
-            <nav class="sidebar-nav">
-                <div class="nav-indicator"></div>
+        <a href="main-menu.html" class="nav-item">
+          <img src="../imagenes/house-icon.svg" alt="Inicio">
+          <span>Inicio</span>
+        </a>
+        <a href="documents.html" class="nav-item">
+          <img src="../imagenes/folder-icon.svg" alt="Documentos">
+          <span>Documentos</span>
+        </a>
+        <a href="trace.html" class="nav-item active">
+          <img src="../imagenes/location-icon.svg" alt="Ambulancias">
+          <span>Ambulancias</span>
+        </a>
+        <a href="analytics.html" class="nav-item">
+          <img src="../imagenes/analytics-icon.svg" alt="Reportes">
+          <span>Reportes</span>
+        </a>
+        <a href="calendar.html" class="nav-item">
+          <img src="../imagenes/calendar-icon.svg" alt="Calendario">
+          <span>Calendario</span>
+        </a>
+        <a href="surveys.html" class="nav-item">
+          <img src="../imagenes/survey-icon.svg" alt="Encuestas">
+          <span>Encuestas</span>
+        </a>
+        <a href="management.html" class="nav-item">
+          <img src="../imagenes/database-cog.svg" alt="Gestion">
+          <span>Gestion</span>
+        </a>
 
-                <a href="main-menu.html" class="nav-item">
-                    <img src="../imagenes/house-icon.svg" alt="Inicio">
-                    <span>Inicio</span>
-                </a>
+        <div class="nav-spacer"></div>
 
-                <a href="documents.html" class="nav-item">
-                    <img src="../imagenes/folder-icon.svg" alt="Documentos">
-                    <span>Documentos</span>
-                </a>
+        <a href="settings.html" class="nav-item">
+          <img src="../imagenes/settings-icon.svg" alt="Configuración">
+          <span>Configuración</span>
+        </a>
+      </nav>
+    </aside>
 
-                <a href="#" class="nav-item active">
-                    <img src="../imagenes/location-icon.svg" alt="Ambulancias">
-                    <span>Ambulancias</span>
-                </a>
+    <header class="topbar">
+      <div class="brand">
+        <img src="../imagenes/hospital-logo.png" alt="Hospital de Clínicas">
+        <span>HOSPITAL DE CLINICAS</span>
+      </div>
 
-                <a href="analytics.html" class="nav-item">
-                    <img src="../imagenes/analytics-icon.svg" alt="Reportes">
-                    <span>Reportes</span>
-                </a>
+      <div class="search-wrapper">
+        <input type="text" class="search-input" placeholder="Buscar...">
+        <button type="button" class="topbar-action search-action" aria-label="Buscar">
+          <img src="../imagenes/search-icon.svg" alt="" aria-hidden="true">
+        </button>
+      </div>
+    </header>
 
-                <a href="calendar.html" class="nav-item">
-                    <img src="../imagenes/calendar-icon.svg" alt="Calendario">
-                    <span>Calendario</span>
-                </a>
+    <section class="hero-panel traslados-panel">
+      <h1>Traslados</h1>
 
-                <a href="surveys.html" class="nav-item">
-                    <img src="../imagenes/survey-icon.svg" alt="Encuestas">
-                    <span>Encuestas</span>
-                </a>
-                <a href="management.html" class="nav-item">
-                    <img src="../imagenes/database-cog.svg" alt="Gestion">
-                    <span>Gestion</span>
-                </a>
+      <div class="traslados-layout">
+        <!-- Izquierda: formulario y lista -->
+        <div class="traslados-columna">
+          <form class="traslados-caja" id="formulario">
+            <h2>Nuevo traslado</h2>
 
-                <div class="nav-spacer"></div>
+            <label>Ruta habitual <small>(opcional, completa origen y destino)</small>
+              <select id="ruta"><option value="">Sin ruta</option></select>
+            </label>
+            <div class="traslados-fila">
+              <label>Origen <select name="id_origen" required></select></label>
+              <label>Destino <select name="id_destino" required></select></label>
+            </div>
 
-                <a href="settings.html" class="nav-item">
-                    <img src="../imagenes/settings-icon.svg" alt="Configuración">
-                    <span>Configuración</span>
-                </a>
-            </nav>
-        </aside>
+            <div class="traslados-fila">
+              <label>Ambulancia <select name="id_ambulancia" required></select></label>
+              <label>Conductor <select name="id_chofer" required></select></label>
+            </div>
+            <label>Acompañante <small>(opcional)</small>
+              <select name="id_acompanante"></select>
+            </label>
 
+            <div class="traslados-campo">
+              <label for="paciente">Paciente <small>(opcional, buscar por nombre o cédula)</small></label>
+              <div class="buscador">
+                <input type="text" id="paciente" placeholder="Escribí el nombre o la cédula">
+                <input type="hidden" name="id_gestion_paciente">
+                <ul class="buscador-lista" role="listbox" hidden></ul>
+              </div>
+            </div>
+            <label>Elemento <small>(si no es un paciente: muestras, equipos...)</small>
+              <input name="elemento" maxlength="150">
+            </label>
 
-        <section class="content-card">
+            <div class="traslados-fila">
+              <label>Salida <input type="datetime-local" name="salida_programada" required></label>
+              <label>Llegada estimada <input type="datetime-local" name="llegada_estimada"></label>
+            </div>
+            <label>Notas <small>(opcional)</small>
+              <input name="notas" maxlength="300">
+            </label>
 
-            <header class="topbar">
-                <div class="brand">
-                    <img src="../imagenes/hospital-logo.png" alt="Hospital de Clínicas">
-                    <span>HOSPITAL DE CLINICAS</span>
-                </div>
+            <p class="traslados-error" id="error" role="alert"></p>
+            <button type="submit" class="traslados-boton">Guardar traslado</button>
+          </form>
 
-                <div class="search-wrapper">
-                    <input type="search" class="search-input" id="quickSearch" placeholder="Buscar una acción o sección..."
-                        autocomplete="off">
-                    <button type="button" class="topbar-action search-action" aria-label="Buscar">
-                        <img src="../imagenes/search-icon.svg" alt="" aria-hidden="true">
-                    </button>
-                </div>
-            </header>
+          <div class="traslados-caja">
+            <h2>Lista de traslados</h2>
+            <input type="search" id="buscar" placeholder="Buscar por ambulancia, paciente, destino..." aria-label="Buscar traslado">
+            <ul class="traslados-lista" id="lista"></ul>
+          </div>
+        </div>
 
-            <section class="trace-panel">
-                <div class="trace-content">
-                    <div class="trace-heading">
-                        <div>
-                            <h1>Traslados de Ambulancias</h1>
-                            <p>Gestiona y realiza seguimiento de todos los traslados</p>
-                        </div>
-
-                        <div class="heading-actions">
-                            <button type="button" class="action-button primary-action">
-                                <img src="../imagenes/plus-icon.svg" alt="" aria-hidden="true"
-                                    class="button-icon">
-                                Nuevo Traslado
-                            </button>
-
-                            <a href="trace-map.html" class="action-button secondary-action">
-                                <img src="../imagenes/map-icon.svg" alt="" aria-hidden="true"
-                                    class="button-icon">
-                                Ver en Mapa
-                            </a>
-                        </div>
-                    </div>
-
-
-                    <div class="status-tabs" role="tablist" aria-label="Filtrar traslados">
-                        <button type="button" class="filter-button active" data-filter="active" role="tab"
-                            aria-selected="true">
-                            Activos <span id="activeCount">0</span>
-                        </button>
-                        <button type="button" class="filter-button" data-filter="completed" role="tab"
-                            aria-selected="false">
-                            Completados <span id="completedCount">0</span>
-                        </button>
-                        <button type="button" class="filter-button" data-filter="all" role="tab" aria-selected="false">
-                            Todos <span id="allCount">0</span>
-                        </button>
-                    </div>
-
-
-                    <section class="transfer-grid" id="transferGrid" aria-live="polite">
-                        <!-- Las tarjetas las arma trace.js con los traslados de la base -->
-                    </section>
-
-                    <p class="empty-message" id="emptyMessage" hidden>No se encontraron traslados.</p>
-
-                    <section class="all-transfers" id="allTransfers" aria-label="Todos los traslados" hidden>
-                        <div class="all-transfers-heading">
-                            <div>
-                                <span class="list-eyebrow">REGISTRO COMPLETO</span>
-                                <h2>Todos los traslados</h2>
-                                <p>Consulta cada recorrido y encuentra un traslado específico.</p>
-                            </div>
-                            <label class="transfer-list-search" for="listTransferSearch">
-                                <img src="../imagenes/search-icon.svg" alt="" aria-hidden="true">
-                                <input type="search" id="listTransferSearch" placeholder="Buscar traslado, lugar, conductor..."
-                                    autocomplete="off" aria-label="Buscar traslados por palabras clave">
-                            </label>
-                        </div>
-
-                        <div class="all-transfers-controls">
-                            <div class="list-control-group">
-                                <span class="control-label">Tipo de traslado</span>
-                                <div class="segmented-controls" role="group" aria-label="Filtrar por tipo de traslado">
-                                    <button type="button" class="list-control active" data-type="all" aria-pressed="true">Todos</button>
-                                    <button type="button" class="list-control" data-type="paciente" aria-pressed="false">Paciente</button>
-                                    <button type="button" class="list-control" data-type="equipo" aria-pressed="false">Equipo</button>
-                                    <button type="button" class="list-control" data-type="biologico" aria-pressed="false">Biológico</button>
-                                </div>
-                            </div>
-                            <div class="list-control-group date-control-group">
-                                <span class="control-label">Fecha de salida</span>
-                                <div class="segmented-controls" role="group" aria-label="Ordenar por fecha de salida">
-                                    <button type="button" class="list-control active" data-sort="newest" aria-pressed="true">Más recientes</button>
-                                    <button type="button" class="list-control" data-sort="oldest" aria-pressed="false">Más antiguos</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="transfer-list-head" aria-hidden="true">
-                            <span>Traslado</span>
-                            <span>Recorrido</span>
-                            <span>Personal asignado</span>
-                            <span>Acción</span>
-                        </div>
-                        <div class="transfer-list" id="transferList" role="region" aria-label="Lista de traslados"
-                            aria-live="polite" tabindex="0"></div>
-                        <p class="list-empty-message" id="listEmptyMessage" hidden>No se encontraron traslados con estos filtros.</p>
-                    </section>
-
-                    <footer class="list-footer">
-                        <p id="resultsText">Mostrando 3 de 3 traslados</p>
-
-                        <div class="pagination" aria-label="Paginación">
-                            <button type="button" class="page-arrow" id="previousPage"
-                                aria-label="Página anterior">◀</button>
-                            <div class="page-numbers" id="pageNumbers">
-                                <button type="button" class="page-button active" aria-current="page">1</button>
-                            </div>
-                            <button type="button" class="page-arrow" id="nextPage"
-                                aria-label="Página siguiente">▶</button>
-                        </div>
-                    </footer>
-                </div>
-            </section>
-        </section>
-    </main>
-
+        <!-- Derecha: mapa -->
+        <div class="traslados-caja traslados-mapa-caja">
+          <div id="mapa" aria-label="Mapa de traslados"></div>
+          <p class="traslados-ayuda" id="ayudaMapa">Elegí un traslado de la lista para verlo en el mapa.</p>
+        </div>
+      </div>
+    </section>
+  </main>
 </body>
 
 </html>

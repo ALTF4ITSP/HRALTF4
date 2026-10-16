@@ -521,19 +521,6 @@ CREATE TABLE `gestion_paciente` (
   `edad` int(11) DEFAULT NULL,
   `documento` varchar(20) NOT NULL,
   `telefono` varchar(30) DEFAULT NULL,
-  `estado` varchar(20) NOT NULL COMMENT 'Internado, Ambulatorio o Urgencias',
-  `habitacion` varchar(100) DEFAULT NULL,
-  `servicio` varchar(100) DEFAULT NULL,
-  `medico` varchar(150) DEFAULT NULL,
-  `especialidad_medico` varchar(100) DEFAULT NULL,
-  `fecha_ingreso` varchar(40) DEFAULT NULL,
-  `grupo_sanguineo` varchar(5) DEFAULT NULL,
-  `alergias` varchar(300) DEFAULT NULL,
-  `diagnostico` varchar(300) DEFAULT NULL,
-  `estado_clinico` varchar(60) DEFAULT NULL,
-  `contacto_nombre` varchar(150) DEFAULT NULL,
-  `contacto_telefono` varchar(30) DEFAULT NULL,
-  `contacto_parentesco` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id_gestion_paciente`),
   UNIQUE KEY `uq_gestion_paciente_codigo` (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
@@ -541,21 +528,10 @@ CREATE TABLE `gestion_paciente` (
 CREATE TABLE `gestion_medico` (
   `id_gestion_medico` int(11) NOT NULL AUTO_INCREMENT,
   `codigo` varchar(40) NOT NULL,
-  `titulo` varchar(10) DEFAULT NULL COMMENT 'Dr. o Dra.',
   `nombre` varchar(150) NOT NULL,
-  `documento` varchar(20) NOT NULL,
-  `registro_msp` varchar(30) NOT NULL,
   `especialidad` varchar(100) NOT NULL,
-  `servicio` varchar(100) NOT NULL,
-  `consultorio` varchar(100) DEFAULT NULL,
   `telefono` varchar(30) DEFAULT NULL,
-  `email` varchar(150) DEFAULT NULL,
-  `estado` varchar(20) NOT NULL COMMENT 'Disponible, En consulta, De guardia o Inactivo',
-  `turno` varchar(20) DEFAULT NULL,
-  `dias` varchar(100) DEFAULT NULL,
-  `hora_inicio` varchar(5) DEFAULT NULL,
-  `hora_fin` varchar(5) DEFAULT NULL,
-  `observaciones` varchar(500) DEFAULT NULL,
+  `estado` varchar(20) NOT NULL COMMENT 'Activo o Inactivo',
   PRIMARY KEY (`id_gestion_medico`),
   UNIQUE KEY `uq_gestion_medico_codigo` (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
@@ -564,10 +540,9 @@ CREATE TABLE `gestion_personal` (
   `id_gestion_personal` int(11) NOT NULL AUTO_INCREMENT,
   `codigo` varchar(40) NOT NULL,
   `nombre` varchar(150) NOT NULL,
-  `rol` varchar(20) NOT NULL COMMENT 'Chofer o Copiloto',
+  `rol` varchar(20) NOT NULL COMMENT 'Chofer o Acompañante',
   `telefono` varchar(30) DEFAULT NULL,
   `documento` varchar(20) DEFAULT NULL,
-  `licencia` varchar(30) DEFAULT NULL,
   `estado` varchar(20) NOT NULL COMMENT 'Activo o Inactivo',
   PRIMARY KEY (`id_gestion_personal`),
   UNIQUE KEY `uq_gestion_personal_codigo` (`codigo`)
@@ -579,9 +554,6 @@ CREATE TABLE `gestion_destino` (
   `nombre` varchar(150) NOT NULL,
   `direccion` varchar(200) NOT NULL,
   `localidad` varchar(100) NOT NULL,
-  `tipo` varchar(40) NOT NULL,
-  `telefono` varchar(30) DEFAULT NULL,
-  `referencia` varchar(500) DEFAULT NULL,
   `estado` varchar(20) NOT NULL COMMENT 'Activo o Inactivo',
   `latitud` decimal(9,6) DEFAULT NULL COMMENT 'Para el mapa de traslados (aproximada)',
   `longitud` decimal(9,6) DEFAULT NULL,
@@ -611,45 +583,54 @@ CREATE TABLE `gestion_ruta` (
   CONSTRAINT `fk_ruta_destino` FOREIGN KEY (`destino`) REFERENCES `gestion_destino` (`codigo`) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
-INSERT INTO `gestion_paciente` VALUES (1,'p-001','María González López',34,'32.456.789','099 123 456','Internado','Habitación 204','Medicina Interna','Dr. Carlos Méndez','Clínica Médica','15 de mar. 2024','O+','Penicilina','Neumonía leve','Estable','José González','098 765 432','Padre');
-INSERT INTO `gestion_paciente` VALUES (2,'p-002','Juan Pérez Ramírez',58,'14.987.321','098 542 166','Ambulatorio','Ambulatorio','Consultorios Externos','Dra. Ana Torres','Cardiología','18 de mar. 2024','A+','Ninguna conocida','Control cardiológico','Estable','Sofía Pérez','099 812 400','Hija');
-INSERT INTO `gestion_paciente` VALUES (3,'p-003','Lucía Fernández Díaz',29,'42.123.456','097 321 550','Internado','Habitación 318','Traumatología','Dr. Miguel Silva','Traumatología','16 de mar. 2024','B+','Látex','Fractura de tibia','Estable','Martín Fernández','098 500 914','Hermano');
-INSERT INTO `gestion_paciente` VALUES (4,'p-004','Roberto Sánchez Torres',67,'10.456.987','091 348 760','Urgencias','Urgencias','Observación','Dra. Laura Martínez','Emergencias','18 de mar. 2024','AB+','Ninguna conocida','Dolor torácico','En observación','Elena Torres','098 765 100','Esposa');
-INSERT INTO `gestion_paciente` VALUES (5,'p-005','Ana Belén Rojas',41,'28.765.432','099 418 300','Ambulatorio','Ambulatorio','Consultorios Externos','Dr. Fernando Ruiz','Endocrinología','18 de mar. 2024','O-','Ninguna conocida','Control endocrinológico','Estable','Pablo Rojas','091 348 901','Esposo');
-INSERT INTO `gestion_paciente` VALUES (6,'p-006','Diego Martín Suárez',52,'21.638.475','095 230 160','Internado','Habitación 112','Cirugía General','Dra. Valentina Costa','Cirugía','17 de mar. 2024','A-','Ibuprofeno','Recuperación posoperatoria','Estable','Laura Suárez','098 240 660','Hermana');
-INSERT INTO `gestion_paciente` VALUES (7,'p-007','Camila Rodríguez Vega',24,'45.789.120','092 508 144','Ambulatorio','Ambulatorio','Consultorios Externos','Dra. Emilia Núñez','Dermatología','18 de mar. 2024','B-','Ninguna conocida','Consulta dermatológica','Estable','Teresa Vega','095 434 170','Madre');
-INSERT INTO `gestion_paciente` VALUES (8,'p-008','Elena Morales Castro',73,'8.502.341','098 120 341','Urgencias','Urgencias','Observación','Dr. Andrés Pereira','Emergencias','18 de mar. 2024','O+','Sulfas','Deshidratación','En observación','Daniel Castro','099 120 800','Hijo');
-INSERT INTO `gestion_paciente` VALUES (9,'p-009','Federico Álvarez Medina',39,'33.184.760','096 230 711','Internado','Habitación 225','Neurología','Dr. Javier Soto','Neurología','14 de mar. 2024','A+','Ninguna conocida','Evaluación neurológica','Estable','Florencia Medina','096 330 721','Esposa');
-INSERT INTO `gestion_paciente` VALUES (10,'p-010','Valeria Acosta Benítez',46,'26.552.943','097 752 630','Ambulatorio','Ambulatorio','Consultorios Externos','Dra. Inés Cabrera','Medicina General','18 de mar. 2024','AB-','Penicilina','Control general','Estable','Luis Acosta','098 660 122','Hermano');
-INSERT INTO `gestion_medico` VALUES (1,'d-001','Dr.','Carlos Méndez','3.456.781-2','MSP-10482','Clínica Médica','Medicina Interna','Sala 2 · Piso 2','099 123 456','c.mendez@hospital.example','Disponible','Mañana','Lunes a viernes','08:00','14:00','Referente del equipo de Medicina Interna.');
-INSERT INTO `gestion_medico` VALUES (2,'d-002','Dra.','Ana Torres','4.128.562-3','MSP-11206','Cardiología','Consultorios Externos','Consultorio 12','098 542 166','a.torres@hospital.example','En consulta','Mañana','Lunes, miércoles y viernes','08:00','13:00','Consultas de control y seguimiento cardiológico.');
-INSERT INTO `gestion_medico` VALUES (3,'d-003','Dr.','Miguel Silva','3.987.124-5','MSP-09871','Traumatología','Traumatología','Sala 3 · Piso 3','097 321 550','m.silva@hospital.example','De guardia','Rotativo','Rotativo','08:00','20:00','Guardia de traumatología y valoración de pacientes internados.');
-INSERT INTO `gestion_medico` VALUES (4,'d-004','Dra.','Laura Martínez','4.765.219-6','MSP-12540','Emergencias','Urgencias','Área de observación','091 348 760','l.martinez@hospital.example','De guardia','Tarde','Rotativo','14:00','22:00','Atención y coordinación del área de urgencias.');
-INSERT INTO `gestion_medico` VALUES (5,'d-005','Dr.','Fernando Ruiz','2.875.643-7','MSP-08734','Endocrinología','Consultorios Externos','Consultorio 8','099 418 300','f.ruiz@hospital.example','Inactivo','Tarde','Martes y jueves','14:00','18:00','Licencia programada. Consultas sujetas a reasignación.');
-INSERT INTO `gestion_medico` VALUES (6,'d-006','Dra.','Valentina Costa','4.365.824-8','MSP-13402','Cirugía General','Cirugía General','Bloque quirúrgico','095 230 160','v.costa@hospital.example','En consulta','Mañana','Lunes a viernes','07:00','13:00','Valoración preoperatoria y seguimiento posoperatorio.');
-INSERT INTO `gestion_medico` VALUES (7,'d-007','Dra.','Emilia Núñez','4.921.635-9','MSP-14218','Dermatología','Consultorios Externos','Consultorio 5','092 508 144','e.nunez@hospital.example','Disponible','Tarde','Martes y jueves','13:00','19:00','');
-INSERT INTO `gestion_medico` VALUES (8,'d-008','Dr.','Andrés Pereira','3.562.471-0','MSP-10635','Emergencias','Urgencias','Box 4','098 120 341','a.pereira@hospital.example','De guardia','Noche','Rotativo','22:00','06:00','Guardia nocturna de emergencias.');
-INSERT INTO `gestion_medico` VALUES (9,'d-009','Dr.','Javier Soto','3.841.962-1','MSP-11783','Neurología','Neurología','Consultorio 16','096 230 711','j.soto@hospital.example','En consulta','Mañana','Lunes, miércoles y viernes','09:00','14:00','');
-INSERT INTO `gestion_medico` VALUES (10,'d-010','Dra.','Inés Cabrera','4.258.716-2','MSP-12892','Medicina General','Consultorios Externos','Consultorio 2','097 752 630','i.cabrera@hospital.example','Disponible','Tarde','Lunes a viernes','14:00','20:00','Consultas de medicina general y controles preventivos.');
-INSERT INTO `gestion_medico` VALUES (11,'d-011','Dr.','Pablo Acosta','3.724.159-3','MSP-10954','Cardiología','Cardiología','Sala 1 · Piso 2','099 640 218','p.acosta@hospital.example','Disponible','Mañana','Lunes a viernes','08:00','14:00','');
-INSERT INTO `gestion_medico` VALUES (12,'d-012','Dra.','Sofía Rodríguez','4.638.925-4','MSP-14573','Clínica Médica','Medicina Interna','Sala 4 · Piso 2','098 325 741','s.rodriguez@hospital.example','Inactivo','Tarde','Lunes a viernes','14:00','20:00','');
-INSERT INTO `gestion_personal` VALUES (2,'seed-2','Miguel Torres','Chofer','098 765 432','','B7654321','Activo');
-INSERT INTO `gestion_personal` VALUES (3,'seed-3','José Ramírez','Chofer','099 234 567','','C9876543','Activo');
-INSERT INTO `gestion_personal` VALUES (4,'seed-4','Fernando López','Chofer','098 345 678','','D4567890','Inactivo');
-INSERT INTO `gestion_personal` VALUES (5,'seed-5','Ricardo Sosa','Chofer','099 876 543','','E3210987','Activo');
-INSERT INTO `gestion_personal` VALUES (6,'seed-6','Daniel Giménez','Chofer','098 111 222','','F6543210','Activo');
-INSERT INTO `gestion_personal` VALUES (12,'seed-1','Carlos Fernández','Chofer','099 123 456','','A1234567','Activo');
-INSERT INTO `gestion_destino` VALUES (1,'seed-1','Hospital de Clínicas','Av. Italia 2870','Montevideo','Hospital','','Ingreso de ambulancias por emergencia.','Activo',-34.893000,-56.153000);
-INSERT INTO `gestion_destino` VALUES (2,'seed-2','Hospital Maciel','25 de Mayo 174','Montevideo','Hospital','','Coordinar el acceso con el personal de recepción.','Activo',-34.906700,-56.208500);
-INSERT INTO `gestion_destino` VALUES (3,'seed-3','Hospital Pasteur','Larravide 2458','Montevideo','Hospital','','','Activo',-34.871700,-56.141600);
-INSERT INTO `gestion_destino` VALUES (4,'seed-4','Sanatorio Central','Av. 18 de Julio 1820','Montevideo','Sanatorio','','Acceso lateral para traslados programados.','Activo',-34.900500,-56.174500);
-INSERT INTO `gestion_destino` VALUES (5,'seed-5','Centro de Rehabilitación','Camino Maldonado 5680','Montevideo','Centro de salud','','Destino temporalmente fuera de servicio.','Inactivo',-34.855000,-56.100000);
-INSERT INTO `gestion_destino` VALUES (6,'seed-6','Policlínica Las Piedras','Av. Artigas 560','Las Piedras','Centro de salud','','','Activo',-34.727000,-56.219000);
-INSERT INTO `gestion_destino` VALUES (7,'seed-7','Centro de Diagnóstico','Bv. Artigas 1450','Montevideo','Centro de salud','','Confirmar el horario del estudio antes del traslado.','Activo',-34.893500,-56.164000);
-INSERT INTO `gestion_destino` VALUES (8,'seed-8','Laboratorio Central','Av. Italia 2890','Montevideo','Otro','','Recepción de muestras por la entrada principal.','Inactivo',-34.892800,-56.152000);
+INSERT INTO `gestion_paciente` VALUES (1,'p-001','María González López',34,'32.456.789','099 123 456');
+INSERT INTO `gestion_paciente` VALUES (2,'p-002','Juan Pérez Ramírez',58,'14.987.321','098 542 166');
+INSERT INTO `gestion_paciente` VALUES (3,'p-003','Lucía Fernández Díaz',29,'42.123.456','097 321 550');
+INSERT INTO `gestion_paciente` VALUES (4,'p-004','Roberto Sánchez Torres',67,'10.456.987','091 348 760');
+INSERT INTO `gestion_paciente` VALUES (5,'p-005','Ana Belén Rojas',41,'28.765.432','099 418 300');
+INSERT INTO `gestion_paciente` VALUES (6,'p-006','Diego Martín Suárez',52,'21.638.475','095 230 160');
+INSERT INTO `gestion_paciente` VALUES (7,'p-007','Camila Rodríguez Vega',24,'45.789.120','092 508 144');
+INSERT INTO `gestion_paciente` VALUES (8,'p-008','Elena Morales Castro',73,'8.502.341','098 120 341');
+INSERT INTO `gestion_paciente` VALUES (9,'p-009','Federico Álvarez Medina',39,'33.184.760','096 230 711');
+INSERT INTO `gestion_paciente` VALUES (10,'p-010','Valeria Acosta Benítez',46,'26.552.943','097 752 630');
+INSERT INTO `gestion_medico` VALUES (1,'d-001','Dr. Carlos Méndez','Clínica Médica','099 123 456','Activo');
+INSERT INTO `gestion_medico` VALUES (2,'d-002','Dra. Ana Torres','Cardiología','098 542 166','Activo');
+INSERT INTO `gestion_medico` VALUES (3,'d-003','Dr. Miguel Silva','Traumatología','097 321 550','Activo');
+INSERT INTO `gestion_medico` VALUES (4,'d-004','Dra. Laura Martínez','Emergencias','091 348 760','Activo');
+INSERT INTO `gestion_medico` VALUES (5,'d-005','Dr. Fernando Ruiz','Endocrinología','099 418 300','Inactivo');
+INSERT INTO `gestion_medico` VALUES (6,'d-006','Dra. Valentina Costa','Cirugía General','095 230 160','Activo');
+INSERT INTO `gestion_medico` VALUES (7,'d-007','Dra. Emilia Núñez','Dermatología','092 508 144','Activo');
+INSERT INTO `gestion_medico` VALUES (8,'d-008','Dr. Andrés Pereira','Emergencias','098 120 341','Activo');
+INSERT INTO `gestion_medico` VALUES (9,'d-009','Dr. Javier Soto','Neurología','096 230 711','Activo');
+INSERT INTO `gestion_medico` VALUES (10,'d-010','Dra. Inés Cabrera','Medicina General','097 752 630','Activo');
+INSERT INTO `gestion_medico` VALUES (11,'d-011','Dr. Pablo Acosta','Cardiología','099 640 218','Activo');
+INSERT INTO `gestion_medico` VALUES (12,'d-012','Dra. Sofía Rodríguez','Clínica Médica','098 325 741','Inactivo');
+INSERT INTO `gestion_personal` VALUES (2,'seed-2','Miguel Torres','Chofer','098 765 432','','Activo');
+INSERT INTO `gestion_personal` VALUES (3,'seed-3','José Ramírez','Chofer','099 234 567','','Activo');
+INSERT INTO `gestion_personal` VALUES (4,'seed-4','Fernando López','Chofer','098 345 678','','Inactivo');
+INSERT INTO `gestion_personal` VALUES (5,'seed-5','Ricardo Sosa','Chofer','099 876 543','','Activo');
+INSERT INTO `gestion_personal` VALUES (6,'seed-6','Daniel Giménez','Chofer','098 111 222','','Activo');
+INSERT INTO `gestion_personal` VALUES (12,'seed-1','Carlos Fernández','Chofer','099 123 456','','Activo');
+INSERT INTO `gestion_personal` VALUES (20,'seed-20','Ana Gómez','Acompañante','099 456 789','','Activo');
+INSERT INTO `gestion_personal` VALUES (21,'seed-21','Martín Silva','Acompañante','098 222 333','','Activo');
+INSERT INTO `gestion_personal` VALUES (22,'seed-22','Lucía Pereira','Acompañante','097 111 444','','Activo');
+INSERT INTO `gestion_destino` VALUES (1,'seed-1','Hospital de Clínicas','Av. Italia 2870','Montevideo','Activo',-34.893000,-56.153000);
+INSERT INTO `gestion_destino` VALUES (2,'seed-2','Hospital Maciel','25 de Mayo 174','Montevideo','Activo',-34.906700,-56.208500);
+INSERT INTO `gestion_destino` VALUES (3,'seed-3','Hospital Pasteur','Larravide 2458','Montevideo','Activo',-34.871700,-56.141600);
+INSERT INTO `gestion_destino` VALUES (4,'seed-4','Sanatorio Central','Av. 18 de Julio 1820','Montevideo','Activo',-34.900500,-56.174500);
+INSERT INTO `gestion_destino` VALUES (5,'seed-5','Centro de Rehabilitación','Camino Maldonado 5680','Montevideo','Inactivo',-34.855000,-56.100000);
+INSERT INTO `gestion_destino` VALUES (6,'seed-6','Policlínica Las Piedras','Av. Artigas 560','Las Piedras','Activo',-34.727000,-56.219000);
+INSERT INTO `gestion_destino` VALUES (7,'seed-7','Centro de Diagnóstico','Bv. Artigas 1450','Montevideo','Activo',-34.893500,-56.164000);
+INSERT INTO `gestion_destino` VALUES (8,'seed-8','Laboratorio Central','Av. Italia 2890','Montevideo','Inactivo',-34.892800,-56.152000);
+INSERT INTO `gestion_destino` VALUES (9,'seed-9','Hospital Escuela del Litoral','Montevideo 1361','Paysandú','Activo',-32.317100,-58.080700);
+INSERT INTO `gestion_destino` VALUES (10,'seed-10','Hospital Regional Salto','Av. Juan H. Paiva s/n','Salto','Activo',-31.389300,-57.961200);
+INSERT INTO `gestion_destino` VALUES (11,'seed-11','Hospital Regional Tacuarembó','Treinta y Tres 444','Tacuarembó','Activo',-31.711000,-55.983000);
+INSERT INTO `gestion_destino` VALUES (12,'seed-12','Hospital de Maldonado','Ventura Alegre s/n','Maldonado','Activo',-34.907000,-54.953000);
+INSERT INTO `gestion_destino` VALUES (13,'seed-13','Hospital de Colonia','Av. Roosevelt s/n','Colonia','Activo',-34.470000,-57.844000);
 -- Rutas de ejemplo entre los destinos de ejemplo
 -- (seed-1 Clínicas, seed-2 Maciel, seed-3 Pasteur, seed-4 Sanatorio Central, seed-5 Centro de Rehabilitación,
---  seed-6 Policlínica Las Piedras, seed-7 Centro de Diagnóstico, seed-8 Laboratorio Central)
+--  seed-6 Policlínica Las Piedras, seed-7 Centro de Diagnóstico, seed-8 Laboratorio Central,
+--  seed-9 a seed-13 hospitales del interior: Paysandú, Salto, Tacuarembó, Maldonado y Colonia)
 INSERT INTO `gestion_ruta`
   (`id_gestion_ruta`, `codigo`, `numero`, `nombre`, `categoria`, `sentido`, `estado`, `origen`, `destino`, `paradas`, `duracion_min`, `notas`)
 VALUES
@@ -659,7 +640,11 @@ VALUES
   (4, 'ruta-4', 'RT-004', 'Consulta · Sanatorio Central', 'Consulta', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-4', '[]', 15, 'Coordinar el regreso al terminar la consulta.'),
   (5, 'ruta-5', 'RT-005', 'Alta · Policlínica Las Piedras', 'Alta', 'Solo ida', 'Activa', 'seed-1', 'seed-6', '[]', 40, NULL),
   (6, 'ruta-6', 'RT-006', 'Circuito de estudios', 'Consulta', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-3', '["seed-7", "seed-4"]', 45, 'Pasa por el Centro de Diagnóstico y el Sanatorio Central.'),
-  (7, 'ruta-7', 'RT-007', 'Muestras al Laboratorio Central', 'Tratamiento', 'Solo ida', 'Inactiva', 'seed-1', 'seed-8', '[]', 5, 'Laboratorio temporalmente cerrado.');
+  (7, 'ruta-7', 'RT-007', 'Muestras al Laboratorio Central', 'Tratamiento', 'Solo ida', 'Inactiva', 'seed-1', 'seed-8', '[]', 5, 'Laboratorio temporalmente cerrado.'),
+  (8, 'ruta-8', 'RT-008', 'Montevideo → Paysandú', 'Interhospitalario', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-9', '["seed-13"]', 270, 'Por ruta 1 y ruta 2. Parada en Colonia.'),
+  (9, 'ruta-9', 'RT-009', 'Montevideo → Salto', 'Interhospitalario', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-10', '[]', 360, 'Por ruta 3.'),
+  (10, 'ruta-10', 'RT-010', 'Montevideo → Tacuarembó', 'Interhospitalario', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-11', '[]', 270, 'Por ruta 5.'),
+  (11, 'ruta-11', 'RT-011', 'Montevideo → Maldonado', 'Interhospitalario', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-12', '[]', 105, 'Por ruta Interbalnearia.');
 
 -- =========================================================
 -- CALENDARIO: TURNOS DE PACIENTES
@@ -713,48 +698,41 @@ VALUES
 CREATE TABLE `gestion_traslado` (
   `id_gestion_traslado` int(11) NOT NULL AUTO_INCREMENT,
   `id_ambulancia` int(11) NOT NULL,
-  `id_chofer` int(11) NOT NULL COMMENT 'gestion_personal',
-  `id_acompanante` int(11) DEFAULT NULL COMMENT 'gestion_personal',
+  `id_chofer` int(11) NOT NULL COMMENT 'gestion_personal (conductor)',
+  `id_acompanante` int(11) DEFAULT NULL COMMENT 'gestion_personal (copiloto o acompañante)',
+  `id_gestion_paciente` int(11) DEFAULT NULL COMMENT 'paciente trasladado (opcional)',
+  `elemento` varchar(150) DEFAULT NULL COMMENT 'qué se traslada si no es un paciente',
   `id_origen` int(11) NOT NULL COMMENT 'gestion_destino',
   `id_destino` int(11) NOT NULL COMMENT 'gestion_destino',
-  `id_gestion_paciente` int(11) DEFAULT NULL,
-  `tipo` varchar(20) NOT NULL COMMENT 'PACIENTE, EQUIPO o BIOLOGICO',
-  `motivo` varchar(100) NOT NULL,
-  `prioridad` varchar(20) NOT NULL COMMENT 'BAJA, NORMAL, ALTA o CRITICA',
-  `estado` varchar(20) NOT NULL DEFAULT 'ASIGNADO' COMMENT 'ASIGNADO, EN_CURSO, EN_DESTINO, FINALIZADO o CANCELADO',
-  `fecha_salida` datetime NOT NULL,
+  `salida_programada` datetime NOT NULL,
   `llegada_estimada` datetime DEFAULT NULL,
-  `fecha_fin` datetime DEFAULT NULL COMMENT 'cuando se finalizó o canceló',
-  `opciones` varchar(300) DEFAULT NULL COMMENT 'Opciones adicionales marcadas, separadas por coma',
-  `notas` varchar(500) DEFAULT NULL,
+  `salida_real` datetime DEFAULT NULL,
+  `llegada_real` datetime DEFAULT NULL,
+  `retorno_real` datetime DEFAULT NULL COMMENT 'cuando volvió al hospital',
+  `estado` varchar(20) NOT NULL DEFAULT 'PROGRAMADO' COMMENT 'PROGRAMADO, EN_CAMINO, EN_DESTINO, RETORNANDO, FINALIZADO o CANCELADO',
+  `notas` varchar(300) DEFAULT NULL,
   `fecha_creacion` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id_gestion_traslado`),
   KEY `idx_traslado_estado` (`estado`),
-  KEY `idx_traslado_ambulancia` (`id_ambulancia`),
-  KEY `idx_traslado_chofer` (`id_chofer`),
-  KEY `idx_traslado_acompanante` (`id_acompanante`),
-  KEY `idx_traslado_origen` (`id_origen`),
-  KEY `idx_traslado_destino` (`id_destino`),
-  KEY `idx_traslado_paciente` (`id_gestion_paciente`),
   CONSTRAINT `fk_traslado_ambulancia` FOREIGN KEY (`id_ambulancia`) REFERENCES `ambulancia` (`id_ambulancia`) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT `fk_traslado_chofer` FOREIGN KEY (`id_chofer`) REFERENCES `gestion_personal` (`id_gestion_personal`) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT `fk_traslado_acompanante` FOREIGN KEY (`id_acompanante`) REFERENCES `gestion_personal` (`id_gestion_personal`) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT `fk_traslado_paciente` FOREIGN KEY (`id_gestion_paciente`) REFERENCES `gestion_paciente` (`id_gestion_paciente`) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT `fk_traslado_origen` FOREIGN KEY (`id_origen`) REFERENCES `gestion_destino` (`id_gestion_destino`) ON UPDATE CASCADE ON DELETE RESTRICT,
-  CONSTRAINT `fk_traslado_destino` FOREIGN KEY (`id_destino`) REFERENCES `gestion_destino` (`id_gestion_destino`) ON UPDATE CASCADE ON DELETE RESTRICT,
-  CONSTRAINT `fk_traslado_paciente` FOREIGN KEY (`id_gestion_paciente`) REFERENCES `gestion_paciente` (`id_gestion_paciente`) ON UPDATE CASCADE ON DELETE RESTRICT
+  CONSTRAINT `fk_traslado_destino` FOREIGN KEY (`id_destino`) REFERENCES `gestion_destino` (`id_gestion_destino`) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
 INSERT INTO `gestion_traslado`
-  (`id_gestion_traslado`, `id_ambulancia`, `id_chofer`, `id_acompanante`, `id_origen`, `id_destino`, `id_gestion_paciente`,
-   `tipo`, `motivo`, `prioridad`, `estado`, `fecha_salida`, `llegada_estimada`, `fecha_fin`, `opciones`, `notas`, `fecha_creacion`)
+  (`id_gestion_traslado`, `id_ambulancia`, `id_chofer`, `id_acompanante`, `id_gestion_paciente`, `elemento`, `id_origen`, `id_destino`,
+   `salida_programada`, `llegada_estimada`, `salida_real`, `llegada_real`, `retorno_real`, `estado`, `notas`)
 VALUES
-  (1, 1, 2, 3, 1, 2, 4, 'PACIENTE', 'Estudio o tratamiento', 'ALTA', 'EN_CURSO', '2026-10-15 09:30:00', '2026-10-15 10:00:00', NULL, 'Requiere equipamiento especial', 'Monitor cardíaco y oxígeno.', '2026-10-15 08:50:00'),
-  (2, 2, 5, NULL, 1, 7, NULL, 'EQUIPO', 'Traslado de insumos', 'NORMAL', 'ASIGNADO', '2026-10-15 16:00:00', '2026-10-15 16:20:00', NULL, NULL, 'Retirar el ecógrafo en recepción.', '2026-10-15 09:10:00'),
-  (3, 4, 6, NULL, 1, 3, NULL, 'BIOLOGICO', 'Traslado de insumos', 'ALTA', 'EN_DESTINO', '2026-10-15 11:00:00', '2026-10-15 11:25:00', NULL, NULL, 'Muestras refrigeradas.', '2026-10-15 10:30:00'),
-  (4, 6, 3, 2, 1, 4, 2, 'PACIENTE', 'Consulta médica', 'NORMAL', 'FINALIZADO', '2026-10-14 08:00:00', '2026-10-14 08:25:00', '2026-10-14 08:40:00', 'Acompañado por familiar', NULL, '2026-10-13 17:00:00'),
-  (5, 1, 2, NULL, 1, 6, 7, 'PACIENTE', 'Alta médica', 'BAJA', 'FINALIZADO', '2026-10-13 14:00:00', '2026-10-13 14:45:00', '2026-10-13 14:50:00', NULL, NULL, '2026-10-13 11:20:00'),
-  (6, 8, 5, NULL, 1, 2, NULL, 'EQUIPO', 'Traslado de insumos', 'NORMAL', 'FINALIZADO', '2026-10-12 10:00:00', '2026-10-12 10:30:00', '2026-10-12 10:35:00', NULL, NULL, '2026-10-12 08:00:00'),
-  (7, 2, 6, NULL, 1, 7, NULL, 'BIOLOGICO', 'Estudio o tratamiento', 'NORMAL', 'CANCELADO', '2026-10-12 15:00:00', '2026-10-12 15:20:00', '2026-10-12 13:00:00', NULL, 'Se canceló: el laboratorio reprogramó.', '2026-10-12 09:00:00');
+  (1, 1, 2, 20, 4, NULL, 1, 9, '2026-10-16 08:00:00', '2026-10-16 12:30:00', '2026-10-16 08:05:00', NULL, NULL, 'EN_CAMINO', 'Control en el Hospital Escuela del Litoral.'),
+  (2, 2, 5, NULL, NULL, 'Muestras de laboratorio', 1, 7, '2026-10-16 15:00:00', '2026-10-16 15:20:00', NULL, NULL, NULL, 'PROGRAMADO', NULL),
+  (3, 4, 6, 21, 2, NULL, 1, 3, '2026-10-16 10:00:00', '2026-10-16 10:20:00', '2026-10-16 10:02:00', '2026-10-16 10:21:00', NULL, 'EN_DESTINO', NULL),
+  (4, 8, 12, 21, 5, NULL, 1, 10, '2026-10-15 06:00:00', '2026-10-15 12:00:00', '2026-10-15 06:10:00', '2026-10-15 12:05:00', NULL, 'RETORNANDO', NULL),
+  (5, 6, 3, 22, 7, NULL, 1, 12, '2026-10-15 09:00:00', '2026-10-15 10:45:00', '2026-10-15 09:00:00', '2026-10-15 10:50:00', '2026-10-15 13:10:00', 'FINALIZADO', NULL),
+  (6, 2, 5, NULL, NULL, 'Ecógrafo portátil', 1, 2, '2026-10-14 10:00:00', '2026-10-14 10:30:00', '2026-10-14 10:00:00', '2026-10-14 10:35:00', '2026-10-14 11:20:00', 'FINALIZADO', NULL),
+  (7, 4, 6, NULL, 10, NULL, 1, 4, '2026-10-14 15:00:00', '2026-10-14 15:15:00', NULL, NULL, NULL, 'CANCELADO', 'El paciente reprogramó.');
 
 -- =========================================================
 -- VALORES AUTO_INCREMENT
@@ -764,9 +742,9 @@ ALTER TABLE `persona` AUTO_INCREMENT = 5;
 ALTER TABLE `ambulancia` AUTO_INCREMENT = 9;
 ALTER TABLE `gestion_paciente` AUTO_INCREMENT = 11;
 ALTER TABLE `gestion_medico` AUTO_INCREMENT = 13;
-ALTER TABLE `gestion_personal` AUTO_INCREMENT = 8;
-ALTER TABLE `gestion_destino` AUTO_INCREMENT = 9;
-ALTER TABLE `gestion_ruta` AUTO_INCREMENT = 8;
+ALTER TABLE `gestion_personal` AUTO_INCREMENT = 23;
+ALTER TABLE `gestion_destino` AUTO_INCREMENT = 14;
+ALTER TABLE `gestion_ruta` AUTO_INCREMENT = 12;
 ALTER TABLE `turno` AUTO_INCREMENT = 13;
 ALTER TABLE `gestion_traslado` AUTO_INCREMENT = 8;
 ALTER TABLE `ruta` AUTO_INCREMENT = 4;
