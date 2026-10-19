@@ -6,6 +6,7 @@ declare(strict_types=1);
  *
  *   GET  traslados.php                                   → traslados + listas para el formulario
  *   POST traslados.php {"accion": "nuevo", "traslado": {...}}
+ *        Lo que lleva (Paciente, Elemento biológico u Otro) se guarda en carga_transportada.
  *        El destino es id_destino (uno de Gestión → Destinos) o una dirección escrita a mano
  *        (destino_direccion + destino_lat + destino_lng), por ejemplo la casa de un paciente.
  *   POST traslados.php {"accion": "avanzar", "id": 3}    → pasa al siguiente estado y guarda la hora
@@ -14,6 +15,8 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/connection.php';
 header('Content-Type: application/json; charset=utf-8');
+
+const TIPOS_CARGA = ['Paciente', 'Elemento biológico', 'Otro'];
 
 // Orden de los estados y qué hora se guarda al llegar a cada uno
 const SIGUIENTE = [
@@ -46,7 +49,8 @@ $conexion = db();
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
     try {
         $traslados = $conexion->query(
-            "SELECT t.id_gestion_traslado AS id, t.estado, t.elemento, t.notas,
+            "SELECT t.id_gestion_traslado AS id, t.estado, t.notas,
+                    c.tipo AS tipo_carga, c.descripcion AS carga,
                     DATE_FORMAT(t.salida_programada, '%Y-%m-%d %H:%i') AS salida_programada,
                     DATE_FORMAT(t.llegada_estimada, '%Y-%m-%d %H:%i') AS llegada_estimada,
                     DATE_FORMAT(t.salida_real, '%Y-%m-%d %H:%i') AS salida_real,
@@ -62,6 +66,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
              INNER JOIN gestion_personal ch ON ch.id_gestion_personal = t.id_chofer
              LEFT JOIN gestion_personal ac ON ac.id_gestion_personal = t.id_acompanante
              LEFT JOIN gestion_paciente p ON p.id_gestion_paciente = t.id_gestion_paciente
+             LEFT JOIN carga_transportada c ON c.id_gestion_traslado = t.id_gestion_traslado
              INNER JOIN gestion_destino o ON o.id_gestion_destino = t.id_origen
              LEFT JOIN gestion_destino d ON d.id_gestion_destino = t.id_destino   -- vacío si es una dirección
              ORDER BY t.salida_programada DESC"
@@ -137,8 +142,9 @@ try {
     $ambulancia = $numero('id_ambulancia');
     $chofer = $numero('id_chofer');
     $acompanante = $numero('id_acompanante');
-    $paciente = $numero('id_gestion_paciente');
-    $elemento = $texto('elemento');
+    $tipoCarga = (string) $texto('tipo_carga');
+    $paciente = $tipoCarga === 'Paciente' ? $numero('id_gestion_paciente') : null;
+    $carga = $tipoCarga === 'Paciente' ? null : $texto('carga');   // qué se lleva si no es un paciente
     $origen = $numero('id_origen');
     $destino = $numero('id_destino');
     $direccion = $destino ? null : $texto('destino_direccion');
@@ -151,7 +157,9 @@ try {
     if (!$ambulancia) traslados_error(422, 'Elegí una ambulancia.');
     if (!$chofer) traslados_error(422, 'Elegí el conductor.');
     if ($acompanante === $chofer) traslados_error(422, 'El acompañante no puede ser el mismo conductor.');
-    if (!$paciente && !$elemento) traslados_error(422, 'Elegí un paciente o escribí qué se traslada.');
+    if (!in_array($tipoCarga, TIPOS_CARGA, true)) traslados_error(422, 'Elegí qué lleva la ambulancia.');
+    if ($tipoCarga === 'Paciente' && !$paciente) traslados_error(422, 'Elegí el paciente.');
+    if ($tipoCarga !== 'Paciente' && !$carga) traslados_error(422, 'Escribí qué se traslada.');
     if (!$origen) traslados_error(422, 'Elegí el origen.');
     if (!$destino && !$direccion) traslados_error(422, 'Elegí el destino o escribí la dirección.');
     // La dirección tiene que estar marcada en el mapa, dentro de Uruguay (aproximadamente)
@@ -161,7 +169,7 @@ try {
     if ($origen === $destino) traslados_error(422, 'El origen y el destino no pueden ser el mismo.');
     if (!DateTime::createFromFormat('!Y-m-d H:i', $salida)) traslados_error(422, 'La hora de salida no es válida.');
     if ($llegada !== null && $llegada <= $salida) traslados_error(422, 'La llegada estimada tiene que ser después de la salida.');
-    if (mb_strlen((string) $direccion) > 200 || mb_strlen((string) $elemento) > 150 || mb_strlen((string) $notas) > 300) traslados_error(422, 'El texto es demasiado largo.');
+    if (mb_strlen((string) $direccion) > 200 || mb_strlen((string) $carga) > 150 || mb_strlen((string) $notas) > 300) traslados_error(422, 'El texto es demasiado largo.');
 
     // La ambulancia no puede estar en otro traslado sin terminar
     $ocupada = $conexion->prepare(
@@ -171,16 +179,23 @@ try {
     $ocupada->execute([$ambulancia]);
     if ($otro = $ocupada->fetchColumn()) traslados_error(409, "Esa ambulancia ya está en el traslado #$otro, que no terminó.");
 
+    // El traslado y su carga se guardan juntos: si falla uno, no se guarda ninguno
+    $conexion->beginTransaction();
     $conexion->prepare(
-        'INSERT INTO gestion_traslado (id_ambulancia, id_chofer, id_acompanante, id_gestion_paciente, elemento,
+        'INSERT INTO gestion_traslado (id_ambulancia, id_chofer, id_acompanante, id_gestion_paciente,
                                        id_origen, id_destino, destino_direccion, destino_lat, destino_lng,
                                        salida_programada, llegada_estimada, notas)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-    )->execute([$ambulancia, $chofer, $acompanante, $paciente, $elemento, $origen, $destino, $direccion, $latitud, $longitud,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    )->execute([$ambulancia, $chofer, $acompanante, $paciente, $origen, $destino, $direccion, $latitud, $longitud,
                 $salida, $llegada, $notas]);
+    $id = (int) $conexion->lastInsertId();
+    $conexion->prepare('INSERT INTO carga_transportada (id_gestion_traslado, tipo, descripcion) VALUES (?, ?, ?)')
+        ->execute([$id, $tipoCarga, $carga]);
+    $conexion->commit();
 
-    traslados_responder(200, ['success' => true, 'id' => (int) $conexion->lastInsertId()]);
+    traslados_responder(200, ['success' => true, 'id' => $id]);
 } catch (Throwable $error) {
+    if ($conexion->inTransaction()) $conexion->rollBack();
     error_log('[traslados_guardar] ' . $error->getMessage());
     $mensaje = ($error instanceof PDOException && ($error->errorInfo[1] ?? 0) === 1452)
         ? 'Alguno de los datos elegidos ya no existe. Recargá la página.'

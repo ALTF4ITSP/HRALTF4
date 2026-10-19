@@ -82,24 +82,24 @@ La base no guarda a todos en una sola tabla. Separa **quién es la persona** de 
                     │ nombre, apellido          │
                     │ fecha_nacimiento, email   │
                     └─────────────┬─────────────┘
-                 ┌────────────────┴────────────────┐
-                 ▼                                 ▼
-   ┌───────────────────────────┐     ┌───────────────────────────┐
-   │ funcionario               │     │ paciente                  │
-   │ id_persona (PK y FK)      │     │ id_persona (PK y FK)      │
-   │ cargo, sector, activo     │     │ nro_historia              │
-   └─────────────┬─────────────┘     └───────────────────────────┘
-                 ▼
-   ┌───────────────────────────┐
-   │ usuario                   │  ← la CUENTA para iniciar sesión
-   │ id_usuario (PK)           │
-   │ id_funcionario (FK, única)│
-   │ nombre_usuario (único)    │
-   │ password_hash, estado     │
-   └───────────────────────────┘
+                                  ▼
+                    ┌───────────────────────────┐
+                    │ funcionario               │
+                    │ id_persona (PK y FK)      │
+                    │ cargo, sector, activo     │
+                    └─────────────┬─────────────┘
+                                  ▼
+                    ┌───────────────────────────┐
+                    │ usuario                   │  ← la CUENTA para iniciar sesión
+                    │ id_usuario (PK)           │
+                    │ id_funcionario (FK, única)│
+                    │ nombre_usuario (único)    │
+                    │ password_hash, estado     │
+                    └───────────────────────────┘
 ```
 
-- **`persona`**: nombre, cédula, email, etc. Una persona aparece una sola vez, aunque sea funcionario y paciente a la vez.
+- **`persona`**: nombre, cédula, email, etc. Una persona aparece una sola vez.
+- Los **pacientes** no están acá: se cargan en Gestión y se guardan en `gestion_paciente`.
 - **`funcionario`**: la persona trabaja en el hospital. No tiene id propio: usa el mismo `id_persona`.
 - **`usuario`**: la cuenta para entrar al sistema. Solo los funcionarios tienen cuenta, y cada funcionario puede tener **una** sola.
 

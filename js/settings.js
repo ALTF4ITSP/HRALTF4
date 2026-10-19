@@ -419,12 +419,6 @@ document.addEventListener("DOMContentLoaded", () => {
             cierre_sesion_automatico: getToggleValue(automaticLogoutToggle)
         };
 
-        /*
-         * El idioma sí se guarda.
-         *
-         * El tema NO se envía porque el modo oscuro/claro todavía
-         * no está implementado.
-         */
         if (languageSelect) {
             datos.idioma = languageSelect.value;
         }
@@ -572,16 +566,6 @@ document.addEventListener("DOMContentLoaded", () => {
             showError(error);
         }
     });
-
-    /*
-     * ------------------------------------------------------------
-     * TEMA
-     * ------------------------------------------------------------
-     *
-     * No se implementa todavía.
-     * Los botones del tema quedan fuera de la lógica de este archivo
-     * hasta que el modo oscuro/claro esté preparado.
-     */
 
     /*
      * ------------------------------------------------------------

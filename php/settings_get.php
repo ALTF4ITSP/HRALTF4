@@ -66,8 +66,7 @@ try {
             'analisis_rendimiento' => (bool) $configuracion['analisis_rendimiento'],
             'notificaciones_seguridad' => (bool) $configuracion['notificaciones_seguridad'],
             'cierre_sesion_automatico' => (bool) $configuracion['cierre_sesion_automatico'],
-            'idioma' => $configuracion['idioma'],
-            'tema' => $configuracion['tema']
+            'idioma' => $configuracion['idioma']
         ],
         'especializaciones' => $especializaciones
     ]);

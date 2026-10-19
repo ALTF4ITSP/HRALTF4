@@ -28,19 +28,10 @@ try {
         ? settings_clean_text($datos['idioma'], 20)
         : $configuracion['idioma'];
 
-    $tema = array_key_exists('tema', $datos)
-        ? settings_clean_text($datos['tema'], 10)
-        : $configuracion['tema'];
-
     $idiomasPermitidos = ['Español', 'English'];
-    $temasPermitidos = ['dark', 'light'];
 
     if (!in_array($idioma, $idiomasPermitidos, true)) {
         settings_json_response(422, false, [], 'El idioma seleccionado no es válido.');
-    }
-
-    if (!in_array($tema, $temasPermitidos, true)) {
-        settings_json_response(422, false, [], 'El tema seleccionado no es válido.');
     }
 
     $consulta = $conexion->prepare(
@@ -49,8 +40,7 @@ try {
             analisis_rendimiento = :analisis_rendimiento,
             notificaciones_seguridad = :notificaciones_seguridad,
             cierre_sesion_automatico = :cierre_sesion_automatico,
-            idioma = :idioma,
-            tema = :tema
+            idioma = :idioma
          WHERE id_usuario = :id_usuario'
     );
 
@@ -59,7 +49,6 @@ try {
         'notificaciones_seguridad' => $notificaciones,
         'cierre_sesion_automatico' => $cierreAutomatico,
         'idioma' => $idioma,
-        'tema' => $tema,
         'id_usuario' => $idUsuario
     ]);
 
@@ -67,8 +56,7 @@ try {
         'analisis_rendimiento' => (bool) $analisis,
         'notificaciones_seguridad' => (bool) $notificaciones,
         'cierre_sesion_automatico' => (bool) $cierreAutomatico,
-        'idioma' => $idioma,
-        'tema' => $tema
+        'idioma' => $idioma
     ]);
 } catch (Throwable $error) {
     error_log('[settings_privacy_update] ' . $error->getMessage());

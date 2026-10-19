@@ -90,20 +90,6 @@ VALUES
   (3, 'LEG003', 'Administrativo', 'Documentación', NULL, 1),
   (4, 'PRUEBA001', 'Administrativo', 'Documentación', NULL, 1);
 
-CREATE TABLE `paciente` (
-  `id_persona` int(11) NOT NULL,
-  `nro_historia` varchar(20) NOT NULL,
-  PRIMARY KEY (`id_persona`),
-  UNIQUE KEY `uq_paciente_historia` (`nro_historia`),
-  CONSTRAINT `fk_paciente_persona`
-    FOREIGN KEY (`id_persona`) REFERENCES `persona` (`id_persona`)
-    ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
-
-INSERT INTO `paciente` (`id_persona`, `nro_historia`) VALUES
-  (2, 'HC001'),
-  (3, 'HC002');
-
 CREATE TABLE `ambulancia` (
   `id_ambulancia` int(11) NOT NULL AUTO_INCREMENT,
   `matricula` varchar(20) NOT NULL,
@@ -125,145 +111,6 @@ VALUES
   (6, 'SAB006', 'Mercedes-Benz Sprinter', 4, 'OPERATIVA'),
   (7, 'SAB007', 'Renault Master', 3, 'MANTENIMIENTO'),
   (8, 'SAB008', 'Fiat Ducato', 4, 'OPERATIVA');
-
-CREATE TABLE `ruta` (
-  `id_ruta` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) NOT NULL,
-  `origen` varchar(150) NOT NULL,
-  `destino` varchar(150) NOT NULL,
-  `distancia_km` decimal(8,2) NOT NULL,
-  `estado` varchar(30) NOT NULL,
-  PRIMARY KEY (`id_ruta`),
-  UNIQUE KEY `uq_ruta_nombre` (`nombre`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
-
-INSERT INTO `ruta`
-  (`id_ruta`, `nombre`, `origen`, `destino`, `distancia_km`, `estado`)
-VALUES
-  (1, 'Ruta Paysandu - Montevideo', 'Hospital de Clínicas', 'Montevideo', 380.50, 'ACTIVA'),
-  (2, 'Ruta Paysandu - Salto', 'Hospital de Clínicas', 'Salto', 120.00, 'ACTIVA'),
-  (3, 'Ruta Paysandu - Colonia', 'Hospital de Clínicas', 'Colonia del Sacramento', 450.00, 'ACTIVA');
-
-CREATE TABLE `solicitud_traslado` (
-  `id_solicitud` int(11) NOT NULL AUTO_INCREMENT,
-  `fecha_solicitud` datetime NOT NULL,
-  `salida_programada` datetime NOT NULL,
-  `llegada_estimada` datetime NOT NULL,
-  `prioridad` varchar(30) NOT NULL,
-  `estado_solicitud` varchar(30) NOT NULL,
-  `observaciones` varchar(500) DEFAULT NULL,
-  `id_funcionario_registra` int(11) NOT NULL,
-  `id_conductor` int(11) NOT NULL,
-  `id_acompanante` int(11) NOT NULL,
-  `id_ruta` int(11) NOT NULL,
-  `id_ambulancia` int(11) NOT NULL,
-  `id_paciente` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_solicitud`),
-  KEY `idx_solicitud_registra` (`id_funcionario_registra`),
-  KEY `idx_solicitud_conductor` (`id_conductor`),
-  KEY `idx_solicitud_acompanante` (`id_acompanante`),
-  KEY `idx_solicitud_ruta` (`id_ruta`),
-  KEY `idx_solicitud_ambulancia` (`id_ambulancia`),
-  KEY `idx_solicitud_paciente` (`id_paciente`),
-  CONSTRAINT `fk_solicitud_registra`
-    FOREIGN KEY (`id_funcionario_registra`) REFERENCES `funcionario` (`id_persona`)
-    ON UPDATE CASCADE ON DELETE RESTRICT,
-  CONSTRAINT `fk_solicitud_conductor`
-    FOREIGN KEY (`id_conductor`) REFERENCES `funcionario` (`id_persona`)
-    ON UPDATE CASCADE ON DELETE RESTRICT,
-  CONSTRAINT `fk_solicitud_acompanante`
-    FOREIGN KEY (`id_acompanante`) REFERENCES `persona` (`id_persona`)
-    ON UPDATE CASCADE ON DELETE RESTRICT,
-  CONSTRAINT `fk_solicitud_ruta`
-    FOREIGN KEY (`id_ruta`) REFERENCES `ruta` (`id_ruta`)
-    ON UPDATE CASCADE ON DELETE RESTRICT,
-  CONSTRAINT `fk_solicitud_ambulancia`
-    FOREIGN KEY (`id_ambulancia`) REFERENCES `ambulancia` (`id_ambulancia`)
-    ON UPDATE CASCADE ON DELETE RESTRICT,
-  CONSTRAINT `fk_solicitud_paciente`
-    FOREIGN KEY (`id_paciente`) REFERENCES `paciente` (`id_persona`)
-    ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
-
-INSERT INTO `solicitud_traslado`
-  (`id_solicitud`, `fecha_solicitud`, `salida_programada`, `llegada_estimada`, `prioridad`, `estado_solicitud`, `observaciones`, `id_funcionario_registra`, `id_conductor`, `id_acompanante`, `id_ruta`, `id_ambulancia`, `id_paciente`)
-VALUES
-  (1, '2026-09-04 08:00:00', '2026-09-04 10:00:00', '2026-09-04 14:00:00', 'ALTA', 'PENDIENTE', 'Traslado de paciente para consulta especializada', 3, 1, 2, 1, 1, 2),
-  (2, '2026-09-04 08:30:00', '2026-09-05 09:00:00', '2026-09-05 12:00:00', 'MEDIA', 'PENDIENTE', 'Traslado programado', 3, 1, 2, 2, 2, NULL);
-
-CREATE TABLE `carga_transportada` (
-  `id_carga` int(11) NOT NULL AUTO_INCREMENT,
-  `tipo` varchar(50) NOT NULL,
-  `descripcion` varchar(200) DEFAULT NULL,
-  `cantidad` decimal(10,2) NOT NULL,
-  `unidad` varchar(30) NOT NULL,
-  `condiciones_especiales` varchar(300) DEFAULT NULL,
-  `id_solicitud` int(11) NOT NULL,
-  PRIMARY KEY (`id_carga`),
-  KEY `idx_carga_solicitud` (`id_solicitud`),
-  CONSTRAINT `fk_carga_solicitud`
-    FOREIGN KEY (`id_solicitud`) REFERENCES `solicitud_traslado` (`id_solicitud`)
-    ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
-
-INSERT INTO `carga_transportada`
-  (`id_carga`, `tipo`, `descripcion`, `cantidad`, `unidad`, `condiciones_especiales`, `id_solicitud`)
-VALUES
-  (1, 'Medicamento', 'Medicación de emergencia', 10.00, 'unidades', 'Conservar en lugar fresco', 1),
-  (2, 'Equipamiento', 'Kit de primeros auxilios', 2.00, 'unidades', 'Mantener cerrado', 1),
-  (3, 'Insumo', 'Suero fisiológico', 5.00, 'litros', 'Evitar exposición al calor', 2);
-
-CREATE TABLE `traslado` (
-  `id_traslado` int(11) NOT NULL AUTO_INCREMENT,
-  `salida_real` datetime DEFAULT NULL,
-  `llegada_real` datetime DEFAULT NULL,
-  `inicio_retorno_real` datetime DEFAULT NULL,
-  `retorno_real` datetime DEFAULT NULL,
-  `observaciones` varchar(500) DEFAULT NULL,
-  `id_solicitud` int(11) NOT NULL,
-  `id_supervisor` int(11) NOT NULL,
-  PRIMARY KEY (`id_traslado`),
-  UNIQUE KEY `uq_traslado_solicitud` (`id_solicitud`),
-  KEY `idx_traslado_supervisor` (`id_supervisor`),
-  CONSTRAINT `fk_traslado_solicitud`
-    FOREIGN KEY (`id_solicitud`) REFERENCES `solicitud_traslado` (`id_solicitud`)
-    ON UPDATE CASCADE ON DELETE RESTRICT,
-  CONSTRAINT `fk_traslado_supervisor`
-    FOREIGN KEY (`id_supervisor`) REFERENCES `funcionario` (`id_persona`)
-    ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
-
-INSERT INTO `traslado`
-  (`id_traslado`, `salida_real`, `llegada_real`, `inicio_retorno_real`, `retorno_real`, `observaciones`, `id_solicitud`, `id_supervisor`)
-VALUES
-  (1, '2026-09-04 10:05:00', '2026-09-04 13:50:00', '2026-09-04 14:10:00', '2026-09-04 17:30:00', 'Traslado realizado correctamente', 1, 3),
-  (2, NULL, NULL, NULL, NULL, 'Traslado programado; aún no iniciado', 2, 3);
-
-CREATE TABLE `historial_estado` (
-  `id_historial` int(11) NOT NULL AUTO_INCREMENT,
-  `estado` varchar(30) NOT NULL,
-  `fecha_hora` datetime NOT NULL,
-  `ubicacion` varchar(200) DEFAULT NULL,
-  `observaciones` varchar(500) DEFAULT NULL,
-  `id_traslado` int(11) NOT NULL,
-  `id_funcionario_registra` int(11) NOT NULL,
-  PRIMARY KEY (`id_historial`),
-  KEY `idx_historial_traslado` (`id_traslado`),
-  KEY `idx_historial_funcionario` (`id_funcionario_registra`),
-  CONSTRAINT `fk_historial_traslado`
-    FOREIGN KEY (`id_traslado`) REFERENCES `traslado` (`id_traslado`)
-    ON UPDATE CASCADE ON DELETE RESTRICT,
-  CONSTRAINT `fk_historial_funcionario`
-    FOREIGN KEY (`id_funcionario_registra`) REFERENCES `funcionario` (`id_persona`)
-    ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
-
-INSERT INTO `historial_estado`
-  (`id_historial`, `estado`, `fecha_hora`, `ubicacion`, `observaciones`, `id_traslado`, `id_funcionario_registra`)
-VALUES
-  (1, 'PROGRAMADO', '2026-09-04 09:00:00', 'Hospital de Clínicas', 'Traslado programado', 1, 3),
-  (2, 'HACIA_DESTINO', '2026-09-04 10:05:00', 'Montevideo', 'Ambulancia en camino', 1, 3),
-  (3, 'EN_DESTINO', '2026-09-04 13:50:00', 'Montevideo', 'Llegada al destino', 1, 3);
 
 CREATE TABLE `tipo_documento` (
   `id_tipo_documento` int(11) NOT NULL AUTO_INCREMENT,
@@ -468,7 +315,6 @@ CREATE TABLE `configuracion_usuario` (
   `notificaciones_seguridad` tinyint(1) NOT NULL DEFAULT 0,
   `cierre_sesion_automatico` tinyint(1) NOT NULL DEFAULT 0,
   `idioma` varchar(20) NOT NULL DEFAULT 'Español',
-  `tema` varchar(10) NOT NULL DEFAULT 'dark',
   `fecha_actualizacion` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id_configuracion`),
   UNIQUE KEY `uq_configuracion_usuario` (`id_usuario`),
@@ -478,11 +324,11 @@ CREATE TABLE `configuracion_usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
 INSERT INTO `configuracion_usuario`
-  (`id_usuario`, `centro`, `foto_perfil`, `foto_publica`, `analisis_rendimiento`, `notificaciones_seguridad`, `cierre_sesion_automatico`, `idioma`, `tema`)
+  (`id_usuario`, `centro`, `foto_perfil`, `foto_publica`, `analisis_rendimiento`, `notificaciones_seguridad`, `cierre_sesion_automatico`, `idioma`)
 VALUES
-  (1, 'Hospital de Clínicas', NULL, 1, 1, 0, 0, 'Español', 'dark'),
-  (2, 'Hospital de Clínicas', NULL, 1, 1, 0, 0, 'Español', 'dark'),
-  (3, 'Hospital de Clínicas', NULL, 1, 1, 0, 0, 'Español', 'dark');
+  (1, 'Hospital de Clínicas', NULL, 1, 1, 0, 0, 'Español'),
+  (2, 'Hospital de Clínicas', NULL, 1, 1, 0, 0, 'Español'),
+  (3, 'Hospital de Clínicas', NULL, 1, 1, 0, 0, 'Español');
 
 CREATE TABLE `especializacion` (
   `id_especializacion` int(11) NOT NULL AUTO_INCREMENT,
@@ -618,19 +464,18 @@ INSERT INTO `gestion_destino` VALUES (1,'seed-1','Hospital de Clínicas','Av. It
 INSERT INTO `gestion_destino` VALUES (2,'seed-2','Hospital Maciel','25 de Mayo 174','Montevideo','Activo',-34.906700,-56.208500);
 INSERT INTO `gestion_destino` VALUES (3,'seed-3','Hospital Pasteur','Larravide 2458','Montevideo','Activo',-34.871700,-56.141600);
 INSERT INTO `gestion_destino` VALUES (4,'seed-4','Sanatorio Central','Av. 18 de Julio 1820','Montevideo','Activo',-34.900500,-56.174500);
-INSERT INTO `gestion_destino` VALUES (5,'seed-5','Centro de Rehabilitación','Camino Maldonado 5680','Montevideo','Inactivo',-34.855000,-56.100000);
+INSERT INTO `gestion_destino` VALUES (5,'seed-5','Centro de Rehabilitación','Camino Maldonado 5680','Montevideo','Activo',-34.855000,-56.100000);
 INSERT INTO `gestion_destino` VALUES (6,'seed-6','Policlínica Las Piedras','Av. Artigas 560','Las Piedras','Activo',-34.727000,-56.219000);
 INSERT INTO `gestion_destino` VALUES (7,'seed-7','Centro de Diagnóstico','Bv. Artigas 1450','Montevideo','Activo',-34.893500,-56.164000);
-INSERT INTO `gestion_destino` VALUES (8,'seed-8','Laboratorio Central','Av. Italia 2890','Montevideo','Inactivo',-34.892800,-56.152000);
+INSERT INTO `gestion_destino` VALUES (8,'seed-8','Laboratorio Central','Av. Italia 2890','Montevideo','Activo',-34.892800,-56.152000);
 INSERT INTO `gestion_destino` VALUES (9,'seed-9','Hospital Escuela del Litoral','Montevideo 1361','Paysandú','Activo',-32.317100,-58.080700);
 INSERT INTO `gestion_destino` VALUES (10,'seed-10','Hospital Regional Salto','Av. Juan H. Paiva s/n','Salto','Activo',-31.389300,-57.961200);
 INSERT INTO `gestion_destino` VALUES (11,'seed-11','Hospital Regional Tacuarembó','Treinta y Tres 444','Tacuarembó','Activo',-31.711000,-55.983000);
 INSERT INTO `gestion_destino` VALUES (12,'seed-12','Hospital de Maldonado','Ventura Alegre s/n','Maldonado','Activo',-34.907000,-54.953000);
 INSERT INTO `gestion_destino` VALUES (13,'seed-13','Hospital de Colonia','Av. Roosevelt s/n','Colonia','Activo',-34.470000,-57.844000);
--- Rutas de ejemplo entre los destinos de ejemplo
+-- Las 5 rutas predeterminadas, todas en Montevideo
 -- (seed-1 Clínicas, seed-2 Maciel, seed-3 Pasteur, seed-4 Sanatorio Central, seed-5 Centro de Rehabilitación,
---  seed-6 Policlínica Las Piedras, seed-7 Centro de Diagnóstico, seed-8 Laboratorio Central,
---  seed-9 a seed-13 hospitales del interior: Paysandú, Salto, Tacuarembó, Maldonado y Colonia)
+--  seed-7 Centro de Diagnóstico, seed-8 Laboratorio Central)
 INSERT INTO `gestion_ruta`
   (`id_gestion_ruta`, `codigo`, `numero`, `nombre`, `categoria`, `sentido`, `estado`, `origen`, `destino`, `paradas`, `duracion_min`, `notas`)
 VALUES
@@ -638,13 +483,7 @@ VALUES
   (2, 'ruta-2', 'RT-002', 'Circuito de rehabilitación', 'Tratamiento', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-5', '["seed-7"]', 35, 'Confirmar el punto de encuentro antes de salir.'),
   (3, 'ruta-3', 'RT-003', 'Clínicas → Hospital Pasteur', 'Interhospitalario', 'Solo ida', 'Activa', 'seed-1', 'seed-3', '[]', 18, NULL),
   (4, 'ruta-4', 'RT-004', 'Consulta · Sanatorio Central', 'Consulta', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-4', '[]', 15, 'Coordinar el regreso al terminar la consulta.'),
-  (5, 'ruta-5', 'RT-005', 'Alta · Policlínica Las Piedras', 'Alta', 'Solo ida', 'Activa', 'seed-1', 'seed-6', '[]', 40, NULL),
-  (6, 'ruta-6', 'RT-006', 'Circuito de estudios', 'Consulta', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-3', '["seed-7", "seed-4"]', 45, 'Pasa por el Centro de Diagnóstico y el Sanatorio Central.'),
-  (7, 'ruta-7', 'RT-007', 'Muestras al Laboratorio Central', 'Tratamiento', 'Solo ida', 'Inactiva', 'seed-1', 'seed-8', '[]', 5, 'Laboratorio temporalmente cerrado.'),
-  (8, 'ruta-8', 'RT-008', 'Montevideo → Paysandú', 'Interhospitalario', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-9', '["seed-13"]', 270, 'Por ruta 1 y ruta 2. Parada en Colonia.'),
-  (9, 'ruta-9', 'RT-009', 'Montevideo → Salto', 'Interhospitalario', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-10', '[]', 360, 'Por ruta 3.'),
-  (10, 'ruta-10', 'RT-010', 'Montevideo → Tacuarembó', 'Interhospitalario', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-11', '[]', 270, 'Por ruta 5.'),
-  (11, 'ruta-11', 'RT-011', 'Montevideo → Maldonado', 'Interhospitalario', 'Ida y vuelta', 'Activa', 'seed-1', 'seed-12', '[]', 105, 'Por ruta Interbalnearia.');
+  (7, 'ruta-7', 'RT-005', 'Muestras al Laboratorio Central', 'Tratamiento', 'Solo ida', 'Activa', 'seed-1', 'seed-8', '[]', 5, 'Laboratorio temporalmente cerrado.');
 
 -- =========================================================
 -- CALENDARIO: TURNOS DE PACIENTES
@@ -692,7 +531,7 @@ VALUES
 -- =========================================================
 -- TRASLADOS DE AMBULANCIAS
 -- Usa las ambulancias, el personal, los destinos y los pacientes de Gestión.
--- (Las tablas solicitud_traslado, traslado e historial_estado son el diseño anterior y la página ya no las usa.)
+-- Lo que lleva cada traslado se guarda en carga_transportada.
 -- =========================================================
 
 CREATE TABLE `gestion_traslado` (
@@ -700,8 +539,7 @@ CREATE TABLE `gestion_traslado` (
   `id_ambulancia` int(11) NOT NULL,
   `id_chofer` int(11) NOT NULL COMMENT 'gestion_personal (conductor)',
   `id_acompanante` int(11) DEFAULT NULL COMMENT 'gestion_personal (copiloto o acompañante)',
-  `id_gestion_paciente` int(11) DEFAULT NULL COMMENT 'paciente trasladado (opcional)',
-  `elemento` varchar(150) DEFAULT NULL COMMENT 'qué se traslada si no es un paciente',
+  `id_gestion_paciente` int(11) DEFAULT NULL COMMENT 'paciente trasladado (si lo que lleva es un paciente)',
   `id_origen` int(11) NOT NULL COMMENT 'gestion_destino',
   `id_destino` int(11) DEFAULT NULL COMMENT 'gestion_destino (vacío si se escribió una dirección)',
   `destino_direccion` varchar(200) DEFAULT NULL COMMENT 'dirección escrita a mano, ej. una casa',
@@ -726,16 +564,36 @@ CREATE TABLE `gestion_traslado` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
 INSERT INTO `gestion_traslado`
-  (`id_gestion_traslado`, `id_ambulancia`, `id_chofer`, `id_acompanante`, `id_gestion_paciente`, `elemento`, `id_origen`, `id_destino`,
+  (`id_gestion_traslado`, `id_ambulancia`, `id_chofer`, `id_acompanante`, `id_gestion_paciente`, `id_origen`, `id_destino`,
    `salida_programada`, `llegada_estimada`, `salida_real`, `llegada_real`, `retorno_real`, `estado`, `notas`)
 VALUES
-  (1, 1, 2, 20, 4, NULL, 1, 9, '2026-10-16 08:00:00', '2026-10-16 12:30:00', '2026-10-16 08:05:00', NULL, NULL, 'EN_CAMINO', 'Control en el Hospital Escuela del Litoral.'),
-  (2, 2, 5, NULL, NULL, 'Muestras de laboratorio', 1, 7, '2026-10-16 15:00:00', '2026-10-16 15:20:00', NULL, NULL, NULL, 'PROGRAMADO', NULL),
-  (3, 4, 6, 21, 2, NULL, 1, 3, '2026-10-16 10:00:00', '2026-10-16 10:20:00', '2026-10-16 10:02:00', '2026-10-16 10:21:00', NULL, 'EN_DESTINO', NULL),
-  (4, 8, 12, 21, 5, NULL, 1, 10, '2026-10-15 06:00:00', '2026-10-15 12:00:00', '2026-10-15 06:10:00', '2026-10-15 12:05:00', NULL, 'RETORNANDO', NULL),
-  (5, 6, 3, 22, 7, NULL, 1, 12, '2026-10-15 09:00:00', '2026-10-15 10:45:00', '2026-10-15 09:00:00', '2026-10-15 10:50:00', '2026-10-15 13:10:00', 'FINALIZADO', NULL),
-  (6, 2, 5, NULL, NULL, 'Ecógrafo portátil', 1, 2, '2026-10-14 10:00:00', '2026-10-14 10:30:00', '2026-10-14 10:00:00', '2026-10-14 10:35:00', '2026-10-14 11:20:00', 'FINALIZADO', NULL),
-  (7, 4, 6, NULL, 10, NULL, 1, 4, '2026-10-14 15:00:00', '2026-10-14 15:15:00', NULL, NULL, NULL, 'CANCELADO', 'El paciente reprogramó.');
+  (1, 1, 2, 20, 4, 1, 9, '2026-10-16 08:00:00', '2026-10-16 12:30:00', '2026-10-16 08:05:00', NULL, NULL, 'EN_CAMINO', 'Control en el Hospital Escuela del Litoral.'),
+  (2, 2, 5, NULL, NULL, 1, 7, '2026-10-16 15:00:00', '2026-10-16 15:20:00', NULL, NULL, NULL, 'PROGRAMADO', NULL),
+  (3, 4, 6, 21, 2, 1, 3, '2026-10-16 10:00:00', '2026-10-16 10:20:00', '2026-10-16 10:02:00', '2026-10-16 10:21:00', NULL, 'EN_DESTINO', NULL),
+  (4, 8, 12, 21, 5, 1, 10, '2026-10-15 06:00:00', '2026-10-15 12:00:00', '2026-10-15 06:10:00', '2026-10-15 12:05:00', NULL, 'RETORNANDO', NULL),
+  (5, 6, 3, 22, 7, 1, 12, '2026-10-15 09:00:00', '2026-10-15 10:45:00', '2026-10-15 09:00:00', '2026-10-15 10:50:00', '2026-10-15 13:10:00', 'FINALIZADO', NULL),
+  (6, 2, 5, NULL, NULL, 1, 2, '2026-10-14 10:00:00', '2026-10-14 10:30:00', '2026-10-14 10:00:00', '2026-10-14 10:35:00', '2026-10-14 11:20:00', 'FINALIZADO', NULL),
+  (7, 4, 6, NULL, 10, 1, 4, '2026-10-14 15:00:00', '2026-10-14 15:15:00', NULL, NULL, NULL, 'CANCELADO', 'El paciente reprogramó.');
+
+-- Qué lleva cada traslado: un paciente, un elemento biológico (muestras, sangre...) u otra cosa
+CREATE TABLE `carga_transportada` (
+  `id_carga` int(11) NOT NULL AUTO_INCREMENT,
+  `id_gestion_traslado` int(11) NOT NULL,
+  `tipo` varchar(30) NOT NULL COMMENT 'Paciente, Elemento biológico u Otro',
+  `descripcion` varchar(150) DEFAULT NULL COMMENT 'qué se lleva (si no es un paciente)',
+  PRIMARY KEY (`id_carga`),
+  UNIQUE KEY `uq_carga_traslado` (`id_gestion_traslado`),
+  CONSTRAINT `fk_carga_traslado` FOREIGN KEY (`id_gestion_traslado`) REFERENCES `gestion_traslado` (`id_gestion_traslado`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+
+INSERT INTO `carga_transportada` (`id_gestion_traslado`, `tipo`, `descripcion`) VALUES
+  (1, 'Paciente', NULL),
+  (2, 'Elemento biológico', 'Muestras de laboratorio'),
+  (3, 'Paciente', NULL),
+  (4, 'Paciente', NULL),
+  (5, 'Paciente', NULL),
+  (6, 'Otro', 'Ecógrafo portátil'),
+  (7, 'Paciente', NULL);
 
 -- =========================================================
 -- VALORES AUTO_INCREMENT
@@ -747,14 +605,10 @@ ALTER TABLE `gestion_paciente` AUTO_INCREMENT = 11;
 ALTER TABLE `gestion_medico` AUTO_INCREMENT = 13;
 ALTER TABLE `gestion_personal` AUTO_INCREMENT = 23;
 ALTER TABLE `gestion_destino` AUTO_INCREMENT = 14;
-ALTER TABLE `gestion_ruta` AUTO_INCREMENT = 12;
+ALTER TABLE `gestion_ruta` AUTO_INCREMENT = 8;
 ALTER TABLE `turno` AUTO_INCREMENT = 13;
 ALTER TABLE `gestion_traslado` AUTO_INCREMENT = 8;
-ALTER TABLE `ruta` AUTO_INCREMENT = 4;
-ALTER TABLE `solicitud_traslado` AUTO_INCREMENT = 3;
-ALTER TABLE `carga_transportada` AUTO_INCREMENT = 4;
-ALTER TABLE `traslado` AUTO_INCREMENT = 3;
-ALTER TABLE `historial_estado` AUTO_INCREMENT = 4;
+ALTER TABLE `carga_transportada` AUTO_INCREMENT = 8;
 ALTER TABLE `tipo_documento` AUTO_INCREMENT = 4;
 ALTER TABLE `documento` AUTO_INCREMENT = 1;
 ALTER TABLE `servicio_hospitalario` AUTO_INCREMENT = 5;

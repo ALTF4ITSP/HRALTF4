@@ -1,4 +1,4 @@
-/* Traslados (trace.html): formulario y lista a la izquierda, mapa a la derecha */
+/* Traslados (trace.html): planilla arriba; formulario y mapa abajo */
 [hidden] {
   display: none !important;
 }
@@ -14,6 +14,131 @@
   font-size: 2rem;
 }
 
+/* Cajas con borde, como en el resto del sitio */
+.traslados-caja {
+  padding: 16px;
+  border: 1px solid rgba(238, 238, 238, 0.13);
+  border-radius: 20px;
+  background: rgba(8, 12, 28, 0.25);
+}
+
+.traslados-caja h2 {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+}
+
+/* ---------- Arriba: botones por estado + planilla ---------- */
+.traslados-arriba {
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.traslados-pestanas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pestana {
+  padding: 6px 14px;
+  border: 1px solid rgba(238, 238, 238, 0.15);
+  border-radius: 999px;
+  background: transparent;
+  color: #eeeeee;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.pestana span {
+  color: rgba(238, 238, 238, 0.6);
+}
+
+.pestana.activa {
+  border-color: #4b6dde;
+  background: #4b6dde;
+}
+
+.pestana.activa span {
+  color: #ffffff;
+}
+
+.traslados-tabla-caja {
+  max-height: 300px;
+  overflow: auto;   /* si hay muchos, la planilla se desliza */
+}
+
+.traslados-planilla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.traslados-planilla th,
+.traslados-planilla td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(238, 238, 238, 0.08);
+  text-align: left;
+}
+
+.traslados-planilla th {
+  position: sticky;
+  top: 0;
+  background: #161f45;
+  color: #abbaea;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.traslados-planilla tbody tr {
+  cursor: pointer;
+}
+
+.traslados-planilla tbody tr:hover td,
+.traslados-planilla tr.elegido td {
+  background: rgba(125, 149, 236, 0.12);
+}
+
+.traslados-celda-botones {
+  white-space: nowrap;
+}
+
+.traslados-celda-botones .traslados-boton {
+  min-height: 30px;
+  padding: 0 10px;
+  font-size: 0.78rem;
+}
+
+.traslados-vacio,
+.traslados-ayuda {
+  color: rgba(238, 238, 238, 0.6);
+  font-size: 0.82rem;
+}
+
+.traslados-vacio {
+  text-align: center !important;
+}
+
+/* Etiqueta de color según el estado */
+.estado {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(238, 238, 238, 0.1);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.estado-PROGRAMADO { color: #abbaea; }
+.estado-EN_CAMINO { color: #fbbf24; }
+.estado-EN_DESTINO { color: #60a5fa; }
+.estado-RETORNANDO { color: #c084fc; }
+.estado-FINALIZADO { color: #6ee7a0; }
+.estado-CANCELADO { color: #ff6b6b; }
+
+/* ---------- Abajo: formulario a la izquierda, mapa a la derecha ---------- */
 .traslados-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -21,62 +146,43 @@
   align-items: start;
 }
 
-.traslados-columna {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Cajas con borde, como en el resto del sitio */
-.traslados-caja {
-  padding: 18px;
-  border: 1px solid rgba(238, 238, 238, 0.13);
-  border-radius: 20px;
-  background: rgba(8, 12, 28, 0.25);
-}
-
-.traslados-caja h2 {
-  margin: 0 0 14px;
-  font-size: 1.2rem;
-}
-
-/* Campos del formulario */
-.traslados-caja label,
-.traslados-campo {
-  margin-bottom: 12px;
-  display: block;
-  color: rgba(238, 238, 238, 0.65);
-  font-size: 0.85rem;
-}
-
-.traslados-campo label {
-  margin: 0;
-}
-
-.traslados-fila {
+/* Formulario en dos columnas; .ancho ocupa las dos */
+.traslados-grilla {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 10px;
+}
+
+.traslados-grilla .ancho {
+  grid-column: 1 / -1;
+}
+
+.traslados-grilla label {
+  display: block;
+  color: rgba(238, 238, 238, 0.65);
+  font-size: 0.82rem;
 }
 
 .traslados-caja input,
 .traslados-caja select {
   width: 100%;
   min-width: 0;
-  height: 40px;
-  padding: 0 12px;
+  height: 38px;
+  margin-top: 4px;
+  padding: 0 10px;
+  display: block;
   border: 1px solid rgba(150, 163, 209, 0.25);
   border-radius: 10px;
   background: rgba(8, 12, 28, 0.5);
   color: #eeeeee;
   font: inherit;
-  margin-top: 6px;
-  display: block;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color-scheme: dark;
 }
 
 #buscar {
+  width: 220px;
+  height: 34px;
   margin-top: 0;
 }
 
@@ -95,9 +201,17 @@
   align-items: flex-end;
 }
 
+.traslados-buscar-direccion .traslados-boton {
+  min-height: 38px;
+}
+
+#cajaDireccion .traslados-ayuda {
+  margin: 4px 0 0;
+}
+
 .traslados-error {
   min-height: 1em;
-  margin: 0 0 10px;
+  margin: 10px 0;
   color: #ff6b6b;
 }
 
@@ -121,88 +235,9 @@
   color: #ff6b6b;
 }
 
-/* Listas de traslados: en curso y terminados */
-.traslados-caja h3 {
-  margin: 18px 0 0;
-  font-size: 1rem;
-}
-
-.traslados-caja h3 span {
-  color: rgba(238, 238, 238, 0.6);
-  font-weight: 400;
-}
-
-.traslados-lista {
-  max-height: 420px;
-  margin: 10px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
-  list-style: none;
-}
-
-.traslado {
-  padding: 12px;
-  border: 1px solid rgba(238, 238, 238, 0.1);
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.traslado:hover,
-.traslado.elegido {
-  border-color: #7d95ec;
-  background: rgba(125, 149, 236, 0.12);
-}
-
-.traslado p {
-  margin: 4px 0;
-  font-size: 0.9rem;
-}
-
-.traslado-gris,
-.traslados-vacio,
-.traslados-ayuda {
-  color: rgba(238, 238, 238, 0.6);
-  font-size: 0.82rem !important;
-}
-
-.traslado-arriba {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.traslado-botones {
-  margin-top: 8px;
-  display: flex;
-  gap: 8px;
-}
-
-/* Etiqueta de color según el estado */
-.estado {
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: rgba(238, 238, 238, 0.1);
-  font-size: 0.78rem;
-}
-
-.estado-PROGRAMADO { color: #abbaea; }
-.estado-EN_CAMINO { color: #fbbf24; }
-.estado-EN_DESTINO { color: #60a5fa; }
-.estado-RETORNANDO { color: #c084fc; }
-.estado-FINALIZADO { color: #6ee7a0; }
-.estado-CANCELADO { color: #ff6b6b; }
-
-/* Mapa: queda fijo al costado mientras se baja por la lista */
-.traslados-mapa-caja {
-  position: sticky;
-  top: 20px;
-}
-
+/* Mapa */
 #mapa {
-  height: 560px;
+  height: 470px;
   border-radius: 14px;
 }
 
@@ -211,7 +246,7 @@
   filter: invert(1) hue-rotate(200deg) brightness(0.9) saturate(0.6);
 }
 
-.traslados-ayuda {
+.traslados-mapa-caja .traslados-ayuda {
   margin: 10px 0 0;
 }
 
@@ -220,13 +255,12 @@
     width: calc(100% - 96px);
   }
 
-  /* En pantallas chicas el mapa va arriba */
+  /* En pantallas chicas el mapa va arriba del formulario */
   .traslados-layout {
     grid-template-columns: 1fr;
   }
 
   .traslados-mapa-caja {
-    position: static;
     order: -1;
   }
 
@@ -240,7 +274,11 @@
     width: 100%;
   }
 
-  .traslados-fila {
+  .traslados-grilla {
     grid-template-columns: 1fr;
+  }
+
+  #buscar {
+    width: 100%;
   }
 }

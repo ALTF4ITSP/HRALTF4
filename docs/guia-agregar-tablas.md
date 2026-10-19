@@ -313,7 +313,7 @@ No hace falta tocar nada más: el PHP y la página leen esas listas para saber q
 
 **Traslados y Calendario tienen su propio PHP** (`php/traslados.php` y `php/turnos.php`), porque cada traslado o turno se guarda por separado y combina datos de varias tablas:
 
-- `gestion_traslado` usa la ambulancia (`ambulancia`), el chofer y el acompañante (`gestion_personal`), el origen y el destino (`gestion_destino`, o una dirección escrita a mano en `destino_direccion` con su `destino_lat`/`destino_lng`, por ejemplo la casa de un paciente) y el paciente (`gestion_paciente`, opcional: si no hay paciente se escribe el `elemento` que se lleva). El `estado` avanza PROGRAMADO → EN_CAMINO → EN_DESTINO → RETORNANDO → FINALIZADO, y en cada paso se guarda la hora (`salida_real`, `llegada_real`, `retorno_real`).
+- `gestion_traslado` usa la ambulancia (`ambulancia`), el chofer y el acompañante (`gestion_personal`), el origen y el destino (`gestion_destino`, o una dirección escrita a mano en `destino_direccion` con su `destino_lat`/`destino_lng`, por ejemplo la casa de un paciente) y el paciente (`gestion_paciente`). Lo que lleva cada traslado se guarda en `carga_transportada` (una fila por traslado): `tipo` es Paciente, Elemento biológico u Otro, y `descripcion` dice qué se lleva cuando no es un paciente. El `estado` avanza PROGRAMADO → EN_CAMINO → EN_DESTINO → RETORNANDO → FINALIZADO, y en cada paso se guarda la hora (`salida_real`, `llegada_real`, `retorno_real`).
 - `turno` usa el paciente (`gestion_paciente`) y el médico (`gestion_medico`).
 
 Por eso no se puede borrar en Gestión algo que un traslado o un turno está usando: la base lo impide y aparece un aviso.

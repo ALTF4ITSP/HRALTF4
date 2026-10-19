@@ -94,80 +94,83 @@
     <section class="hero-panel traslados-panel">
       <h1>Traslados</h1>
 
-      <div class="traslados-layout">
-        <!-- Izquierda: formulario y lista -->
-        <div class="traslados-columna">
-          <form class="traslados-caja" id="formulario">
-            <h2>Nuevo traslado</h2>
+      <!-- Arriba: un botón por estado y la planilla de los traslados de ese estado -->
+      <div class="traslados-caja" id="planillaCaja">
+        <div class="traslados-arriba">
+          <div class="traslados-pestanas">
+            <button type="button" class="pestana activa" data-grupo="enCurso">En curso <span></span></button>
+            <button type="button" class="pestana" data-grupo="programados">Programados <span></span></button>
+            <button type="button" class="pestana" data-grupo="finalizados">Finalizados <span></span></button>
+            <button type="button" class="pestana" data-grupo="cancelados">Cancelados <span></span></button>
+          </div>
+          <input type="search" id="buscar" placeholder="Buscar..." aria-label="Buscar traslado">
+        </div>
+        <div class="traslados-tabla-caja">
+          <table class="traslados-planilla">
+            <thead>
+              <tr><th>N°</th><th>Estado</th><th>Ambulancia</th><th>Lleva</th><th>Recorrido</th><th>Salida</th><th>Llegada</th><th></th></tr>
+            </thead>
+            <tbody id="planilla"></tbody>
+          </table>
+        </div>
+      </div>
 
-            <label>Ruta habitual <small>(opcional, completa origen y destino)</small>
-              <select id="ruta"><option value="">Sin ruta</option></select>
-            </label>
-            <div class="traslados-fila">
-              <label>Origen <select name="id_origen" required></select></label>
-              <label>Destino <select name="id_destino" id="destino" required></select></label>
-            </div>
+      <div class="traslados-layout">
+        <!-- Izquierda: formulario -->
+        <form class="traslados-caja" id="formulario">
+          <h2>Nuevo traslado</h2>
+          <div class="traslados-grilla">
+            <label class="ancho">Ruta habitual <select id="ruta"></select></label>
+            <label>Origen <select name="id_origen" required></select></label>
+            <label>Destino <select name="id_destino" required></select></label>
 
             <!-- Solo si en Destino se elige "Otra dirección" -->
-            <div class="traslados-campo" id="cajaDireccion" hidden>
-              <label for="direccion">Dirección <small>(calle, número y ciudad)</small></label>
+            <div class="ancho" id="cajaDireccion" hidden>
+              <label for="direccion">Dirección</label>
               <div class="traslados-buscar-direccion">
                 <input id="direccion" name="destino_direccion" maxlength="200" placeholder="Ej. Av. Rivera 3456, Montevideo">
                 <button type="button" class="traslados-boton" id="buscarDireccion">Buscar</button>
               </div>
               <input type="hidden" name="destino_lat">
               <input type="hidden" name="destino_lng">
-              <p class="traslados-ayuda" id="ayudaDireccion">Buscala o hacé clic en el mapa para marcar la casa.</p>
+              <p class="traslados-ayuda" id="ayudaDireccion">Buscala o hacé clic en el mapa.</p>
             </div>
 
-            <div class="traslados-fila">
-              <label>Ambulancia <select name="id_ambulancia" required></select></label>
-              <label>Conductor <select name="id_chofer" required></select></label>
-            </div>
-            <label>Acompañante <small>(opcional)</small>
-              <select name="id_acompanante"></select>
+            <label>Ambulancia <select name="id_ambulancia" required></select></label>
+            <label>Conductor <select name="id_chofer" required></select></label>
+            <label>Acompañante <select name="id_acompanante"></select></label>
+            <label>Lleva
+              <select name="tipo_carga">
+                <option>Paciente</option>
+                <option>Elemento biológico</option>
+                <option>Otro</option>
+              </select>
             </label>
 
-            <div class="traslados-campo">
-              <label for="paciente">Paciente <small>(opcional, buscar por nombre o cédula)</small></label>
+            <div class="ancho" id="cajaPaciente">
+              <label for="paciente">Paciente</label>
               <div class="buscador">
-                <input type="text" id="paciente" placeholder="Escribí el nombre o la cédula">
+                <input type="text" id="paciente" placeholder="Nombre o cédula">
                 <input type="hidden" name="id_gestion_paciente">
                 <ul class="buscador-lista" role="listbox" hidden></ul>
               </div>
             </div>
-            <label>Elemento <small>(si no es un paciente: muestras, equipos...)</small>
-              <input name="elemento" maxlength="150">
+            <label class="ancho" id="cajaCarga" hidden>Qué lleva
+              <input name="carga" maxlength="150" placeholder="Ej. muestras de sangre">
             </label>
 
-            <div class="traslados-fila">
-              <label>Salida <input type="datetime-local" name="salida_programada" required></label>
-              <label>Llegada estimada <input type="datetime-local" name="llegada_estimada"></label>
-            </div>
-            <label>Notas <small>(opcional)</small>
-              <input name="notas" maxlength="300">
-            </label>
-
-            <p class="traslados-error" id="error" role="alert"></p>
-            <button type="submit" class="traslados-boton">Guardar traslado</button>
-          </form>
-
-          <div class="traslados-caja" id="listas">
-            <h2>Traslados</h2>
-            <input type="search" id="buscar" placeholder="Buscar por ambulancia, paciente, destino..." aria-label="Buscar traslado">
-
-            <h3>En curso <span id="cantidadEnCurso"></span></h3>
-            <ul class="traslados-lista" id="listaEnCurso"></ul>
-
-            <h3>Finalizados y cancelados <span id="cantidadTerminados"></span></h3>
-            <ul class="traslados-lista" id="listaTerminados"></ul>
+            <label>Salida <input type="datetime-local" name="salida_programada" required></label>
+            <label>Llegada estimada <input type="datetime-local" name="llegada_estimada"></label>
           </div>
-        </div>
+
+          <p class="traslados-error" id="error" role="alert"></p>
+          <button type="submit" class="traslados-boton">Guardar traslado</button>
+        </form>
 
         <!-- Derecha: mapa -->
         <div class="traslados-caja traslados-mapa-caja">
           <div id="mapa" aria-label="Mapa de traslados"></div>
-          <p class="traslados-ayuda" id="ayudaMapa">Elegí un traslado de la lista para verlo en el mapa.</p>
+          <p class="traslados-ayuda" id="ayudaMapa">Hacé clic en un traslado de la planilla para verlo en el mapa.</p>
         </div>
       </div>
     </section>

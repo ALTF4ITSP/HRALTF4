@@ -1,10 +1,10 @@
-// Traslados de ambulancias (trace.html): formulario "Nuevo traslado", lista y mapa con Leaflet.
+// Traslados de ambulancias (trace.html): planilla por estado, formulario "Nuevo traslado" y mapa con Leaflet.
 // Los datos se leen y guardan con php/traslados.php.
 document.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
   const formulario = document.getElementById("formulario");
-  const listas = document.getElementById("listas");
+  const planilla = document.getElementById("planilla");
   let datos = {};   // lo que devuelve traslados.php: traslados, ambulancias, personal, destinos, pacientes, rutas
 
   // Nombre de cada estado y texto del botón para pasar al siguiente
@@ -49,8 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const respuesta = await fetch("../php/traslados.php", { headers: { Accept: "application/json" } });
     datos = await respuesta.json();
     if (!datos.success) {
-      document.getElementById("listaEnCurso").innerHTML =
-        `<li class="traslados-vacio">${escapeHtml(datos.error?.message || "Error al cargar.")}</li>`;
+      planilla.innerHTML = `<tr><td colspan="8" class="traslados-vacio">${escapeHtml(datos.error?.message || "Error al cargar.")}</td></tr>`;
       return;
     }
     llenarFormulario();
@@ -69,15 +68,15 @@ document.addEventListener("DOMContentLoaded", () => {
   function llenarFormulario() {
     const f = formulario.elements;
     const lugar = d => `${d.nombre} (${d.localidad})`;
-    opciones(f.id_origen, datos.destinos, lugar, "Elegí el origen");
-    opciones(f.id_destino, datos.destinos, lugar, "Elegí el destino");
+    opciones(f.id_origen, datos.destinos, lugar, "Elegí");
+    opciones(f.id_destino, datos.destinos, lugar, "Elegí");
     f.id_destino.insertAdjacentHTML("beforeend", '<option value="otra">Otra dirección (una casa)…</option>');
-    opciones(f.id_ambulancia, datos.ambulancias, a => `${a.matricula} · ${a.modelo}`, "Elegí la ambulancia");
-    opciones(f.id_chofer, datos.personal.filter(p => p.rol === "Chofer"), p => p.nombre, "Elegí el conductor");
-    opciones(f.id_acompanante, datos.personal.filter(p => p.rol === "Acompañante"), p => p.nombre, "Sin acompañante");
+    opciones(f.id_ambulancia, datos.ambulancias, a => `${a.matricula} · ${a.modelo}`, "Elegí");
+    opciones(f.id_chofer, datos.personal.filter(p => p.rol === "Chofer"), p => p.nombre, "Elegí");
+    opciones(f.id_acompanante, datos.personal.filter(p => p.rol === "Acompañante"), p => p.nombre, "Ninguno");
 
     const rutas = document.getElementById("ruta");
-    rutas.innerHTML = '<option value="">Sin ruta</option>' +
+    rutas.innerHTML = '<option value="">Ninguna (elegir origen y destino)</option>' +
       datos.rutas.map((r, i) => `<option value="${i}">${escapeHtml(`${r.numero} · ${r.nombre}`)}</option>`).join("");
 
     buscadorPaciente ??= crearBuscador(document.getElementById("paciente"), { texto: p => `${p.nombre} · CI ${p.documento}` });
@@ -159,6 +158,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (esDireccion()) marcarDireccion(evento.latlng.lat, evento.latlng.lng, "Ubicación marcada en el mapa.");
   });
 
+  // "Lleva": si es un paciente se busca el paciente; si no, se escribe qué se lleva
+  function mostrarCarga() {
+    const esPaciente = formulario.elements.tipo_carga.value === "Paciente";
+    document.getElementById("cajaPaciente").hidden = !esPaciente;
+    document.getElementById("cajaCarga").hidden = esPaciente;
+    formulario.elements.carga.required = !esPaciente;
+  }
+  formulario.elements.tipo_carga.addEventListener("change", mostrarCarga);
+
   // Una ruta habitual completa origen, destino y la llegada estimada (salida + duración)
   document.getElementById("ruta").addEventListener("change", evento => {
     const ruta = datos.rutas[evento.target.value];
@@ -166,6 +174,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const porCodigo = codigo => datos.destinos.find(d => d.codigo === codigo)?.id ?? "";
     formulario.elements.id_origen.value = porCodigo(ruta.origen);
     formulario.elements.id_destino.value = porCodigo(ruta.destino);
+    // Si el origen o el destino de la ruta está Inactivo en Gestión → Destinos, no aparece en la lista
+    document.getElementById("error").textContent = porCodigo(ruta.origen) && porCodigo(ruta.destino)
+      ? "" : "Esa ruta usa un destino inactivo. Activalo en Gestión → Destinos.";
     document.getElementById("cajaDireccion").hidden = true;
     formulario.elements.destino_direccion.required = false;
     const salida = formulario.elements.salida_programada.value;
@@ -181,8 +192,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const traslado = Object.fromEntries(new FormData(formulario));
     const error = document.getElementById("error");
     error.textContent = "";
-    if (!traslado.id_gestion_paciente && !traslado.elemento.trim()) {
-      error.textContent = "Elegí un paciente o escribí qué se traslada.";
+    if (traslado.tipo_carga === "Paciente" && !traslado.id_gestion_paciente) {
+      error.textContent = "Elegí el paciente.";
       return;
     }
     if (esDireccion() && !traslado.destino_lat) {
@@ -197,11 +208,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     formulario.reset();
     formulario.elements.destino_lat.value = formulario.elements.destino_lng.value = "";
-    document.getElementById("ayudaDireccion").textContent = "Buscala o hacé clic en el mapa para marcar la casa.";
+    document.getElementById("ayudaDireccion").textContent = "Buscala o hacé clic en el mapa.";
     mostrarDireccion();
+    mostrarCarga();
     buscadorPaciente.setValue(null);
     await cargar();
-    verEnMapa(respuesta.id);
+    mostrarTraslado(respuesta.id);
   });
 
   async function enviar(cuerpo) {
@@ -214,68 +226,84 @@ document.addEventListener("DOMContentLoaded", () => {
     return respuesta.json();
   }
 
-  // ---------- Listas: en curso y terminados ----------
-  const TERMINADOS = ["FINALIZADO", "CANCELADO"];
+  // ---------- Planilla: un botón por estado ----------
+  // Qué estados entran en cada botón de arriba
+  const GRUPOS = {
+    enCurso: ["EN_CAMINO", "EN_DESTINO", "RETORNANDO"],
+    programados: ["PROGRAMADO"],
+    finalizados: ["FINALIZADO"],
+    cancelados: ["CANCELADO"]
+  };
+  let grupo = "enCurso";   // el botón elegido
 
   function mostrarLista() {
     const busqueda = document.getElementById("buscar").value.trim().toLowerCase();
-    const visibles = datos.traslados.filter(t =>
-      [t.id, t.matricula, t.chofer, t.acompanante, t.paciente, t.elemento, t.origen, t.destino, ESTADOS[t.estado].nombre]
+    const buscados = datos.traslados.filter(t =>
+      [t.id, t.matricula, t.chofer, t.acompanante, t.paciente, t.carga, t.origen, t.destino]
         .join(" ").toLowerCase().includes(busqueda));
 
-    const enCurso = visibles.filter(t => !TERMINADOS.includes(t.estado));
-    const terminados = visibles.filter(t => TERMINADOS.includes(t.estado));
-    document.getElementById("listaEnCurso").innerHTML = armarLista(enCurso);
-    document.getElementById("listaTerminados").innerHTML = armarLista(terminados);
-    document.getElementById("cantidadEnCurso").textContent = `(${enCurso.length})`;
-    document.getElementById("cantidadTerminados").textContent = `(${terminados.length})`;
-  }
+    // Cantidad en cada botón
+    document.querySelectorAll(".pestana").forEach(boton => {
+      const cantidad = buscados.filter(t => GRUPOS[boton.dataset.grupo].includes(t.estado)).length;
+      boton.querySelector("span").textContent = `(${cantidad})`;
+      boton.classList.toggle("activa", boton.dataset.grupo === grupo);
+    });
 
-  function armarLista(traslados) {
-    if (!traslados.length) return '<li class="traslados-vacio">No hay traslados para mostrar.</li>';
-    return traslados.map(t => `
-      <li class="traslado" data-id="${t.id}">
-        <div class="traslado-arriba">
-          <strong>#${t.id} · ${escapeHtml(t.matricula)}</strong>
-          <span class="estado estado-${t.estado}">${ESTADOS[t.estado].nombre}</span>
-        </div>
-        <p>${escapeHtml(t.paciente ? `Paciente: ${t.paciente}` : `Elemento: ${t.elemento}`)}</p>
-        <p>${escapeHtml(t.origen)} → ${escapeHtml(t.destino)}</p>
-        <p class="traslado-gris">Conductor: ${escapeHtml(t.chofer)}${t.acompanante ? ` · Acompañante: ${escapeHtml(t.acompanante)}` : ""}</p>
-        <p class="traslado-gris">
-          Salida: ${hora(t.salida_real || t.salida_programada)}${t.salida_real ? "" : " (programada)"} ·
-          Llegada: ${hora(t.llegada_real || t.llegada_estimada)}${t.llegada_real ? "" : " (estimada)"}
-          ${t.retorno_real ? ` · Regreso: ${hora(t.retorno_real)}` : ""}
-        </p>
-        ${ESTADOS[t.estado].boton ? `
-          <div class="traslado-botones">
-            <button type="button" class="traslados-boton" data-avanzar="${t.id}">${ESTADOS[t.estado].boton}</button>
-            <button type="button" class="traslados-boton secundario" data-cancelar="${t.id}">Cancelar</button>
-          </div>` : ""}
-      </li>`).join("");
+    const visibles = buscados.filter(t => GRUPOS[grupo].includes(t.estado));
+    planilla.innerHTML = visibles.length ? visibles.map(t => `
+      <tr data-id="${t.id}">
+        <td>${t.id}</td>
+        <td><span class="estado estado-${t.estado}">${ESTADOS[t.estado].nombre}</span></td>
+        <td>${escapeHtml(t.matricula)}</td>
+        <td>${escapeHtml(t.tipo_carga === "Paciente" ? t.paciente : `${t.tipo_carga}: ${t.carga}`)}</td>
+        <td>${escapeHtml(t.origen)} → ${escapeHtml(t.destino)}</td>
+        <td>${hora(t.salida_real || t.salida_programada)}</td>
+        <td>${hora(t.retorno_real || t.llegada_real || t.llegada_estimada)}</td>
+        <td class="traslados-celda-botones">${ESTADOS[t.estado].boton ? `
+          <button type="button" class="traslados-boton" data-avanzar="${t.id}">${ESTADOS[t.estado].boton}</button>
+          <button type="button" class="traslados-boton secundario" data-cancelar="${t.id}">Cancelar</button>` : ""}
+        </td>
+      </tr>`).join("")
+      : '<tr><td colspan="8" class="traslados-vacio">No hay traslados en este grupo.</td></tr>';
   }
 
   function verEnMapa(id) {
     const t = datos.traslados.find(t => String(t.id) === String(id));
     if (!t) return;
-    listas.querySelectorAll(".traslado").forEach(li => li.classList.toggle("elegido", li.dataset.id === String(id)));
+    planilla.querySelectorAll("tr").forEach(fila => fila.classList.toggle("elegido", fila.dataset.id === String(id)));
     dibujar({ nombre: t.origen, lat: t.origen_lat, lng: t.origen_lng },
       { nombre: t.destino, lat: t.destino_lat, lng: t.destino_lng },
-      `Traslado #${t.id}: ${t.origen} → ${t.destino} (${ESTADOS[t.estado].nombre})`);
+      `Traslado ${t.id}: ${t.origen} → ${t.destino} (${ESTADOS[t.estado].nombre})`);
+  }
+
+  // Al guardar uno nuevo se muestra su grupo (Programados) y se marca en el mapa
+  function mostrarTraslado(id) {
+    const t = datos.traslados.find(t => String(t.id) === String(id));
+    if (t) grupo = Object.keys(GRUPOS).find(g => GRUPOS[g].includes(t.estado));
+    mostrarLista();
+    verEnMapa(id);
   }
 
   document.getElementById("buscar").addEventListener("input", mostrarLista);
 
-  listas.addEventListener("click", async evento => {
+  document.querySelector(".traslados-pestanas").addEventListener("click", evento => {
+    const boton = evento.target.closest(".pestana");
+    if (!boton) return;
+    grupo = boton.dataset.grupo;
+    mostrarLista();
+  });
+
+  planilla.addEventListener("click", async evento => {
     const { avanzar, cancelar } = evento.target.dataset;
     if (avanzar || cancelar) {
-      if (cancelar && !confirm(`¿Cancelar el traslado #${cancelar}?`)) return;
+      if (cancelar && !confirm(`¿Cancelar el traslado ${cancelar}?`)) return;
       const respuesta = await enviar({ accion: avanzar ? "avanzar" : "cancelar", id: Number(avanzar || cancelar) });
       if (!respuesta.success) alert(respuesta.error?.message || "No se pudo cambiar el estado.");
       await cargar();
+      return;
     }
-    const li = evento.target.closest(".traslado");
-    if (li) verEnMapa(li.dataset.id);
+    const fila = evento.target.closest("tr[data-id]");
+    if (fila) verEnMapa(fila.dataset.id);
   });
 
   cargar();

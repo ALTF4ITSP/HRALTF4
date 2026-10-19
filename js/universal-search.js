@@ -134,7 +134,7 @@
                 detail: 'Perfil y preferencias',
                 href: 'settings.html',
                 icon: '../imagenes/settings-icon.svg',
-                terms: 'ajustes perfil cuenta contraseña tema'
+                terms: 'ajustes perfil cuenta contraseña idioma'
             },
             {
                 title: 'Reportes',
