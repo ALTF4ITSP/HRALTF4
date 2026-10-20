@@ -50,13 +50,13 @@ if (loginForm) {
                 );
             }
 
-            loginMessage.style.color = '#2ecc71';
+            loginMessage.style.color = '#1e7e34';
             loginMessage.textContent = 'Inicio de sesión correcto.';
 
             window.location.href = 'html/main-menu.html';
 
         } catch (error) {
-            loginMessage.style.color = '#ff4d4d';
+            loginMessage.style.color = '#c62828';
             loginMessage.textContent = error.message;
         }
     });

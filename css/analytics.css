@@ -9,19 +9,19 @@
 }
 
 .report-surface {
-  border: 1px solid rgba(238, 238, 238, 0.13);
+  border: 1px solid rgba(17, 17, 17, 0.13);
   border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
 }
 
 .report-error {
   margin: 0;
-  color: #ff6b6b;
+  color: #940000;
 }
 
 .report-empty {
   margin: 0;
-  color: rgba(238, 238, 238, 0.5);
+  color: rgba(17, 17, 17, 0.5);
   font-size: 0.85rem;
 }
 
@@ -45,14 +45,14 @@
   padding: 10px;
   flex-shrink: 0;
   border-radius: 12px;
-  background: rgba(171, 186, 234, 0.18);
-  filter: brightness(0) invert(1);
+  background: rgba(21, 36, 84, 0.18);
+  filter: brightness(0);
   opacity: 0.82;
 }
 
 .stat-card p {
   margin: 0 0 4px;
-  color: rgba(238, 238, 238, 0.55);
+  color: rgba(17, 17, 17, 0.55);
   font-size: 0.8rem;
 }
 
@@ -91,7 +91,7 @@
   width: 5px;
   height: 20px;
   border-radius: 4px;
-  background: #abbaea;
+  background: #152454;
 }
 
 /* Barras horizontales */
@@ -109,7 +109,7 @@
 
 .bar-label {
   overflow: hidden;
-  color: rgba(238, 238, 238, 0.8);
+  color: rgba(17, 17, 17, 0.8);
   font-size: 0.85rem;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -124,7 +124,7 @@
   grid-column: 1 / -1;
   height: 8px;
   border-radius: 999px;
-  background: rgba(238, 238, 238, 0.08);
+  background: rgba(17, 17, 17, 0.08);
 }
 
 .bar-track span {
@@ -132,7 +132,7 @@
   min-width: 4px;
   display: block;
   border-radius: 999px;
-  background: #7d95ec;
+  background: #132b82;
 }
 
 /* Columnas por mes */
@@ -157,14 +157,14 @@
   flex: 1;
   display: flex;
   align-items: flex-end;
-  border-bottom: 1px solid rgba(238, 238, 238, 0.15);
+  border-bottom: 1px solid rgba(17, 17, 17, 0.15);
 }
 
 .column-track span {
   width: 100%;
   display: block;
   border-radius: 4px 4px 0 0;
-  background: #7d95ec;
+  background: #132b82;
 
 }
 
@@ -174,7 +174,7 @@
 }
 
 .column-label {
-  color: rgba(238, 238, 238, 0.55);
+  color: rgba(17, 17, 17, 0.55);
   font-size: 0.78rem;
 }
 
@@ -191,7 +191,7 @@
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background: rgba(238, 238, 238, 0.08);
+  background: rgba(17, 17, 17, 0.08);
 }
 
 /* Agujero del centro con el total */
@@ -202,7 +202,7 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #101732;
+  background: #f5f6f9;
   font-size: 1.6rem;
   font-weight: 700;
 }
@@ -221,13 +221,13 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: rgba(238, 238, 238, 0.8);
+  color: rgba(17, 17, 17, 0.8);
   font-size: 0.88rem;
 }
 
 .donut-legend strong {
   margin-left: auto;
-  color: #eeeeee;
+  color: #111111;
 }
 
 .legend-dot {

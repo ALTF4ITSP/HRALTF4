@@ -7,8 +7,8 @@ body {
 body {
   overflow-x: hidden;
   overflow-y: auto;
-  background: #101732;
-  color: #eeeeee;
+  background: #f5f6f9;
+  color: #111111;
 }
 
 [hidden] {
@@ -43,17 +43,17 @@ body {
 }
 
 .document-workspace .nav-indicator {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(238, 238, 238, 0.14);
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(17, 17, 17, 0.14);
 }
 
 .document-form-panel {
   width: 100%;
   min-height: 0;
   padding: 18px 28px 22px;
-  border: 1px solid rgba(238, 238, 238, 0.18);
+  border: 1px solid rgba(17, 17, 17, 0.18);
   border-radius: 30px;
-  background: rgba(16, 23, 50, 0.38);
+  background: rgba(245, 246, 249, 0.38);
 
   flex: 1 1 auto;
   overflow-y: auto;
@@ -77,7 +77,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  color: rgba(171, 186, 234, 0.76);
+  color: rgba(21, 36, 84, 0.76);
   font-size: 0.92rem;
   text-decoration: none;
 
@@ -89,7 +89,7 @@ body {
 }
 
 .back-link:hover {
-  color: #abbaea;
+  color: #152454;
 }
 
 .document-form-heading {
@@ -107,21 +107,21 @@ body {
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  border: 1px solid rgba(150, 163, 209, 0.24);
-  background: rgba(171, 186, 234, 0.18);
+  border: 1px solid rgba(46, 59, 105, 0.24);
+  background: rgba(21, 36, 84, 0.18);
 }
 
 .heading-icon img {
   width: 31px;
   height: 31px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
+  filter: brightness(0);
   opacity: 0.82;
 }
 
 .document-form-heading h1 {
   margin: 0 0 3px;
-  color: rgba(238, 238, 238, 0.9);
+  color: rgba(17, 17, 17, 0.9);
   font-size: clamp(1.45rem, 2vw, 2rem);
   line-height: 1.1;
   font-weight: 700;
@@ -129,7 +129,7 @@ body {
 
 .document-form-heading p {
   margin: 0;
-  color: rgba(238, 238, 238, 0.58);
+  color: rgba(17, 17, 17, 0.58);
   font-size: 0.9rem;
 }
 
@@ -153,10 +153,10 @@ body {
   min-width: 0;
   min-height: 0;
   padding: 20px;
-  border: 1px solid rgba(150, 163, 209, 0.24);
+  border: 1px solid rgba(46, 59, 105, 0.24);
   border-radius: 14px;
-  background: rgba(18, 26, 55, 0.58);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  background: rgba(244, 245, 248, 0.58);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
 }
 
 .details-section {
@@ -170,7 +170,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: rgba(238, 238, 238, 0.9);
+  color: rgba(17, 17, 17, 0.9);
   font-family: "Krub", "Inclusive Sans", sans-serif;
   font-size: 1.02rem;
   font-weight: 600;
@@ -180,7 +180,7 @@ body {
   width: 5px;
   height: 24px;
   border-radius: 4px;
-  background: #abbaea;
+  background: #152454;
 }
 
 .document-field + .document-field,
@@ -202,7 +202,7 @@ body {
 .document-field label {
   display: block;
   margin: 0 0 7px 3px;
-  color: rgba(238, 238, 238, 0.58);
+  color: rgba(17, 17, 17, 0.58);
   font-size: 0.88rem;
   font-weight: 500;
 }
@@ -211,12 +211,12 @@ body {
 .document-field select,
 .document-field textarea {
   width: 100%;
-  border: 1px solid rgba(150, 163, 209, 0.24);
+  border: 1px solid rgba(46, 59, 105, 0.24);
   border-radius: 10px;
   outline: 0;
-  background: rgba(8, 12, 28, 0.5);
-  color: rgba(238, 238, 238, 0.9);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.25);
+  background: rgba(250, 250, 252, 0.5);
+  color: rgba(17, 17, 17, 0.9);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.12);
   font: inherit;
   font-size: 0.95rem;
 
@@ -251,25 +251,25 @@ body {
 
 .document-field input::placeholder,
 .document-field textarea::placeholder {
-  color: rgba(238, 238, 238, 0.42);
+  color: rgba(17, 17, 17, 0.42);
 }
 
 .document-field input:hover,
 .document-field select:hover,
 .document-field textarea:hover {
-  background: rgba(12, 18, 42, 0.72);
+  background: rgba(247, 248, 250, 0.72);
 }
 
 .document-field input:focus,
 .document-field select:focus,
 .document-field textarea:focus {
-  border-color: rgba(171, 186, 234, 0.52);
+  border-color: rgba(21, 36, 84, 0.52);
 
 }
 
 .document-field select option {
-  background: #101732;
-  color: #eeeeee;
+  background: #f5f6f9;
+  color: #111111;
 }
 
 .file-section {
@@ -283,15 +283,15 @@ body {
   flex: 1 1 auto;
   min-height: 205px;
   padding: 28px 20px;
-  border: 2px dashed rgba(150, 163, 209, 0.24);
+  border: 2px dashed rgba(46, 59, 105, 0.24);
   border-radius: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: rgba(8, 12, 28, 0.35);
-  color: rgba(238, 238, 238, 0.58);
+  background: rgba(250, 250, 252, 0.35);
+  color: rgba(17, 17, 17, 0.58);
   text-align: center;
   cursor: pointer;
 
@@ -299,13 +299,13 @@ body {
 
 .upload-area:hover,
 .upload-area.is-dragging {
-  border-color: rgba(171, 186, 234, 0.52);
-  background: rgba(38, 44, 65, 0.55);
+  border-color: rgba(21, 36, 84, 0.52);
+  background: rgba(241, 242, 244, 0.55);
 
 }
 
 .upload-area:focus-within {
-  border-color: rgba(171, 186, 234, 0.52);
+  border-color: rgba(21, 36, 84, 0.52);
 
 }
 
@@ -324,7 +324,7 @@ body {
   height: 43px;
   margin-bottom: 3px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
+  filter: brightness(0);
   opacity: 0.66;
 
 }
@@ -336,13 +336,13 @@ body {
 }
 
 .upload-area strong {
-  color: rgba(238, 238, 238, 0.9);
+  color: rgba(17, 17, 17, 0.9);
   font-size: 1rem;
   font-weight: 600;
 }
 
 .upload-area span {
-  color: rgba(238, 238, 238, 0.42);
+  color: rgba(17, 17, 17, 0.42);
   font-size: 0.82rem;
 }
 
@@ -355,13 +355,13 @@ body {
   min-width: 0;
   min-height: 58px;
   padding: 10px 12px;
-  border: 1px solid rgba(150, 163, 209, 0.24);
+  border: 1px solid rgba(46, 59, 105, 0.24);
   border-radius: 11px;
   display: grid;
   grid-template-columns: 34px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
-  background: rgba(8, 12, 28, 0.5);
+  background: rgba(250, 250, 252, 0.5);
 }
 
 .current-file {
@@ -378,7 +378,7 @@ body {
   width: 28px;
   height: 28px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
+  filter: brightness(0);
   opacity: 0.74;
 }
 
@@ -393,7 +393,7 @@ body {
 .current-file strong,
 .file-summary strong {
   overflow: hidden;
-  color: rgba(238, 238, 238, 0.9);
+  color: rgba(17, 17, 17, 0.9);
   font-size: 0.86rem;
   font-weight: 600;
   text-overflow: ellipsis;
@@ -402,7 +402,7 @@ body {
 
 .current-file span,
 .file-summary span {
-  color: rgba(238, 238, 238, 0.42);
+  color: rgba(17, 17, 17, 0.42);
   font-size: 0.74rem;
 }
 
@@ -413,7 +413,7 @@ body {
   border: 1px solid transparent;
   border-radius: 50%;
   background: transparent;
-  color: rgba(238, 238, 238, 0.58);
+  color: rgba(17, 17, 17, 0.58);
   font-size: 1.25rem;
   line-height: 1;
   cursor: pointer;
@@ -421,26 +421,26 @@ body {
 }
 
 .file-summary button:hover {
-  border-color: rgba(196, 67, 67, 0.45);
-  background: rgba(196, 67, 67, 0.1);
-  color: #c44343;
+  border-color: rgba(188, 59, 59, 0.45);
+  background: rgba(188, 59, 59, 0.1);
+  color: #bc3b3b;
 }
 
 .form-message {
   min-height: 20px;
   margin: 8px 2px;
-  color: #9de2c3;
+  color: #1d6243;
   font-size: 0.8rem;
   text-align: right;
 }
 
 .form-message.error {
-  color: #ef7b85;
+  color: #84101a;
 }
 
 .form-actions {
   min-height: 48px;
-  border: 1px solid rgba(150, 163, 209, 0.24);
+  border: 1px solid rgba(46, 59, 105, 0.24);
   border-radius: 10px;
   display: grid;
   grid-template-columns: 0.9fr 1.3fr;
@@ -465,18 +465,18 @@ body {
 }
 
 .form-actions .cancel-button {
-  border-right: 1px solid rgba(150, 163, 209, 0.24);
+  border-right: 1px solid rgba(46, 59, 105, 0.24);
   background: transparent;
-  color: rgba(238, 238, 238, 0.58);
+  color: rgba(17, 17, 17, 0.58);
 }
 
 .form-actions .cancel-button:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #eb2c2c;
+  background: rgba(0, 0, 0, 0.06);
+  color: #d31414;
 }
 
 .form-actions .save-button {
-  background-color: #4b6dde;
+  background-color: #2143b4;
   background-image: url("../imagenes/special-bg.png");
   background-position: center;
   background-repeat: no-repeat;
@@ -642,7 +642,7 @@ body {
 
   .form-actions .cancel-button {
     border-right: 0;
-    border-bottom: 1px solid rgba(150, 163, 209, 0.24);
+    border-bottom: 1px solid rgba(46, 59, 105, 0.24);
   }
 }
 

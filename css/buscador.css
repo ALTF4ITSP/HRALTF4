@@ -13,27 +13,27 @@
   margin: 0;
   padding: 6px;
   overflow-y: auto;
-  border: 1px solid rgba(150, 163, 209, 0.3);
+  border: 1px solid rgba(46, 59, 105, 0.3);
   border-radius: 12px;
-  background: #121a3a;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+  background: #f4f5f8;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.20);
   list-style: none;
 }
 
 .buscador-lista li {
   padding: 9px 12px;
   border-radius: 8px;
-  color: #eeeeee;
+  color: #111111;
   font-size: 0.9rem;
   cursor: pointer;
 }
 
 .buscador-lista li.marcado,
 .buscador-lista li[data-i]:hover {
-  background: rgba(171, 186, 234, 0.18);
+  background: rgba(21, 36, 84, 0.18);
 }
 
 .buscador-lista li.sin-resultados {
-  color: rgba(238, 238, 238, 0.5);
+  color: rgba(17, 17, 17, 0.5);
   cursor: default;
 }

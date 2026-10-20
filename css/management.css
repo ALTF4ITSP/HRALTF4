@@ -1,9 +1,9 @@
 :root {
-  --management-surface: rgba(8, 12, 28, 0.34);
-  --management-surface-strong: #0c1325;
-  --management-border: rgba(238, 238, 238, 0.13);
-  --management-muted: rgba(238, 238, 238, 0.55);
-  --management-accent: #abbaea;
+  --management-surface: rgba(250, 250, 252, 0.34);
+  --management-surface-strong: #f8f9fa;
+  --management-border: rgba(17, 17, 17, 0.13);
+  --management-muted: rgba(17, 17, 17, 0.55);
+  --management-accent: #152454;
 }
 
 .app-shell {
@@ -45,7 +45,7 @@
 
 .management-heading h1 {
   margin: 0;
-  color: #eeeeee;
+  color: #111111;
   font-size: clamp(1.7rem, 2.2vw, 2.2rem);
   line-height: 1.05;
   letter-spacing: -0.025em;
@@ -76,8 +76,8 @@
   border: 1px solid var(--management-border);
   border-radius: clamp(20px, 2vw, 30px);
   background: var(--management-surface);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-  color: #eeeeee;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+  color: #111111;
   font: inherit;
   text-align: left;
   display: grid;
@@ -89,8 +89,8 @@
 
 .management-card:hover {
 
-  border-color: rgba(238, 238, 238, 0.22);
-  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(17, 17, 17, 0.22);
+  background: rgba(0, 0, 0, 0.045);
 
 }
 
@@ -102,14 +102,14 @@
   background: var(--management-surface-strong);
   display: grid;
   place-items: center;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
 }
 
 .management-card__icon img {
   width: 46%;
   height: 46%;
   object-fit: contain;
-  filter: brightness(0) invert(1);
+  filter: brightness(0);
   opacity: 0.82;
 }
 
@@ -131,7 +131,7 @@
 }
 
 .management-card__copy strong {
-  color: #eeeeee;
+  color: #111111;
   font-family: "Krub", "Inclusive Sans", sans-serif;
   font-size: clamp(1rem, 1.15vw, 1.25rem);
   font-weight: 700;
@@ -166,15 +166,15 @@
   display: block;
   opacity: 0.48;
   pointer-events: none;
-  filter: brightness(0) invert(1);
+  filter: brightness(0);
   transform: rotate(90deg);
 
 }
 
 .management-card__arrow:hover {
 
-  border-color: rgba(171, 186, 234, 0.55);
-  background: rgba(171, 186, 234, 0.1);
+  border-color: rgba(21, 36, 84, 0.55);
+  background: rgba(21, 36, 84, 0.1);
 
 }
 
@@ -185,10 +185,10 @@
 }
 
 .management-card__arrow:focus-visible {
-  outline: 3px solid rgba(171, 186, 234, 0.65);
+  outline: 3px solid rgba(21, 36, 84, 0.65);
   outline-offset: 3px;
-  border-color: rgba(171, 186, 234, 0.55);
-  background: rgba(171, 186, 234, 0.1);
+  border-color: rgba(21, 36, 84, 0.55);
+  background: rgba(21, 36, 84, 0.1);
 }
 
 @media (max-width: 1100px) {

@@ -1,13 +1,13 @@
 .back-link {
   width: fit-content;
-  color: rgba(171, 186, 234, 0.76);
+  color: rgba(21, 36, 84, 0.76);
   font-size: 0.92rem;
   text-decoration: none;
 
 }
 
 .back-link:hover {
-  color: #abbaea;
+  color: #152454;
 }
 
 .survey-form {
@@ -36,7 +36,7 @@
   width: 5px;
   height: 22px;
   border-radius: 4px;
-  background: #abbaea;
+  background: #152454;
 }
 
 /* Campos (mismo estilo que documents-upload) */
@@ -47,7 +47,7 @@
 .survey-field label {
   display: block;
   margin: 0 0 7px 3px;
-  color: rgba(238, 238, 238, 0.58);
+  color: rgba(17, 17, 17, 0.58);
   font-size: 0.88rem;
 }
 
@@ -59,11 +59,11 @@
 .question-card textarea {
   width: 100%;
   padding: 0 14px;
-  border: 1px solid rgba(150, 163, 209, 0.24);
+  border: 1px solid rgba(46, 59, 105, 0.24);
   border-radius: 10px;
   outline: 0;
-  background: rgba(8, 12, 28, 0.5);
-  color: rgba(238, 238, 238, 0.9);
+  background: rgba(250, 250, 252, 0.5);
+  color: rgba(17, 17, 17, 0.9);
   font: inherit;
   font-size: 0.92rem;
 
@@ -84,16 +84,16 @@
 }
 
 .survey-form :is(input, select, textarea):focus {
-  border-color: rgba(171, 186, 234, 0.52);
+  border-color: rgba(21, 36, 84, 0.52);
 
 }
 
 .survey-form ::placeholder {
-  color: rgba(238, 238, 238, 0.42);
+  color: rgba(17, 17, 17, 0.42);
 }
 
 .survey-form select option {
-  background: #101732;
+  background: #f5f6f9;
 }
 
 /* Preguntas */
@@ -108,9 +108,9 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border: 1px solid rgba(238, 238, 238, 0.12);
+  border: 1px solid rgba(17, 17, 17, 0.12);
   border-radius: 16px;
-  background: rgba(8, 12, 28, 0.34);
+  background: rgba(250, 250, 252, 0.34);
 }
 
 .question-top,
@@ -131,8 +131,8 @@
   place-items: center;
   flex-shrink: 0;
   border-radius: 12px;
-  background: rgba(171, 186, 234, 0.18);
-  color: #abbaea;
+  background: rgba(21, 36, 84, 0.18);
+  color: #152454;
   font-weight: 700;
 }
 
@@ -142,7 +142,7 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  border: 1px solid rgba(238, 238, 238, 0.13);
+  border: 1px solid rgba(17, 17, 17, 0.13);
   border-radius: 10px;
   background: transparent;
   cursor: pointer;
@@ -150,12 +150,12 @@
 }
 
 .remove-question:hover {
-  background: rgba(255, 107, 107, 0.15);
+  background: rgba(148, 0, 0, 0.15);
 }
 
 .remove-question img {
   width: 18px;
-  filter: brightness(0) invert(1);
+  filter: brightness(0);
   opacity: 0.7;
 }
 
@@ -163,25 +163,25 @@
   width: 100%;
   min-height: 48px;
   margin-top: 14px;
-  border: 2px dashed rgba(150, 163, 209, 0.24);
+  border: 2px dashed rgba(46, 59, 105, 0.24);
   border-radius: 14px;
   background: transparent;
-  color: #abbaea;
+  color: #152454;
   font: inherit;
   cursor: pointer;
 
 }
 
 .add-question:hover {
-  border-color: rgba(171, 186, 234, 0.52);
-  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(21, 36, 84, 0.52);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 /* Acciones */
 .form-message {
   min-height: 1em;
   margin: 0;
-  color: #ff6b6b;
+  color: #940000;
   font-size: 0.88rem;
 }
 

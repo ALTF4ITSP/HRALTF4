@@ -17,9 +17,9 @@
 /* Cajas con borde, como en el resto del sitio */
 .traslados-caja {
   padding: 16px;
-  border: 1px solid rgba(238, 238, 238, 0.13);
+  border: 1px solid rgba(17, 17, 17, 0.13);
   border-radius: 20px;
-  background: rgba(8, 12, 28, 0.25);
+  background: rgba(250, 250, 252, 0.25);
 }
 
 .traslados-caja h2 {
@@ -44,22 +44,23 @@
 
 .pestana {
   padding: 6px 14px;
-  border: 1px solid rgba(238, 238, 238, 0.15);
+  border: 1px solid rgba(17, 17, 17, 0.15);
   border-radius: 999px;
   background: transparent;
-  color: #eeeeee;
+  color: #111111;
   font: inherit;
   font-size: 0.85rem;
   cursor: pointer;
 }
 
 .pestana span {
-  color: rgba(238, 238, 238, 0.6);
+  color: rgba(17, 17, 17, 0.6);
 }
 
 .pestana.activa {
-  border-color: #4b6dde;
-  background: #4b6dde;
+  border-color: #2143b4;
+  background: #2143b4;
+  color: #ffffff;
 }
 
 .pestana.activa span {
@@ -80,15 +81,15 @@
 .traslados-planilla th,
 .traslados-planilla td {
   padding: 8px 10px;
-  border-bottom: 1px solid rgba(238, 238, 238, 0.08);
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
   text-align: left;
 }
 
 .traslados-planilla th {
   position: sticky;
   top: 0;
-  background: #161f45;
-  color: #abbaea;
+  background: #f2f3f6;
+  color: #152454;
   font-size: 0.75rem;
   text-transform: uppercase;
 }
@@ -99,7 +100,7 @@
 
 .traslados-planilla tbody tr:hover td,
 .traslados-planilla tr.elegido td {
-  background: rgba(125, 149, 236, 0.12);
+  background: rgba(19, 43, 130, 0.12);
 }
 
 .traslados-celda-botones {
@@ -114,7 +115,7 @@
 
 .traslados-vacio,
 .traslados-ayuda {
-  color: rgba(238, 238, 238, 0.6);
+  color: rgba(17, 17, 17, 0.6);
   font-size: 0.82rem;
 }
 
@@ -126,17 +127,17 @@
 .estado {
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(238, 238, 238, 0.1);
+  background: rgba(17, 17, 17, 0.1);
   font-size: 0.75rem;
   white-space: nowrap;
 }
 
-.estado-PROGRAMADO { color: #abbaea; }
-.estado-EN_CAMINO { color: #fbbf24; }
-.estado-EN_DESTINO { color: #60a5fa; }
-.estado-RETORNANDO { color: #c084fc; }
-.estado-FINALIZADO { color: #6ee7a0; }
-.estado-CANCELADO { color: #ff6b6b; }
+.estado-PROGRAMADO { color: #152454; }
+.estado-EN_CAMINO { color: #db9f04; }
+.estado-EN_DESTINO { color: #054a9f; }
+.estado-RETORNANDO { color: #3f037b; }
+.estado-FINALIZADO { color: #18914a; }
+.estado-CANCELADO { color: #940000; }
 
 /* ---------- Abajo: formulario a la izquierda, mapa a la derecha ---------- */
 .traslados-layout {
@@ -159,7 +160,7 @@
 
 .traslados-grilla label {
   display: block;
-  color: rgba(238, 238, 238, 0.65);
+  color: rgba(17, 17, 17, 0.65);
   font-size: 0.82rem;
 }
 
@@ -171,13 +172,13 @@
   margin-top: 4px;
   padding: 0 10px;
   display: block;
-  border: 1px solid rgba(150, 163, 209, 0.25);
+  border: 1px solid rgba(46, 59, 105, 0.25);
   border-radius: 10px;
-  background: rgba(8, 12, 28, 0.5);
-  color: #eeeeee;
+  background: rgba(250, 250, 252, 0.5);
+  color: #111111;
   font: inherit;
   font-size: 0.86rem;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 #buscar {
@@ -191,7 +192,7 @@
 }
 
 .traslados-caja select option {
-  background: #101732;
+  background: #f5f6f9;
 }
 
 /* Dirección + botón Buscar en la misma fila */
@@ -212,7 +213,7 @@
 .traslados-error {
   min-height: 1em;
   margin: 10px 0;
-  color: #ff6b6b;
+  color: #940000;
 }
 
 /* Botones */
@@ -221,7 +222,7 @@
   padding: 0 16px;
   border: 0;
   border-radius: 12px;
-  background: #4b6dde;
+  background: #2143b4;
   color: #ffffff;
   font: inherit;
   font-size: 0.85rem;
@@ -230,9 +231,9 @@
 }
 
 .traslados-boton.secundario {
-  border: 1px solid rgba(238, 238, 238, 0.15);
-  background: #111934;
-  color: #ff6b6b;
+  border: 1px solid rgba(17, 17, 17, 0.15);
+  background: #f5f6f8;
+  color: #940000;
 }
 
 /* Mapa */
@@ -243,7 +244,7 @@
 
 /* El mapa en tonos oscuros, igual que el de Rutas */
 #mapa .leaflet-tile-pane {
-  filter: invert(1) hue-rotate(200deg) brightness(0.9) saturate(0.6);
+  filter: none;
 }
 
 .traslados-mapa-caja .traslados-ayuda {

@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 {
                     label: 'Muy débil',
-                    color: '#ff4d4d',
+                    color: '#c62828',
                     width: '20%'
                 },
 
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 {
                     label: 'Fuerte',
-                    color: '#2ecc71',
+                    color: '#1e7e34',
                     width: '100%'
                 }
 
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 registerMessage.textContent =
                     'Usuario registrado correctamente.';
 
-                registerMessage.style.color = '#2ecc71';
+                registerMessage.style.color = '#1e7e34';
 
 
                 //limpiar formulario
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     error.message ||
                     'No se pudo conectar con el servidor.';
 
-                registerMessage.style.color = '#ff4d4d';
+                registerMessage.style.color = '#c62828';
 
             }
 

@@ -10,7 +10,7 @@
 }
 
 .route-back {
-  color: #abbaea;
+  color: #152454;
   font-size: 0.9rem;
   text-decoration: none;
 }
@@ -24,9 +24,9 @@
 
 /* Cajas con borde, como en el resto del sitio */
 .route-surface {
-  border: 1px solid rgba(238, 238, 238, 0.13);
+  border: 1px solid rgba(17, 17, 17, 0.13);
   border-radius: 20px;
-  background: rgba(8, 12, 28, 0.25);
+  background: rgba(250, 250, 252, 0.25);
 }
 
 /* Botones */
@@ -35,7 +35,7 @@
   padding: 0 18px;
   border: 0;
   border-radius: 12px;
-  background: #4b6dde;
+  background: #2143b4;
   color: #ffffff;
   font: inherit;
   font-size: 0.85rem;
@@ -44,20 +44,21 @@
 }
 
 .route-button.secondary {
-  border: 1px solid rgba(238, 238, 238, 0.15);
-  background: #111934;
+  border: 1px solid rgba(17, 17, 17, 0.15);
+  background: #f5f6f8;
+  color: #111111;
 }
 
 .route-button.danger {
-  border: 1px solid rgba(255, 107, 107, 0.4);
+  border: 1px solid rgba(148, 0, 0, 0.4);
   background: transparent;
-  color: #ff6b6b;
+  color: #940000;
 }
 
 .route-link {
   border: 0;
   background: none;
-  color: #abbaea;
+  color: #152454;
   font: inherit;
   cursor: pointer;
 }
@@ -88,10 +89,10 @@
   min-width: 0;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid rgba(150, 163, 209, 0.25);
+  border: 1px solid rgba(46, 59, 105, 0.25);
   border-radius: 10px;
-  background: rgba(8, 12, 28, 0.5);
-  color: #eeeeee;
+  background: rgba(250, 250, 252, 0.5);
+  color: #111111;
   font: inherit;
   font-size: 0.88rem;
 }
@@ -115,10 +116,10 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
-  border: 1px solid rgba(238, 238, 238, 0.1);
+  border: 1px solid rgba(17, 17, 17, 0.1);
   border-radius: 12px;
   background: transparent;
-  color: #eeeeee;
+  color: #111111;
   font: inherit;
   text-align: left;
   cursor: pointer;
@@ -126,19 +127,19 @@
 
 .route-item:hover,
 .route-item.is-selected {
-  border-color: #7d95ec;
-  background: rgba(125, 149, 236, 0.12);
+  border-color: #132b82;
+  background: rgba(19, 43, 130, 0.12);
 }
 
 .route-item span,
 .route-item small,
 .route-muted {
-  color: rgba(238, 238, 238, 0.6);
+  color: rgba(17, 17, 17, 0.6);
   font-size: 0.82rem;
 }
 
 .route-item small.is-active {
-  color: #6ee7a0;
+  color: #18914a;
 }
 
 /* Detalle */
@@ -149,7 +150,7 @@
 
 .route-empty {
   margin: 0;
-  color: rgba(238, 238, 238, 0.6);
+  color: rgba(17, 17, 17, 0.6);
 }
 
 .route-detail-top {
@@ -164,7 +165,7 @@
 
 .route-code {
   margin: 0;
-  color: #abbaea;
+  color: #152454;
   font-size: 0.85rem;
 }
 
@@ -182,7 +183,7 @@
 
 /* El mapa en tonos oscuros, igual que el mapa de traslados */
 #routeMap .leaflet-tile-pane {
-  filter: invert(1) hue-rotate(200deg) brightness(0.9) saturate(0.6);
+  filter: none;
 }
 
 .route-numbers {
@@ -200,7 +201,7 @@
 }
 
 .route-numbers span {
-  color: rgba(238, 238, 238, 0.6);
+  color: rgba(17, 17, 17, 0.6);
   font-size: 0.8rem;
 }
 
@@ -214,10 +215,10 @@
 .route-dialog {
   width: min(560px, calc(100% - 32px));
   padding: 24px;
-  border: 1px solid rgba(238, 238, 238, 0.13);
+  border: 1px solid rgba(17, 17, 17, 0.13);
   border-radius: 20px;
-  background: #121a3a;
-  color: #eeeeee;
+  background: #f4f5f8;
+  color: #111111;
 }
 
 .route-dialog::backdrop {
@@ -234,7 +235,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  color: rgba(238, 238, 238, 0.65);
+  color: rgba(17, 17, 17, 0.65);
   font-size: 0.85rem;
 }
 
@@ -261,10 +262,10 @@
 
 .route-stop button {
   width: 40px;
-  border: 1px solid rgba(238, 238, 238, 0.15);
+  border: 1px solid rgba(17, 17, 17, 0.15);
   border-radius: 10px;
   background: transparent;
-  color: #ff6b6b;
+  color: #940000;
   font-size: 1.2rem;
   cursor: pointer;
 }
@@ -276,7 +277,7 @@
 .route-error {
   min-height: 1em;
   margin: 0 0 10px;
-  color: #ff6b6b;
+  color: #940000;
 }
 
 .route-dialog .route-actions {
