@@ -14,7 +14,7 @@
   padding: 6px;
   overflow-y: auto;
   border: 1px solid rgba(46, 59, 105, 0.3);
-  border-radius: 12px;
+  border-radius: 0;
   background: #f4f5f8;
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.20);
   list-style: none;
@@ -22,7 +22,7 @@
 
 .buscador-lista li {
   padding: 9px 12px;
-  border-radius: 8px;
+  border-radius: 0;
   color: #111111;
   font-size: 0.9rem;
   cursor: pointer;

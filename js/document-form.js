@@ -1,178 +1,54 @@
-document.addEventListener("DOMContentLoaded", () => {
+// Formulario de documentos (documents-upload.html). Sin ?id carga uno nuevo; con ?id=3 edita el documento 3.
+//   Nuevo  → php/documents-upload.php
+//   Editar → php/documents-update.php (el archivo es opcional: si no se elige, queda el que estaba)
+document.addEventListener("DOMContentLoaded", async () => {
   "use strict";
+  const formulario = document.getElementById("formulario");
+  const mensaje = document.getElementById("mensaje");
+  const id = new URLSearchParams(window.location.search).get("id");
 
-  const form = document.getElementById("documentForm");
-  if (!form) return;
+  // ---------- Modo editar: se cargan los datos que ya tiene ----------
+  if (id) {
+    document.getElementById("titulo").textContent = "Editar documento";
+    document.getElementById("ayudaArchivo").textContent = "(opcional: elegí uno solo si querés reemplazarlo)";
+    formulario.elements.archivo.required = false;
 
-  const fileInput = document.getElementById("archivo");
-  const uploadArea = document.getElementById("uploadArea");
-  const fileSummary = document.getElementById("fileSummary");
-  const currentFile = document.getElementById("currentFile");
-  const fileName = document.getElementById("selectedFileName");
-  const fileMeta = document.getElementById("selectedFileMeta");
-  const clearFileButton = document.getElementById("clearFile");
-  const formMessage = document.getElementById("formMessage");
-  const submitButton = form.querySelector("button[type='submit']");
-  const allowedExtensions = new Set(["pdf", "docx", "jpg", "jpeg", "png"]);
-  const maxFileBytes = 10 * 1024 * 1024;
-  const documentIdField = form.elements.namedItem("id_documento");
-
-  if (documentIdField) {
-    const requestedId = new URLSearchParams(window.location.search).get("id");
-    if (/^[1-9]\d*$/.test(requestedId || "")) documentIdField.value = requestedId;
-  }
-
-  async function loadDocument() {
-    if (!documentIdField || !documentIdField.value) return;
-
-    try {
-      const response = await fetch(`../php/documents-get.php?id=${encodeURIComponent(documentIdField.value)}`);
-      const payload = await response.json();
-      if (!response.ok || payload.success !== true) throw new Error(payload?.error?.message || "No se pudo cargar el documento.");
-
-      const documentData = payload.data;
-      form.elements.nombre.value = documentData.titulo;
-      form.elements.descripcion.value = documentData.descripcion || "";
-      form.elements.fecha.value = documentData.fecha;
-      const categoryByName = {
-        "Informe médico": "informe",
-        "Estudio de Laboratorio": "estudio",
-        "Documento Administrativo": "administrativo"
-      };
-      form.elements.categoria.value = categoryByName[documentData.tipo] || "";
-      const currentFileName = currentFile?.querySelector("strong");
-      if (currentFileName) currentFileName.textContent = documentData.ruta_archivo.split("/").pop();
-    } catch (error) {
-      showMessage(error.message, true);
-      submitButton.disabled = true;
+    const respuesta = await (await fetch(`../php/documents-get.php?id=${id}`)).json();
+    if (!respuesta.success) {
+      mensaje.textContent = respuesta.error?.message || "No se encontró el documento.";
+      mensaje.className = "error";
+      return;
     }
+    const documento = respuesta.data;
+    const categorias = { "Informe médico": "informe", "Estudio de Laboratorio": "estudio", "Documento Administrativo": "administrativo" };
+    formulario.elements.id_documento.value = documento.id_documento;
+    formulario.elements.nombre.value = documento.titulo;
+    formulario.elements.fecha.value = documento.fecha;
+    formulario.elements.categoria.value = categorias[documento.tipo] || "";
+    formulario.elements.descripcion.value = documento.descripcion || "";
   }
 
-  function showMessage(message, isError = false) {
-    formMessage.textContent = message;
-    formMessage.classList.toggle("error", isError);
-  }
-
-  function selectedExtension(file) {
-    return file.name.includes(".") ? file.name.split(".").pop().toLowerCase() : "";
-  }
-
-  function validateFile(file) {
-    if (!allowedExtensions.has(selectedExtension(file))) {
-      return "El formato debe ser PDF, DOCX, JPG o PNG.";
-    }
-
-    if (file.size > maxFileBytes) {
-      return "El archivo supera el límite de 10 MB.";
-    }
-
-    return "";
-  }
-
-  function formatFileSize(bytes) {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  }
-
-  function clearSelectedFile() {
-    fileInput.value = "";
-    fileSummary.hidden = true;
-    if (currentFile) currentFile.hidden = false;
-  }
-
-  function renderSelectedFile() {
-    const file = fileInput.files[0];
-
-    if (!file) {
-      clearSelectedFile();
-      return true;
-    }
-
-    const error = validateFile(file);
-    if (error) {
-      clearSelectedFile();
-      showMessage(error, true);
-      return false;
-    }
-
-    fileName.textContent = file.name;
-    fileMeta.textContent = `${selectedExtension(file).toUpperCase()} · ${formatFileSize(file.size)}`;
-    fileSummary.hidden = false;
-    if (currentFile) currentFile.hidden = true;
-    showMessage("");
-    return true;
-  }
-
-  function setSubmitting(isSubmitting) {
-    form.setAttribute("aria-busy", String(isSubmitting));
-    submitButton.disabled = isSubmitting;
-  }
-
-  fileInput.addEventListener("change", renderSelectedFile);
-  clearFileButton.addEventListener("click", clearSelectedFile);
-
-  ["dragenter", "dragover"].forEach((eventName) => {
-    uploadArea.addEventListener(eventName, (event) => {
-      event.preventDefault();
-      uploadArea.classList.add("is-dragging");
-    });
-  });
-
-  ["dragleave", "drop"].forEach((eventName) => {
-    uploadArea.addEventListener(eventName, (event) => {
-      event.preventDefault();
-      uploadArea.classList.remove("is-dragging");
-    });
-  });
-
-  uploadArea.addEventListener("drop", (event) => {
-    const droppedFiles = event.dataTransfer?.files;
-    if (!droppedFiles?.length) return;
-
-    if (droppedFiles.length > 1) {
-      showMessage("Seleccioná un solo archivo.", true);
+  // ---------- Guardar ----------
+  formulario.addEventListener("submit", async evento => {
+    evento.preventDefault();
+    const archivo = formulario.elements.archivo.files[0];
+    if (archivo && archivo.size > 10 * 1024 * 1024) {
+      mensaje.textContent = "El archivo supera los 10 MB.";
+      mensaje.className = "error";
       return;
     }
 
-    const transfer = new DataTransfer();
-    transfer.items.add(droppedFiles[0]);
-    fileInput.files = transfer.files;
-    renderSelectedFile();
-  });
+    mensaje.textContent = "Guardando...";
+    mensaje.className = "";
+    const php = id ? "../php/documents-update.php" : "../php/documents-upload.php";
+    const respuesta = await (await fetch(php, { method: "POST", body: new FormData(formulario) })).json();
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    if (!form.checkValidity()) {
-      showMessage("Completá los campos obligatorios.", true);
-      form.reportValidity();
+    if (!respuesta.success) {
+      mensaje.textContent = respuesta.error?.message || respuesta.message || "No se pudo guardar.";
+      mensaje.className = "error";
       return;
     }
-
-    if (fileInput.files[0] && !renderSelectedFile()) return;
-
-    setSubmitting(true);
-    showMessage("Guardando documento...");
-
-    try {
-      const result = await window.DocumentApi.submit(form);
-      const successMessage = form.dataset.mode === "update"
-        ? "Cambios guardados correctamente."
-        : "Documento cargado correctamente.";
-
-      showMessage(successMessage);
-      window.setTimeout(() => {
-        // Al cargar uno nuevo se muestra su código QR; al editar se vuelve a la lista
-        window.location.href = form.dataset.mode === "update"
-          ? "documents.html"
-          : `documents-viewer.html?id=${result.id_documento}&qr=1`;
-      }, 700);
-    } catch (error) {
-      showMessage(error.message || "No se pudo conectar con el servidor.", true);
-      setSubmitting(false);
-    }
+    // Al terminar se abre el documento (uno nuevo muestra su código QR para imprimirlo)
+    window.location.href = `documents-viewer.html?id=${id || respuesta.data.id_documento}`;
   });
-
-  loadDocument();
 });

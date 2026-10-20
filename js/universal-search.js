@@ -137,13 +137,6 @@
                 terms: 'ajustes perfil cuenta contraseña idioma'
             },
             {
-                title: 'Reportes',
-                section: 'Análisis',
-                detail: 'Sección en desarrollo',
-                icon: '../imagenes/analytics-icon.svg',
-                terms: 'analitica estadísticas informes'
-            },
-            {
                 title: 'Calendario',
                 section: 'Agenda',
                 detail: 'Turnos de los pacientes por semana',

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Documento médico · Visor de documentos</title>
+  <title>Documento | Hospital de Clínicas</title>
   <link rel="icon" type="image/x-icon" href="../imagenes/hospital-dark.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/main-menu.css?v=20260927-brand-fix">
-  <link rel="stylesheet" href="../css/documents-viewer.css?v=20260929-icons">
+  <link rel="stylesheet" href="../css/documents.css">
   <script src="../js/main-menu.js?v=20260927-global" defer></script>
   <script src="../js/universal-search.js?v=20260927-global" defer></script>
   <!-- QRCode.js: dibuja el código QR (https://github.com/davidshimjs/qrcodejs) -->
@@ -24,7 +24,7 @@
   <div class="page-background"></div>
   <div class="page-glow"></div>
 
-  <main class="app-shell document-viewer-shell">
+  <main class="app-shell">
     <aside class="sidebar">
       <button type="button" class="sidebar-action" aria-label="Abrir menú">
         <span></span>
@@ -47,10 +47,6 @@
         <a href="trace.html" class="nav-item">
           <img src="../imagenes/location-icon.svg" alt="Ambulancias">
           <span>Ambulancias</span>
-        </a>
-        <a href="analytics.html" class="nav-item">
-          <img src="../imagenes/analytics-icon.svg" alt="Reportes">
-          <span>Reportes</span>
         </a>
         <a href="calendar.html" class="nav-item">
           <img src="../imagenes/calendar-icon.svg" alt="Calendario">
@@ -100,112 +96,40 @@
       <span id="search-status" class="visually-hidden" role="status" aria-live="polite"></span>
     </header>
 
-    <section class="hero-panel document-viewer-hero">
-      <div class="viewer-card">
-        <header class="document-header">
-          <a class="back-link" href="documents.html"><img class="icon" src="../imagenes/arrow-left.svg" alt="" aria-hidden="true"><span>Volver a documentos</span></a>
-          <div class="header-main">
-            <div class="document-heading">
-              <h1 id="document-title">Cargando documento...</h1>
-              <p>Documento N.º <span id="document-id">—</span></p>
-            </div>
-            <div class="header-actions">
-              <button class="action-button download-button" id="download-button" type="button"><img class="icon" src="../imagenes/download-icon.svg" alt="" aria-hidden="true"><span>Descargar</span></button>
-              <button class="action-button share-button" id="share-button" type="button"><img class="icon" src="../imagenes/share-icon.svg" alt="" aria-hidden="true"><span>Compartir</span></button>
-              <div class="more-wrap">
-                <button class="action-button icon-action" id="more-button" type="button" aria-label="Más opciones" aria-haspopup="menu" aria-expanded="false" aria-controls="more-menu"><span aria-hidden="true">⋮</span></button>
-                <div class="more-menu" id="more-menu" role="menu" hidden>
-                  <button type="button" role="menuitem" id="copy-link-menu">Copiar enlace</button>
-                  <button type="button" role="menuitem" id="reset-view-menu">Restablecer vista</button>
-                </div>
-              </div>
-            </div>
+    <section class="hero-panel documentos-panel">
+      <a href="documents.html" class="volver">← Volver a documentos</a>
+      <h1 id="titulo">Cargando...</h1>
+
+      <div class="visor">
+        <!-- El archivo: un PDF se muestra en un iframe y una imagen en un img -->
+        <div class="caja archivo" id="archivo"></div>
+
+        <div class="columna">
+          <div class="caja">
+            <h2>Datos</h2>
+            <dl class="datos">
+              <dt>Tipo</dt><dd id="tipo">—</dd>
+              <dt>Formato</dt><dd id="formato">—</dd>
+              <dt>Tamaño</dt><dd id="tamano">—</dd>
+              <dt>Subido por</dt><dd id="autor">—</dd>
+              <dt>Fecha</dt><dd id="fecha">—</dd>
+            </dl>
+            <p class="acciones">
+              <a class="boton" id="descargar">Descargar</a>
+              <a class="boton secundario" id="editar">Editar</a>
+              <button type="button" class="boton peligro" id="borrar">Borrar</button>
+            </p>
           </div>
-        </header>
 
-        <div class="content-grid">
-          <section class="viewer-container" id="viewer-container" aria-label="Visor de documento">
-            <div class="viewer-toolbar" role="toolbar" aria-label="Herramientas del visor">
-              <div class="toolbar-group">
-                <button class="tool-button" id="toggle-thumbnails" type="button" aria-label="Ocultar miniaturas" aria-pressed="true" title="Mostrar u ocultar miniaturas"><img class="icon" src="../imagenes/list-icon.svg" alt="" aria-hidden="true"></button>
-                <label class="visually-hidden" for="page-input">Página actual</label>
-                <input id="page-input" class="page-input" type="number" min="1" max="1" value="1" inputmode="numeric">
-                <span class="page-total">/ <span id="total-pages">5</span></span>
-                <span class="toolbar-space" aria-hidden="true"></span>
-                <button class="tool-button" id="zoom-out" type="button" aria-label="Reducir zoom" title="Reducir zoom"><img class="icon" src="../imagenes/zoom-out.svg" alt="" aria-hidden="true"></button>
-                <button class="zoom-level" id="zoom-reset" type="button" aria-label="Restablecer zoom a 100%" title="Restablecer zoom">100%</button>
-                <button class="tool-button" id="zoom-in" type="button" aria-label="Aumentar zoom" title="Aumentar zoom"><img class="icon" src="../imagenes/zoom-in.svg" alt="" aria-hidden="true"></button>
-              </div>
-              <div class="toolbar-group toolbar-group-right">
-                <button class="tool-button" id="rotate-button" type="button" aria-label="Rotar 90 grados" title="Rotar 90 grados"><img class="icon" src="../imagenes/reload-icon.svg" alt="" aria-hidden="true"></button>
-                <button class="tool-button" id="fullscreen-button" type="button" aria-label="Pantalla completa" title="Pantalla completa"><img class="icon" src="../imagenes/full-screen.svg" alt="" aria-hidden="true"></button>
-              </div>
-            </div>
-            <div class="viewer-body" id="viewer-body">
-              <nav class="thumbnail-rail" id="thumbnail-rail" aria-label="Páginas del documento">
-                <div class="thumbnail-list" id="thumbnail-list"></div>
-              </nav>
-              <div class="document-viewport" id="document-viewport" aria-label="Vista previa del documento">
-                <div class="page-scroll-inner">
-                  <div class="page-frame" id="page-frame">
-                    <div class="document-sheet" id="document-sheet" role="img" aria-label="Vista previa de la página 1">
-                      <img class="document-image" id="document-image" alt="Documento" hidden>
-                      <iframe class="document-pdf" id="document-pdf" title="Documento PDF" hidden></iframe>
-                      <div class="unavailable-preview" id="unavailable-preview" hidden>
-                        <img class="icon" src="../imagenes/format-icon.svg" alt="" aria-hidden="true">
-                        <strong>Vista previa no disponible</strong>
-                        <span>Descargá el archivo para abrirlo en tu dispositivo.</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="visually-hidden" id="viewer-status" role="status" aria-live="polite"></p>
-          </section>
-
-          <aside class="document-sidebar" aria-label="Detalles y acciones del documento">
-            <section class="sidebar-panel information-panel" aria-labelledby="info-heading">
-              <h2 id="info-heading">Información del documento</h2>
-              <dl class="metadata-list">
-                <div class="metadata-row"><img class="icon" src="../imagenes/information-icon.svg" alt="" aria-hidden="true"><div><dt>Tipo de documento</dt><dd id="document-kind">—</dd></div></div>
-                <div class="metadata-row"><img class="icon" src="../imagenes/format-icon.svg" alt="" aria-hidden="true"><div><dt>Formato</dt><dd id="document-format">—</dd></div></div>
-                <div class="metadata-row"><img class="icon" src="../imagenes/server-icon.svg" alt="" aria-hidden="true"><div><dt>Tamaño</dt><dd id="document-size">—</dd></div></div>
-                <div class="metadata-row"><img class="icon" src="../imagenes/person-icon.svg" alt="" aria-hidden="true"><div><dt>Subido por</dt><dd id="document-author">—</dd></div></div>
-                <div class="metadata-row"><img class="icon" src="../imagenes/calendar-icon.svg" alt="" aria-hidden="true"><div><dt>Fecha de subida</dt><dd id="document-uploaded">—</dd></div></div>
-                <div class="metadata-row last-modified"><img class="icon" src="../imagenes/time-icon.svg" alt="" aria-hidden="true"><div><dt>Versión</dt><dd id="document-updated">—</dd></div></div>
-              </dl>
-            </section>
-            <section class="sidebar-panel quick-panel" aria-labelledby="quick-heading">
-              <h2 id="quick-heading">Acciones rápidas</h2>
-              <div class="quick-actions">
-                <button type="button" id="print-button"><img class="icon" src="../imagenes/print-icon.svg" alt="" aria-hidden="true"><span>Imprimir documento</span></button>
-                <button type="button" id="qr-button"><img class="icon" src="../imagenes/qr-icon.svg" alt="" aria-hidden="true"><span>Ver código QR</span></button>
-                <button type="button" class="danger-button" id="delete-button"><img class="icon" src="../imagenes/trash-icon.svg" alt="" aria-hidden="true"><span>Eliminar documento</span></button>
-              </div>
-            </section>
-          </aside>
+          <!-- El QR abre el archivo desde el celular -->
+          <div class="caja">
+            <h2>Código QR</h2>
+            <div id="codigoQr"></div>
+            <button type="button" class="boton secundario" id="imprimirQr">Imprimir código QR</button>
+          </div>
         </div>
       </div>
     </section>
   </main>
-
-  <dialog class="viewer-dialog" id="share-dialog" aria-labelledby="share-title">
-    <div class="dialog-heading"><h2 id="share-title">Compartir documento</h2><button type="button" class="dialog-close" data-close-dialog aria-label="Cerrar"><span aria-hidden="true">×</span></button></div>
-    <p>Copiá este enlace para compartir el documento.</p>
-    <label class="visually-hidden" for="share-url">Enlace del documento</label>
-    <input id="share-url" type="text" readonly>
-    <button type="button" class="dialog-primary" id="copy-share-link"><img class="icon" src="../imagenes/select-multiple-icon.svg" alt="" aria-hidden="true"><span>Copiar enlace</span></button>
-  </dialog>
-
-  <dialog class="viewer-dialog qr-dialog" id="qr-dialog" aria-labelledby="qr-title">
-    <div class="dialog-heading"><h2 id="qr-title">Código QR del documento</h2><button type="button" class="dialog-close" data-close-dialog aria-label="Cerrar"><span aria-hidden="true">×</span></button></div>
-    <div class="qr-preview" id="qr-code" role="img" aria-label="Código QR del documento"></div>
-    <p>Al escanearlo se abre <strong id="qr-document-id">—</strong>.</p>
-    <button type="button" class="dialog-primary" id="copy-qr-link"><img class="icon" src="../imagenes/select-multiple-icon.svg" alt="" aria-hidden="true"><span>Copiar enlace</span></button>
-    <button type="button" class="dialog-primary" id="print-qr"><img class="icon" src="../imagenes/print-icon.svg" alt="" aria-hidden="true"><span>Imprimir código QR</span></button>
-  </dialog>
-
-  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </body>
 </html>

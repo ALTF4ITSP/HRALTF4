@@ -37,7 +37,7 @@
     margin-left: 0;
     padding: 12px 20px 16px;
     border: 1px solid rgba(17, 17, 17, 0.18);
-    border-radius: 30px;
+    border-radius: 0;
     background: rgba(245, 246, 249, 0.38);
 
     flex: 1;
@@ -290,7 +290,7 @@ button {
     height: 54px;
     padding: 0 28px;
     border: 2px solid rgba(48, 63, 112, 0.24);
-    border-radius: 14px;
+    border-radius: 0;
     outline: none;
     background: rgba(249, 250, 251, 0.13);
     color: rgba(17, 17, 17, 0.74);
@@ -377,7 +377,7 @@ button {
     margin-top: 17px;
     padding: 22px;
     border: 4px dashed rgba(17, 17, 17, 0.35);
-    border-radius: 38px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -541,7 +541,7 @@ button {
     margin-top: 22px;
     padding: 12px 28px;
     border: 1px solid rgba(21, 36, 84, 0.4);
-    border-radius: 18px;
+    border-radius: 0;
     color: #111111;
     background-color: #4972db;
     background-image: url("../imagenes/special-bg.png");
@@ -656,7 +656,7 @@ button {
 
     .bg-panel {
         padding: 32px 28px 40px;
-        border-radius: 26px;
+        border-radius: 0;
     }
 
     .settings-header {
@@ -726,7 +726,7 @@ button {
 
     .upload-box {
         min-height: 170px;
-        border-radius: 30px;
+        border-radius: 0;
     }
 
     .toggle-line {
