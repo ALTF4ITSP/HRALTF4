@@ -6,23 +6,14 @@
   --management-accent: #152454;
 }
 
-.app-shell {
-  gap: 20px;
-  padding-bottom: 32px;
-}
 
 .management-panel {
-  width: calc(100% - 108px);
-  margin-left: 108px;
+  width: 100%;
+  margin-left: 0;
   display: flex;
   flex-direction: column;
   gap: clamp(18px, 2.4vh, 24px);
 
-}
-
-.app-shell.menu-open .management-panel {
-  width: calc(100% - 280px);
-  margin-left: 280px;
 }
 
 .management-heading {
@@ -193,13 +184,8 @@
 
 @media (max-width: 1100px) {
   .management-panel {
-    width: calc(100% - 96px);
-    margin-left: 96px;
-  }
-
-  .app-shell.menu-open .management-panel {
-    width: calc(100% - 260px);
-    margin-left: 260px;
+    width: 100%;
+    margin-left: 0;
   }
 
   .management-card {
@@ -220,9 +206,6 @@
 }
 
 @media (min-width: 1051px) and (max-width: 1180px) {
-  .app-shell.menu-open .management-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 880px) {
@@ -233,10 +216,6 @@
 
 @media (max-width: 770px) {
   .management-panel,
-  .app-shell.menu-open .management-panel {
-    width: 100%;
-    margin-left: 0;
-  }
 }
 
 @media (max-width: 500px) {

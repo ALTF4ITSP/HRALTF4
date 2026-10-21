@@ -11,7 +11,7 @@ $directorio = dirname(__DIR__) . '/archivos/perfiles';
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
     try {
         $consulta = $conexion->prepare(
-            'SELECT foto_perfil, foto_publica
+            'SELECT foto_perfil
              FROM configuracion_usuario
              WHERE id_usuario = :id_usuario
              LIMIT 1'
@@ -22,13 +22,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
         if (!$configuracion || empty($configuracion['foto_perfil'])) {
             http_response_code(404);
             exit;
-        }
-
-        if (!(bool) $configuracion['foto_publica']) {
-            /*
-             * La foto privada sigue disponible para el usuario autenticado
-             * porque este endpoint siempre exige sesión.
-             */
         }
 
         $nombreArchivo = basename((string) $configuracion['foto_perfil']);

@@ -5,7 +5,8 @@
 .calendar-panel {
   position: relative;
   z-index: 1;
-  width: min(calc(100% - 125px), 1180px);
+  width: 100%;
+  max-width: 1180px;
 }
 
 .cal-surface {
@@ -339,7 +340,7 @@
 
 @media (max-width: 900px) {
   .calendar-panel {
-    width: calc(100% - 96px);
+    width: 100%;
   }
 }
 

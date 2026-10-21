@@ -3,6 +3,7 @@ crearPaginaGestion({
   modulo: "ambulancias",
   titulo: "Ambulancias",
   singular: "ambulancia",
+  nuevo: "Nueva ambulancia",
   // Las ambulancias usan números como id: el siguiente al más alto
   nuevoId: lista => Math.max(0, ...lista.map(a => a.id)) + 1,
   campos: [

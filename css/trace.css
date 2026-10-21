@@ -6,7 +6,8 @@
 .traslados-panel {
   position: relative;
   z-index: 1;
-  width: min(calc(100% - 125px), 1280px);
+  width: 100%;
+  max-width: 1280px;
 }
 
 .traslados-panel h1 {
@@ -253,7 +254,7 @@
 
 @media (max-width: 900px) {
   .traslados-panel {
-    width: calc(100% - 96px);
+    width: 100%;
   }
 
   /* En pantallas chicas el mapa va arriba del formulario */

@@ -35,11 +35,12 @@ function crearPaginaGestion(config) {
 
     // ---------- Armar la página ----------
     const columnas = config.campos.filter(c => c.enTabla);
+    const textoNuevo = config.nuevo || `Nuevo ${config.singular}`;   // Ambulancias usa "Nueva ambulancia"
     pagina.innerHTML = `
       <a href="management.html" class="gestion-volver">← Volver a Gestión</a>
       <div class="gestion-encabezado">
         <h1>${config.titulo}</h1>
-        <button type="button" class="gestion-boton" id="nuevo">+ Nuevo ${config.singular}</button>
+        <button type="button" class="gestion-boton" id="nuevo">+ ${textoNuevo}</button>
       </div>
       <input type="search" class="gestion-buscar" id="buscar" placeholder="Buscar..." aria-label="Buscar">
       <table class="gestion-tabla">
@@ -107,7 +108,7 @@ function crearPaginaGestion(config) {
     // ---------- Formulario ----------
     function abrirFormulario(item = null) {
       editando = item ? item.id : null;
-      document.getElementById("tituloFormulario").textContent = item ? `Editar ${config.singular}` : `Nuevo ${config.singular}`;
+      document.getElementById("tituloFormulario").textContent = item ? `Editar ${config.singular}` : textoNuevo;
       formulario.reset();
       if (item) config.campos.forEach(c => { formulario.elements[c.campo].value = item[c.campo] ?? ""; });
       dialogo.showModal();

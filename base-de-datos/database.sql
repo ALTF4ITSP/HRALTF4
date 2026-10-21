@@ -310,11 +310,6 @@ CREATE TABLE `configuracion_usuario` (
   `id_usuario` int(11) NOT NULL,
   `centro` varchar(150) NOT NULL DEFAULT 'Hospital de Clínicas',
   `foto_perfil` varchar(500) DEFAULT NULL,
-  `foto_publica` tinyint(1) NOT NULL DEFAULT 1,
-  `analisis_rendimiento` tinyint(1) NOT NULL DEFAULT 1,
-  `notificaciones_seguridad` tinyint(1) NOT NULL DEFAULT 0,
-  `cierre_sesion_automatico` tinyint(1) NOT NULL DEFAULT 0,
-  `idioma` varchar(20) NOT NULL DEFAULT 'Español',
   `fecha_actualizacion` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id_configuracion`),
   UNIQUE KEY `uq_configuracion_usuario` (`id_usuario`),
@@ -324,11 +319,11 @@ CREATE TABLE `configuracion_usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
 INSERT INTO `configuracion_usuario`
-  (`id_usuario`, `centro`, `foto_perfil`, `foto_publica`, `analisis_rendimiento`, `notificaciones_seguridad`, `cierre_sesion_automatico`, `idioma`)
+  (`id_usuario`, `centro`, `foto_perfil`)
 VALUES
-  (1, 'Hospital de Clínicas', NULL, 1, 1, 0, 0, 'Español'),
-  (2, 'Hospital de Clínicas', NULL, 1, 1, 0, 0, 'Español'),
-  (3, 'Hospital de Clínicas', NULL, 1, 1, 0, 0, 'Español');
+  (1, 'Hospital de Clínicas', NULL),
+  (2, 'Hospital de Clínicas', NULL),
+  (3, 'Hospital de Clínicas', NULL);
 
 CREATE TABLE `especializacion` (
   `id_especializacion` int(11) NOT NULL AUTO_INCREMENT,

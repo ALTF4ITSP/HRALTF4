@@ -18,8 +18,7 @@ try {
             f.cargo,
             f.sector,
             u.nombre_usuario,
-            c.centro,
-            c.foto_publica
+            c.centro
          FROM usuario u
          INNER JOIN funcionario f ON f.id_persona = u.id_funcionario
          INNER JOIN persona p ON p.id_persona = f.id_persona
@@ -61,8 +60,7 @@ try {
             'cargo' => $personaActual['cargo'],
             'sector' => $personaActual['sector'],
             'nombre_usuario' => $personaActual['nombre_usuario'],
-            'centro' => 'Hospital de Clínicas',
-            'foto_publica' => 1
+            'centro' => 'Hospital de Clínicas'
         ];
     }
 
@@ -193,19 +191,13 @@ try {
 
     settings_get_or_create_config($conexion, $idUsuario);
 
-    $fotoPublica = array_key_exists('foto_publica', $datos)
-        ? settings_bool($datos['foto_publica'])
-        : (int) $actual['foto_publica'];
-
     $actualizarConfig = $conexion->prepare(
         'UPDATE configuracion_usuario
-         SET centro = :centro,
-             foto_publica = :foto_publica
+         SET centro = :centro
          WHERE id_usuario = :id_usuario'
     );
     $actualizarConfig->execute([
         'centro' => $centro,
-        'foto_publica' => $fotoPublica,
         'id_usuario' => $idUsuario
     ]);
 
@@ -225,8 +217,7 @@ try {
         'cargo' => $cargo,
         'sector' => $sector,
         'nombre_usuario' => $nombreUsuario,
-        'centro' => $centro,
-        'foto_publica' => (bool) $fotoPublica
+        'centro' => $centro
     ]);
 } catch (Throwable $error) {
     if ($conexion->inTransaction()) {

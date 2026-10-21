@@ -11,26 +11,15 @@
 }
 
 .content-card {
-    width: calc(100% - 108px);
+    width: 100%;
     height: calc(100vh - 87px);
-    margin-left: 108px;
+    margin-left: 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
 
 }
 
-.app-shell.menu-open .content-card {
-    width: calc(100% - 280px);
-    margin-left: 280px;
-}
-
-.content-card .topbar,
-.app-shell.menu-open .content-card .topbar {
-    width: 100%;
-    margin-left: 0;
-    flex-shrink: 0;
-}
 
 .bg-panel {
     width: 100%;
@@ -80,39 +69,6 @@ button {
     align-items: flex-start;
     justify-content: space-between;
     gap: 32px;
-}
-
-.settings-search-host {
-    --search-expanded-width: min(420px, calc(100vw - 180px));
-    position: relative;
-    z-index: 30;
-    width: 52px;
-    height: 54px;
-    flex: 0 0 52px;
-    margin-left: auto;
-}
-
-.settings-search-host .search-wrapper {
-    right: 0;
-}
-
-.settings-search-host.search-active .search-wrapper {
-    width: var(--search-expanded-width);
-    border-color: rgba(17, 17, 17, 0.14);
-    background: rgba(250, 250, 252, 0.85);
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.12);
-}
-
-.settings-search-host.search-active .search-input {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.settings-search-host .search-results {
-    top: 64px;
-    right: -70px;
-    width: min(480px, calc(100vw - 80px));
-    min-width: 0;
 }
 
 .settings-header.search-active .settings-heading {
@@ -542,7 +498,7 @@ button {
     padding: 12px 28px;
     border: 1px solid rgba(21, 36, 84, 0.4);
     border-radius: 0;
-    color: #111111;
+    color: #ffffff;
     background-color: #4972db;
     background-image: url("../imagenes/special-bg.png");
     background-position: center;
@@ -570,32 +526,12 @@ button {
         grid-template-columns: minmax(340px, 430px) 1px minmax(300px, 1fr);
         gap: 36px;
     }
-
-    .app-shell.menu-open .general-panel,
-    .app-shell.menu-open .privacy-panel {
-        grid-template-columns: 1fr;
-    }
-
-    .app-shell.menu-open .general-divider {
-        display: none;
-    }
-
-    .app-shell.menu-open .profile-settings,
-    .app-shell.menu-open .privacy-options {
-        width: 100%;
-        max-width: 430px;
-    }
 }
 
 @media (max-width: 1100px) {
     .content-card {
-        width: calc(100% - 96px);
-        margin-left: 96px;
-    }
-
-    .app-shell.menu-open .content-card {
-        width: calc(100% - 260px);
-        margin-left: 260px;
+        width: 100%;
+        margin-left: 0;
     }
 
     .bg-panel {
@@ -635,24 +571,8 @@ button {
 }
 
 @media (max-width: 770px) {
-    .settings-search-host {
-        --search-expanded-width: min(420px, calc(100vw - 110px));
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin-left: 0;
-    }
-
-    .settings-search-host .search-results {
-        right: 0;
-        width: min(480px, calc(100vw - 72px));
-    }
 
     .content-card,
-    .app-shell.menu-open .content-card {
-        width: 100%;
-        margin-left: 0;
-    }
 
     .bg-panel {
         padding: 32px 28px 40px;

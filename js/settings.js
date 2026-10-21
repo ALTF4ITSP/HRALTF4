@@ -13,23 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordForm = document.getElementById("passwordForm");
     const passwordStatus = document.getElementById("passwordStatus");
     const centerInput = document.getElementById("settings-center");
-    const languageSelect = document.getElementById("settings-language");
-
-    const photoVisibilityToggle = document.querySelector(
-        '.toggle[aria-label="Visibilidad pública de la foto"]'
-    );
-
-    const performanceToggle = document.querySelector(
-        '.toggle[aria-label="Análisis de rendimiento"]'
-    );
-
-    const securityToggle = document.querySelector(
-        '.toggle[aria-label="Notificaciones de seguridad"]'
-    );
-
-    const automaticLogoutToggle = document.querySelector(
-        '.toggle[aria-label="Cerrar sesión automáticamente"]'
-    );
 
     const specialtyList = document.querySelector(".specialty-list");
     const specialtyAddButton = document.querySelector(".specialty-add");
@@ -71,21 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         return result.data;
-    }
-
-    function setToggle(toggle, value) {
-        if (!toggle) {
-            return;
-        }
-
-        const isOn = Boolean(value);
-
-        toggle.classList.toggle("is-on", isOn);
-        toggle.setAttribute("aria-checked", String(isOn));
-    }
-
-    function getToggleValue(toggle) {
-        return Boolean(toggle && toggle.classList.contains("is-on"));
     }
 
     // Muestra un mensaje debajo de un formulario (verde si salió bien, rojo si no)
@@ -204,18 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 userName.textContent = usuario.nombre_completo || "Usuario";
             }
 
-            setToggle(photoVisibilityToggle, configuracion.foto_publica);
-            setToggle(performanceToggle, configuracion.analisis_rendimiento);
-            setToggle(securityToggle, configuracion.notificaciones_seguridad);
-            setToggle(
-                automaticLogoutToggle,
-                configuracion.cierre_sesion_automatico
-            );
-
-            if (languageSelect && configuracion.idioma) {
-                languageSelect.value = configuracion.idioma;
-            }
-
             loadSpecialties(data.especializaciones || []);
 
             if (configuracion.foto_perfil) {
@@ -240,8 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
             cargo: roleInput ? roleInput.value : "",
             sector: sectorInput ? sectorInput.value : "",
             nombre_usuario: usernameInput ? usernameInput.value : "",
-            centro: centerInput ? centerInput.value : "",
-            foto_publica: getToggleValue(photoVisibilityToggle)
+            centro: centerInput ? centerInput.value : ""
         };
 
         const data = await request(`${API}/settings_profile_update.php`, {
@@ -355,25 +310,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /*
      * ------------------------------------------------------------
-     * VISIBILIDAD DE FOTO
-     * ------------------------------------------------------------
-     */
-
-    photoVisibilityToggle?.addEventListener("click", async () => {
-        const previousValue = getToggleValue(photoVisibilityToggle);
-
-        setToggle(photoVisibilityToggle, !previousValue);
-
-        try {
-            await updateProfile();
-        } catch (error) {
-            setToggle(photoVisibilityToggle, previousValue);
-            showError(error);
-        }
-    });
-
-    /*
-     * ------------------------------------------------------------
      * CAMBIAR CONTRASEÑA
      * ------------------------------------------------------------
      */
@@ -403,64 +339,6 @@ document.addEventListener("DOMContentLoaded", () => {
             setStatus(passwordStatus, "La contraseña se cambió correctamente.", "ok");
         } catch (error) {
             setStatus(passwordStatus, error.message, "error");
-        }
-    });
-
-    /*
-     * ------------------------------------------------------------
-     * PRIVACIDAD
-     * ------------------------------------------------------------
-     */
-
-    async function updatePrivacy() {
-        const datos = {
-            analisis_rendimiento: getToggleValue(performanceToggle),
-            notificaciones_seguridad: getToggleValue(securityToggle),
-            cierre_sesion_automatico: getToggleValue(automaticLogoutToggle)
-        };
-
-        if (languageSelect) {
-            datos.idioma = languageSelect.value;
-        }
-
-        return request(`${API}/settings_privacy_update.php`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(datos)
-        });
-    }
-
-    [
-        performanceToggle,
-        securityToggle,
-        automaticLogoutToggle
-    ].forEach((toggle) => {
-        toggle?.addEventListener("click", async () => {
-            const previousValue = getToggleValue(toggle);
-
-            /*
-             * Cambiamos el estado visual antes de guardar.
-             */
-            setToggle(toggle, !previousValue);
-
-            try {
-                await updatePrivacy();
-            } catch (error) {
-                setToggle(toggle, previousValue);
-                showError(error);
-            }
-        });
-    });
-
-    languageSelect?.addEventListener("change", async () => {
-        try {
-            await updatePrivacy();
-            languageSelect.blur();
-        } catch (error) {
-            showError(error);
-            await loadSettings();
         }
     });
 

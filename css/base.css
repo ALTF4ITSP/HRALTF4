@@ -1,0 +1,237 @@
+/* base.css: lo que comparten todas las páginas con menú (colores, barra de arriba, menú de la izquierda).
+   Cada página tiene además su propio CSS con lo que es solo de ella. */
+
+/* ---------- Colores: si se quiere cambiar un color, se cambia acá ---------- */
+:root {
+  --azul: #2143b4;            /* color principal */
+  --azul-claro: #e8ecf8;      /* fondo de lo elegido */
+  --fondo: #f5f6f9;           /* fondo de la página */
+  --blanco: #ffffff;
+  --borde: rgba(17, 17, 17, 0.13);
+  --texto: #111111;
+  --gris: rgba(17, 17, 17, 0.55);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: "Inclusive Sans", "Segoe UI", sans-serif;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* ---------- Barra de arriba ---------- */
+.barra {
+  height: 64px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-top: 4px solid var(--azul);
+  border-bottom: 1px solid var(--borde);
+  background: var(--blanco);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--texto);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.marca img {
+  width: 34px;
+}
+
+/* Botón ☰: solo se ve en el celular */
+.boton-menu {
+  display: none;
+  padding: 4px 10px;
+  border: 1px solid var(--borde);
+  background: var(--blanco);
+  color: var(--texto);
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* Buscador de secciones (js/menu.js) */
+.buscador-general {
+  position: relative;
+  width: 280px;
+  margin-left: auto;
+}
+
+.buscador-general input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--borde);
+  font: inherit;
+}
+
+.buscador-general ul {
+  position: absolute;
+  z-index: 1000;
+  top: 40px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 4px;
+  border: 1px solid var(--borde);
+  background: var(--blanco);
+  list-style: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.buscador-general li a {
+  padding: 8px 10px;
+  display: block;
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.buscador-general li a:hover {
+  background: var(--azul-claro);
+}
+
+/* Botón de idioma (js/idioma.js) */
+.boton-idioma {
+  padding: 6px 10px;
+  border: 1px solid var(--borde);
+  background: var(--blanco);
+  color: var(--azul);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- Menú de la izquierda y contenido ---------- */
+.pagina {
+  min-height: calc(100vh - 64px);
+  display: flex;
+}
+
+.menu {
+  width: 210px;
+  flex-shrink: 0;
+  padding: 16px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-right: 1px solid var(--borde);
+  background: var(--blanco);
+}
+
+.menu a {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--texto);
+  text-decoration: none;
+}
+
+/* Los íconos tienen colores distintos: brightness(0) los deja todos negros */
+.menu a img {
+  width: 20px;
+  filter: brightness(0);
+  opacity: 0.7;
+}
+
+.menu a:hover {
+  background: var(--fondo);
+}
+
+.menu a.activo {
+  background: var(--azul-claro);
+  color: var(--azul);
+  font-weight: 600;
+}
+
+.menu .separador {
+  flex: 1;
+}
+
+.contenido {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+}
+
+/* El bloque principal de cada página y su título */
+.hero-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.hero-copy {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-copy h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.hero-copy p {
+  margin: 0;
+  color: var(--gris);
+}
+
+/* Texto que solo leen los lectores de pantalla */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* ---------- Celular ---------- */
+@media (max-width: 800px) {
+  .boton-menu {
+    display: block;
+  }
+
+  .buscador-general {
+    width: 150px;
+  }
+
+  .marca span {
+    display: none;
+  }
+
+  /* El menú se esconde y aparece al tocar ☰ */
+  .menu {
+    display: none;
+    position: fixed;
+    z-index: 900;
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+  }
+
+  body.menu-abierto .menu {
+    display: flex;
+  }
+
+  .contenido {
+    padding: 16px;
+  }
+}

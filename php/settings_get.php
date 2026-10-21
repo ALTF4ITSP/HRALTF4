@@ -62,11 +62,6 @@ try {
             'centro' => $configuracion['centro'],
             'foto_perfil' => $configuracion['foto_perfil'],
             'foto_url' => !empty($configuracion['foto_perfil']) ? '../php/settings_photo.php' : null,
-            'foto_publica' => (bool) $configuracion['foto_publica'],
-            'analisis_rendimiento' => (bool) $configuracion['analisis_rendimiento'],
-            'notificaciones_seguridad' => (bool) $configuracion['notificaciones_seguridad'],
-            'cierre_sesion_automatico' => (bool) $configuracion['cierre_sesion_automatico'],
-            'idioma' => $configuracion['idioma']
         ],
         'especializaciones' => $especializaciones
     ]);
